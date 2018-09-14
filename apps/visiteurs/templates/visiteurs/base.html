@@ -1,5 +1,9 @@
 <h1>salut je suis un visisteur</h1>
-<a href ="{% url 'accueil_vis' %}"> go to visiteur</a>
-<a href ="{% url 'accueil_ent' %}"> go to entreprise</a>
+<a href ="{% url 'accueil_vis' %}"> go to visiteur</a><br/>
+<a href ="{% url 'accueil_ent' %}"> go to entreprise</a><br/>
+<a href ="{% url 'redirection_vide' %}"> go to vide</a><br/>
+<a href ="{% url 'accueil_col' %}"> go to collaborateurs</a><br/>
 
-<a href ="{% url 'redirection_vide' %}"> go to vide</a>
+{% if deco %}
+	vous avez été déconnecté
+{% endif %}

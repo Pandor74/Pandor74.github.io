@@ -18,6 +18,7 @@ APPS_DIR=os.path.realpath(os.path.join(BASE_DIR,'apps'))
 sys.path.append(APPS_DIR)
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 

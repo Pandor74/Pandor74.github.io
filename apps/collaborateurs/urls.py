@@ -18,6 +18,7 @@ from django.urls import path,include
 from collaborateurs import views
 
 urlpatterns = [
-	path('',views.home)
+	path('',views.home,name='accueil_col'),
+	path('deconnexion',views.deconnexion,name='deconnexion')
 
 ]

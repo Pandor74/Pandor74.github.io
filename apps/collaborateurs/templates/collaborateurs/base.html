@@ -1,1 +1,90 @@
-<h1>salut je suis un collaborateur</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+   <meta charset="utf-8"/>
+  
+
+   <link rel="stylesheet" href="../../static/css/base_style.css" />
+   {% block stylepers %}
+   {% endblock %}
+
+   {% comment %} 
+   		c'est ici que l'on appelle la source jquery 
+   {% endcomment %}
+   <script src="../../static/js/jquery-3.3.1.js"></script>
+   
+   {% comment %} 
+   		c'est ici que l'on écrit les scripts qui correspondent à la base 
+   {% endcomment %}
+   <script>
+   	$(document).ready(function(){
+    $("#bdeco").click(function(){
+        alert('Vous avez été déconnecté')
+    });
+});
+   </script>
+
+   {% comment %}
+   		c'est ici que l'on écrira les scripts qui correspondent au contenu dynamique
+   {% endcomment %}
+   <script>
+   	{% block scritpers %}
+   	{% endblock %}
+   </script>
+
+
+
+   <title>{% block title %}Plateforme Appel d'offres{% endblock %}</title>
+</head>
+
+
+
+<body>
+<header>
+    <nav class="bandeau_sup" id="BS1">
+
+       <ul class="list_nav_sup" id="LNS1">
+            <li><a href="/contacts">Liste des contacts</a></li>
+            <li><a href="/mon-compte">Mon compte</a></li>
+            <li><a href='{% url "deconnexion" %}' id="bdeco">Déconnexion</a></li>
+       </ul>
+
+   </nav>
+
+   <nav class="bandeau_sup" id="BS2">
+
+       <ul class="list_nav_sup" id="LNS2">
+       		<li><a href='{% url "accueil_col" %}'>Accueil</a></li>
+            <li><a href="/tous-les-projets">Tous les projets</a></li>
+            <li><a href="/mes-projets">Mes projets</a></li>
+            <li><a href="/nouveau-projet">Nouveau projet</a></li>
+       </ul>
+ 
+   </nav>
+
+ </header>
+
+
+
+   <section id="content">
+       {% block content %}
+       salut je suis un <strong>collaborateur</strong> qui pete les plombs juste pour pouvoir dépaser complètement les ligne et voir les effets de wrap et autres choses. plombs juste pour pouvoeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeir dépaseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer complètement les ligne et voir les effets de wrap et autres choseplombs juste pour pouvoir dépaser complètement les ligne et voir les effets de wrap et autres chose<br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>
+       salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>salut je suis un <strong>collaborateur</strong><br/>
+
+       {% endblock %}
+   </section>
+
+
+<footer></footer>
+
+
+</body>
+</html>
