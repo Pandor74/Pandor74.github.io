@@ -19,6 +19,8 @@ from collaborateurs import views
 
 urlpatterns = [
 	path('',views.home,name='accueil_col'),
-	path('deconnexion',views.deconnexion,name='deconnexion')
+	path('deconnexion',views.deconnexion,name='deconnexion'),
+	path('nouveau_projet',views.new_projet,name="nouveau_projet"),
+	path('les_projets',views.afficher_projets,name="les_projets"),
 
 ]

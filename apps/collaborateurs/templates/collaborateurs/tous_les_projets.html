@@ -1,0 +1,21 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="../../static/css/tous_les_projets_style.css" />
+{% endblock %}
+
+
+
+{% block content %}
+	
+	{% for projet in projets %}
+		<h1>{{projet.nom}} dont l'année est : {{projet.annee_teamber}} et porte le numéro : {{projet.numero_teamber}}</h1>
+	{% empty %}
+		<p>Il n'y a pas de projets actuellement ! </p>
+	{% endfor %}
+
+
+
+{% endblock %}
+
+
