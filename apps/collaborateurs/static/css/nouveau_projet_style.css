@@ -1,6 +1,24 @@
-#content li {
+#content p {
 	list-style-type: none;
 	
 	margin-bottom: 10px;
+	margin-top:0;
 
+}
+
+
+
+form .errorlist {
+	color:red;
+	display: flex;
+	margin: 0;
+
+}
+
+.errorlist li {
+	margin-bottom: 0;
+}
+
+form a {
+	color:orange;
 }

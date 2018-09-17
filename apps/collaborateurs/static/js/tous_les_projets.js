@@ -1,0 +1,12 @@
+
+
+
+$(function(){
+	$(".trier").click(function(){
+
+		
+	
+	});
+
+
+});

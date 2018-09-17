@@ -6,23 +6,15 @@ from django.utils.translation import gettext_lazy as _
 class ProjetForm(ModelForm):
 	class Meta:
 		model=Projet
-		fields='__all__'
+		exclude=['date_creation']
 		localized_fields=('__all__')
-		error_messages = {
-			'nom': {'required': _(" "),},
-			'date_creation': {'required': _(" "),},
-			'date_exe': {'required': _(" "),},
-			'annee_teamber': {'required': _(" "),},
-			'numero_teamber': {'required': _(" "),},
-			'nb_lots': {'required': _(" "),},
-			'nb_etages': {'required': _(" "),},
-			'surf_sol': {'required': _(" "),},
-			'surf_shon': {'required': _(" "),},
-			'photo': {'required': _(" "),},
-		}
 		widgets= {
-			'date_creation': SelectDateWidget,
+			'date_exe': SelectDateWidget,
 		}
+		initial={
+			'nom':'nom du projet',
+		}
+
 
 class ImageForm(forms.Form):
 	fichier=forms.ImageField()

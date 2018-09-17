@@ -5,6 +5,13 @@
 {% endblock %}
 
 
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script src="../../static/js/nouveau_projet.js"></script>
+
+{% endblock %}
+
+
 
 {% block content %}
 
@@ -14,7 +21,7 @@
 <form enctype="multipart/form-data" method="post"  action="{% url 'nouveau_projet' %}">
 
 	{% csrf_token %}
-	{{ form.as_ul }}
+	{{ form.as_p }}
 	<input type="submit" value="Créer"/>
 	
 

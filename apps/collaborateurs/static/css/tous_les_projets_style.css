@@ -1,4 +1,52 @@
-#content h1 {
+#content {
+	padding-left:25px;
+	padding-right:25px;
+}
+
+#filtres_wrapper {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.filtres {
 	color:orange;
+	width:207px;
+	text-align:  center;
+	margin-bottom: 10px;
+	border:solid red ;
+}
+
+#trier_wrapper {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.trier {
+	color:orange;
+	width:207px;
+	text-align:  center;
+	margin-bottom: 10px;
+	border:solid red ;
+}
+
+div.trier:hover {
+	cursor: pointer;
+}
+
+.line_wrapper {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border:solid red;
+}
+
+.projet_prop {
+	border:solid blue;
+	width:207px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 }

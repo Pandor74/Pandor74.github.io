@@ -1,15 +1,44 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="../../static/css/tous_les_projets_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/tous_les_projets_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script src="../../static/js/tous_les_projets.js"></script>
 {% endblock %}
 
 
 
 {% block content %}
-	
+	<div id="filtres_wrapper">
+		<div class="filtres" id="photo_projet">Photo</div>
+		<div class="filtres" id="num_projet">N° projet</div>
+		<div class="filtres" id="nom_projet">Nom projet</div>
+		<div class="filtres" id="loc_projet">Localisation</div>
+		<div class="filtres" id="date_projet">Date retour AO</div>
+		<div class="filtres" id="avancement_projet">Avancement</div>
+	</div>
+
+	<div id="trier_wrapper">
+		<div class="trier" id="trier_photo_projet">Trier</div>
+		<div class="trier" id="trier_num_projet"><a href='{% url "projets_liste" 1 %}'>Trier</a></div>
+		<div class="trier" id="trier_nom_projet"><a href='{% url "projets_liste" 2 %}'>Trier</a></div>
+		<div class="trier" id="trier_loc_projet"><a href='{% url "projets_liste" 3 %}'>Trier</a></div>
+		<div class="trier" id="trier_date_projet"><a href='{% url "projets_liste" 4 %}'>Trier</a></div>
+		<div class="trier" id="trier_avancement_projet"><a href='{% url "projets_liste" 5 %}'>Trier</a></div>
+	</div>
+
 	{% for projet in projets %}
-		<h1>{{projet.nom}} dont l'année est : {{projet.annee_teamber}} et porte le numéro : {{projet.numero_teamber}}</h1>
+	<div class="line_wrapper">
+		<div class="projet_prop"><img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100" /></div>
+		<div class="projet_prop">{{projet.annee_teamber}}-{{projet.numero_teamber}}</div>
+		<div class="projet_prop">{{projet.nom}}</div>
+		<div class="projet_prop">projet.ville</div> 
+		<div class="projet_prop">projet.date retour AO</div>
+		<div class="projet_prop">projet.avancement</div>
+	</div>
 	{% empty %}
 		<p>Il n'y a pas de projets actuellement ! </p>
 	{% endfor %}
