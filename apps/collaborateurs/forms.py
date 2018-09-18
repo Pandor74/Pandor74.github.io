@@ -20,3 +20,15 @@ class ImageForm(forms.Form):
 	fichier=forms.ImageField()
 	nom=forms.CharField()
 
+
+
+class FiltreForm(forms.Form):
+	FILTRES=(
+		('numero', 'par numero'),
+		('nom', 'par nom'),
+		
+	)
+	
+	filtre=forms.ChoiceField(choices=FILTRES)
+
+

@@ -1,8 +1,12 @@
 from django.shortcuts import render,redirect
-from collaborateurs.forms import ProjetForm,ImageForm
+from collaborateurs.forms import ProjetForm,ImageForm,FiltreForm
 from collaborateurs.models import Projet,Image
 from django.core.mail import send_mail
-from django.views.generic import ListView
+from django.views.generic.list import ListView
+from django.views.generic.edit import FormMixin
+from django.http import Http404
+from django.utils.translation import ugettext as _
+from django.urls import reverse_lazy,reverse
 
 
 # Create your views here.
@@ -46,53 +50,77 @@ def afficher_projets(request):
 	return render(request,'collaborateurs/tous_les_projets.html',locals())
 
 
-def new_image(request):
-	envoi=False
-	projet=Image()
-	form=ImageForm(request.POST or None, request.FILES)
-
-	if form.is_valid():
-
-		projet=Image()
-		projet.nom=form.cleaned_data["nom"]
-		projet.fichier=form.cleaned_data["fichier"]
-		projet.save()
-		envoi=True
 
 
-	return render(request,'collaborateurs/nouveau_projet.html',locals())
+class FormListView(ListView,FormMixin):
+	def get(self, request, *args, **kwargs):
+	    # From ProcessFormMixin
+	    form_class = self.get_form_class()
+	    self.form = self.get_form(form_class)
+
+	    # From BaseListView
+	    self.object_list = self.get_queryset()
+	    allow_empty = self.get_allow_empty()
+	    if not allow_empty and len(self.object_list) == 0:
+	        raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")
+	                      % {'class_name': self.__class__.__name__})
+
+	    context = self.get_context_data(object_list=self.object_list, form=self.form)
+	    return self.render_to_response(context)
+
+	def post(self, request, *args, **kwargs):
+		return self.get(request, *args, **kwargs)
 
 
-class ListeProjets(ListView):
+class ListeProjets(FormListView):
+	form_class=FiltreForm
 	model=Projet
 	context_object_name="projets"
 	template_name="collaborateurs/tous_les_projets.html"
 	paginate_by=3
 	
 
+	def post(self,request,*args,**kwargs):
+		self.form=FiltreForm(self.request.POST or None,)
+		#if self.form.is_valid():
+			#projets=Projet.objects.all()
+			#return super(ListeProjets,self).post(request,*args,**kwargs)
+		#else:
+		return super(ListeProjets,self).post(request,*args,**kwargs)
+
+	def get_queryset(self,**kwargs):
+
+		form=self.form
+
+		if form.is_valid():
+			if form.cleaned_data['filtre']=='numero':
+				projets = Projet.objects.filter().order_by('-annee_teamber','-numero_teamber')
+			else:
+				projets = Projet.objects.filter().order_by(form.cleaned_data['filtre'])
+		else :
+			projets=Projet.objects.all()
+		return projets
+
 	def get_context_data(self,**kwargs):
-		
 		context=super(ListeProjets,self).get_context_data(**kwargs)
-		
-		context['filtre']=self.kwargs['num']
+		form=context['form']
+		context['form']=form
+
+
+
 
 		return context
 
-	def get_queryset(self,**kwargs):
-		if self.kwargs['num']=='1':
-			return Projet.objects.order_by('-annee_teamber','-numero_teamber')
-		else:
-			if self.kwargs['num']=='2':
-				 return Projet.objects.order_by('nom')
-			else:
-				if self.kwargs['num']=='3':
-					return Projet.objects.order_by('localisation') #attention ici il faut créer les propriétés nécessaires
-				else:
-					if self.kwargs['num']=='4':
-						return Projet.objects.order_by('date_AO') #attention ici il faut créer les propriétés nécessaires
-					else:
-						if self.kwargs['num']=='5':
-							return Projet.objects.order_by('avancement') #attention ici il faut créer les propriétés nécessaires
-		return Projet.objects.order_by('-annee_teamber','-numero_teamber')
+
+
+	
+
+	
+
+
+	
+	
+
+	
 
 		

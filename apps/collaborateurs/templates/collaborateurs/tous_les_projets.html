@@ -6,12 +6,24 @@
 
 {% block scriptpers %}
 <script src="../../static/js/jquery-3.3.1.js"></script>
-<script src="../../static/js/tous_les_projets.js"></script>
+<script type="text/javascript" src="../../static/js/tous_les_projets.js"></script>
 {% endblock %}
 
 
 
 {% block content %}
+	<form method="post" action="{% url 'projets_liste' %}" >
+		{% csrf_token %}
+		{{form}}
+	<input type="submit" value="Filtrer"/>
+	</form>
+
+{{test}}
+
+
+
+
+
 	<div id="filtres_wrapper">
 		<div class="filtres" id="photo_projet">Photo</div>
 		<div class="filtres" id="num_projet">N° projet</div>
@@ -23,12 +35,13 @@
 
 	<div id="trier_wrapper">
 		<div class="trier" id="trier_photo_projet">Trier</div>
-		<div class="trier" id="trier_num_projet"><a href='{% url "projets_liste" 1 %}'>Trier</a></div>
-		<div class="trier" id="trier_nom_projet"><a href='{% url "projets_liste" 2 %}'>Trier</a></div>
-		<div class="trier" id="trier_loc_projet"><a href='{% url "projets_liste" 3 %}'>Trier</a></div>
-		<div class="trier" id="trier_date_projet"><a href='{% url "projets_liste" 4 %}'>Trier</a></div>
-		<div class="trier" id="trier_avancement_projet"><a href='{% url "projets_liste" 5 %}'>Trier</a></div>
+		<div class="trier" id="trier_num_projet"><a href='{% url "projets_liste" %}'>Trier</a></div>
+		<div class="trier" id="trier_nom_projet"><a href='{% url "projets_liste" %}'>Trier</a></div>
+		<div class="trier" id="trier_loc_projet"><a href='{% url "projets_liste" %}'>Trier</a></div>
+		<div class="trier" id="trier_date_projet"><a href='{% url "projets_liste" %}'>Trier</a></div>
+		<div class="trier" id="trier_avancement_projet"><a href='{% url "projets_liste" %}'>Trier</a></div>
 	</div>
+
 
 	{% for projet in projets %}
 	<div class="line_wrapper">
@@ -42,6 +55,20 @@
 	{% empty %}
 		<p>Il n'y a pas de projets actuellement ! </p>
 	{% endfor %}
+
+
+	{# Mise en forme de la pagination ici #}
+	{% if is_paginated %}
+	    <div class="pagination">
+	           {% if page_obj.has_previous %}
+	               <a href="?page={{ page_obj.previous_page_number }}">Précédente</a> —
+	           {% endif %}
+	           Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }} 
+	           {% if page_obj.has_next %}
+	              — <a href="?page={{ page_obj.next_page_number }}">Suivante</a>
+	           {% endif %}
+	    </div>
+	{% endif %}
 
 
 
