@@ -7,7 +7,7 @@
 
 {% block scriptpers %}
 <script src="../../static/js/jquery-3.3.1.js"></script>
-<script src="../../static/js/nouveau_projet.js"></script>
+<!--<script src="../../static/js/nouveau_projet.js"></script>-->
 
 {% endblock %}
 
@@ -21,8 +21,20 @@
 <form enctype="multipart/form-data" method="post"  action="{% url 'nouveau_projet' %}">
 
 	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Créer"/>
+	<div id="wrap-form">
+		<div class="form-wrapper">
+			<h1> Veuillez saisir les identifiants du projet </h1>
+
+			{{ form.as_p }}
+		</div>
+
+		<div class="form-wrapper">
+			<h1> Veuillez saisir l'adresse du projet </h1>
+			{{formAdresse.as_p}}
+		</div>
+	</div>
+	<input type="submit" value="Créer le projet" id="Bcreateprojet" />
+	
 	
 
 </form>

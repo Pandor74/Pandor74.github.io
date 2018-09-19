@@ -24,9 +24,6 @@ urlpatterns = [
 	path('',views.home,name='accueil_col'),
 	path('deconnexion',views.deconnexion,name='deconnexion'),
 	path('nouveau_projet',views.new_projet,name="nouveau_projet"),
-	path('les_projets',views.afficher_projets,name="les_projets"),
-    #re_path(r'^projets/(?P<num>.*)$',views.ListeProjets.as_view(),name="projets_liste"),
     re_path('projets/',views.ListeProjets.as_view(),name="projets_liste"),
-
-
+    url(r'^projet/(?P<pk>\d+)$',views.VoirProjet.as_view(),name="voir_projet"),
 ]

@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
-from collaborateurs.forms import ProjetForm,FiltreForm
-from collaborateurs.models import Projet
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm
+from collaborateurs.models import Projet,Adresse
 from django.core.mail import send_mail
-from django.views.generic.list import ListView
+from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
 from django.http import Http404
 from django.utils.translation import ugettext as _
@@ -27,12 +27,19 @@ def new_projet(request):
 	
 
 	if request.method=='POST':
+		adresse=Adresse()
+		formAdresse=AdresseForm(request.POST or None,)
 		projet=Projet()
 		form=ProjetForm(request.POST, request.FILES)
-		if form.is_valid():
+		if form.is_valid() and formAdresse.is_valid():
 
 			envoi=True
+			
+			adresse=formAdresse.save()
 			projet=form.save()
+			projet.adresse=adresse
+			projet.save()
+			
 			
 
 			return render(request,'collaborateurs/accueil_col.html',locals())
@@ -40,19 +47,17 @@ def new_projet(request):
 		return render(request,'collaborateurs/nouveau_projet.html',locals())
 	else:
 		form=ProjetForm()
+		formAdresse=AdresseForm()
 
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
 
-def afficher_projets(request):
-
-	projets=Projet.objects.all()
-	trie_par_numero=False;
-
-	return render(request,'collaborateurs/tous_les_projets.html',locals())
 
 
 
 
+
+
+#sert a préparer le terrain pour LIsteprojets
 class FormListView(ListView,FormMixin):
 	def get(self, request, *args, **kwargs):
 	    # From ProcessFormMixin
@@ -106,7 +111,10 @@ class ListeProjets(FormListView):
 
 
 
-	
+class VoirProjet(DetailView):
+	context_object_name="projet"
+	model=Projet
+	template_name="collaborateurs/projet.html"
 
 	
 

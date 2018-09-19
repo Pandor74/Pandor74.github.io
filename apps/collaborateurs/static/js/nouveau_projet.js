@@ -12,7 +12,7 @@ function rgb2hex(rgb) {
 var colHEX=''
 
 $(function(){
-	$(":input").click(function(){
+	$(".form-wrapper:input").click(function(){
 		try 
 		{	
 			if (colHEX=='')
@@ -28,12 +28,12 @@ $(function(){
 		
 	});
 
-	$(":input").focusin(function(){
+	$(".form-wrapper:input").focusin(function(){
 		
 		$(this).css('background-color','yellow');
 	});
 
-	$(":input").focusout(function(){
+	$(".form-wrapper:input").focusout(function(){
 		$(this).css('background-color', colHEX);
 		colHEX='';
 	});
