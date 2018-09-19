@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
-from collaborateurs.forms import ProjetForm,ImageForm,FiltreForm
-from collaborateurs.models import Projet,Image
+from collaborateurs.forms import ProjetForm,FiltreForm
+from collaborateurs.models import Projet
 from django.core.mail import send_mail
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
 from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.urls import reverse_lazy,reverse
+from collaborateurs.fonction import chercherProjet
 
 
 # Create your views here.
@@ -77,38 +78,30 @@ class ListeProjets(FormListView):
 	model=Projet
 	context_object_name="projets"
 	template_name="collaborateurs/tous_les_projets.html"
-	paginate_by=3
+	paginate_by=10
 	
 
 	def post(self,request,*args,**kwargs):
-		self.form=FiltreForm(self.request.POST or None,)
-		#if self.form.is_valid():
-			#projets=Projet.objects.all()
-			#return super(ListeProjets,self).post(request,*args,**kwargs)
-		#else:
+		self.form=FiltreForm(self.request.POST or None,initial={'choice':'nom'},)
+
 		return super(ListeProjets,self).post(request,*args,**kwargs)
 
 	def get_queryset(self,**kwargs):
 
 		form=self.form
-
+		
 		if form.is_valid():
-			if form.cleaned_data['filtre']=='numero':
-				projets = Projet.objects.filter().order_by('-annee_teamber','-numero_teamber')
-			else:
-				projets = Projet.objects.filter().order_by(form.cleaned_data['filtre'])
+			filtre=form.cleaned_data['filtre']
+			recherche=form.cleaned_data['search']
+			projets=Projet.objects.all()
+			projets=chercherProjet(self,projets,filtre,recherche)
 		else :
 			projets=Projet.objects.all()
 		return projets
 
 	def get_context_data(self,**kwargs):
 		context=super(ListeProjets,self).get_context_data(**kwargs)
-		form=context['form']
-		context['form']=form
-
-
-
-
+		
 		return context
 
 

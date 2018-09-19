@@ -18,8 +18,6 @@
 	<input type="submit" value="Filtrer"/>
 	</form>
 
-{{test}}
-
 
 
 
@@ -46,7 +44,7 @@
 	{% for projet in projets %}
 	<div class="line_wrapper">
 		<div class="projet_prop"><img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100" /></div>
-		<div class="projet_prop">{{projet.annee_teamber}}-{{projet.numero_teamber}}</div>
+		<div class="projet_prop">{{projet.numero_identifiant}}</div>
 		<div class="projet_prop">{{projet.nom}}</div>
 		<div class="projet_prop">projet.ville</div> 
 		<div class="projet_prop">projet.date retour AO</div>

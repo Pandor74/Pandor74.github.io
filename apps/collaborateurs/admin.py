@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Projet,Image
+from .models import Projet,Adresse
 
 # Register your models here.
 
 
 admin.site.register(Projet)
-admin.site.register(Image)
+admin.site.register(Adresse)
