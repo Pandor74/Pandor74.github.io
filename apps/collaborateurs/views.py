@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm
-from collaborateurs.models import Projet,Adresse
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,PropProjetForm
+from collaborateurs.models import Projet,Adresse,PropProjet
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
@@ -31,18 +31,22 @@ def new_projet(request):
 		formAdresse=AdresseForm(request.POST or None,)
 		projet=Projet()
 		form=ProjetForm(request.POST, request.FILES)
-		if form.is_valid() and formAdresse.is_valid():
+		proprietes=PropProjet()
+		formProp=PropProjetForm(request.POST or None,)
+		if form.is_valid() and formAdresse.is_valid() and formProp.is_valid():
 
 			envoi=True
 			
 			adresse=formAdresse.save()
 			projet=form.save()
 			projet.adresse=adresse
+			proprietes=formProp.save()
+			projet.proprietes=proprietes
 			projet.save()
 			
 			
 
-			return render(request,'collaborateurs/accueil_col.html',locals())
+			return redirect('projet/%s' % projet.pk)
 
 		return render(request,'collaborateurs/nouveau_projet.html',locals())
 	else:

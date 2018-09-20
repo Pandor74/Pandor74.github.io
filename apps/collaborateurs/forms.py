@@ -1,5 +1,5 @@
 from django import forms
-from collaborateurs.models import Projet,Adresse
+from collaborateurs.models import Projet,Adresse,PropProjet
 from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput
 from django.utils.translation import gettext_lazy as _
 
@@ -10,8 +10,8 @@ class ProjetForm(forms.ModelForm):
 		localized_fields=('__all__')
 		widgets= {
 			'date_exe': SelectDateWidget,
-			'nom':TextInput(attrs={'size':40,'placeholder':'Numéro Teamber'}),
-			'numero_teamber':TextInput(attrs={'size':40}),
+			'nom':TextInput(attrs={'size':40,'placeholder':'Nom du projet'}),
+			'numero_teamber':TextInput(attrs={'size':40,'placeholder':'Numéro Teamber'}),
 		}
 
 
@@ -40,7 +40,11 @@ class AdresseForm(forms.ModelForm):
 			'ville':TextInput(attrs={'size':40}),
 			'pays':TextInput(attrs={'size':40}),
 		}
-
 		
+
+class PropProjetForm(forms.ModelForm):
+	class Meta:
+		model=PropProjet
+		fields='__all__'
 
 

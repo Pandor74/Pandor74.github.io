@@ -1,0 +1,151 @@
+#content {
+	display:flex;
+	flex-direction: column;
+
+	padding:0;
+	flex-grow: 1;
+}
+
+
+.titre_projet {
+	font-size: 25px;
+	border-bottom:solid white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color:#ff6624;
+	background-color:#3e6a87;
+	font-weight: bold;
+	box-sizing: border-box;
+	height: 35px;
+}
+
+@media all and (min-height:300px) {
+	.titre_projet {
+		position:sticky;
+		top:74px;
+	}
+}
+
+
+.contenu_wrapper {
+	border:solid orange;
+	display:flex;
+	flex-grow: 1;
+}
+
+
+.left_nav_projet {
+	border:solid blue;
+	box-sizing: border-box;
+	width:20%;
+	
+	padding:15px;
+}
+
+
+.left_nav_projet h1 {
+	color:#ff6624;
+	text-decoration: underline;
+}
+
+
+.left_nav_projet a {
+	color:white;
+	text-decoration: none;
+}
+
+.list_wrapper {
+	border:solid red;
+}
+
+.bouton {
+	display: flex;
+	border:solid white 2px;
+	border-radius: 10px;
+	justify-content: center;
+	background-color: #3e6a87;
+	padding:2px 0px 2px 0px;
+	font-weight: bold;
+	align-self: center;
+	
+}
+
+.bouton:hover {
+	background-color:#e00025;
+}
+
+
+
+.contenu_projet {
+	width:80%;
+	border:solid green;
+	/*padding:25px;*/
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: flex-start;
+
+}
+
+
+
+.contenu_projet h2 {
+	color:#ff6624;
+	font-size: 22px;
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.content_wrapper {
+	/*margin-left:25px;*/
+	/*border:solid white;*/
+	box-sizing: border-box;
+	width: 49%;
+	height: auto;
+	padding-left: 25px;
+	padding-right: 50px;
+	
+
+}
+
+.content_wrapper ul {
+	list-style-type: none;
+}
+
+.content_wrapper img {
+	box-sizing: border-box;
+	border: solid white 2px;
+	height:100px;
+	width: 150px;
+}
+
+.content_wrapper strong {
+	margin-left: 25px;
+}
+
+.boutonMod {
+	display: inline-flex;
+	align-self: flex-end;
+	color:white;
+	border:solid white 2px;
+	border-radius: 10px;
+	justify-content: center;
+	background-color: #3e6a87;
+	padding:2px 5px 2px 5px;
+	font-weight: bold;
+	margin-left: 25px;
+	font-size: 15px;
+}
+
+.boutonMod:hover {
+	background-color:#e00025;
+}
+
+.boutonMod a {
+	color: white;
+	text-decoration: none;
+}
+
+

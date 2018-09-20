@@ -13,8 +13,117 @@
 
 {% block content %}
 
-test de la concordance!<br/>
-{{projet.nom}}
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	<div class="left_nav_projet">
+
+		<div class="bouton" id="Baccueil"><a href='{% url "voir_projet" projet.pk %}'>Accueil projet</a></div>
+
+		<div class="list_wrapper" id="ao_wrapper">
+
+			<a href=""><h1>Appels d'offres :</h1></a>
+
+			<ol class="liste" id="liste_ao">
+				<li><a href="">ao 1</a></li>
+				<li><a href="">ao 2</a></li>
+			</ol>
+
+			<div class="bouton" id="Bnouveauao"><a href="">Nouvel Appel d'Offres</a></div>
+
+		</div>
+
+		<div class="list_wrapper" id="lots_wrapper">
+
+			<a href=""><h1>Lots :</h1></a>
+
+			<ol class="liste" id="liste_lots">
+				<li><a href="">ao 1</a></li>
+				<li><a href="">ao 2</a></li>
+			</ol>
+
+			<div class="bouton" id="Bnouveaulot"><a href="">Nouveau Lot</a></div>
+
+		</div>
+
+	</div>
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Informations générales<span class="boutonMod" id="Bmodinfosgene"><a href="">Modifier</a></span></h2>
+			<ul class="liste_prop">
+				<li>Numéro du projet :</li>
+				<li><strong>{{projet.numero_teamber}}</strong></li>
+				<li>Nom du projet :</li>
+				<li><strong>{{projet.nom}}</strong></li>
+				<li>Adresse :</li>
+				<li><strong>{% if projet.adresse.adresse1 != None %}{{projet.adresse.adresse1}}{% endif %}</strong></li>
+				<li>Complément d'adresse :</li>
+				<li><strong>{% if projet.adresse.adresse2 != None %}{{projet.adresse.adresse2}}{% endif %}</strong></li>
+				<li>Code postal :</li>
+				<li><strong>{% if projet.adresse.code_postal != None %}{{projet.adresse.code_postal}}{% endif %}</strong></li>
+				<li>Ville :</li>
+				<li><strong>{% if projet.adresse.ville != None %}{{projet.adresse.ville}}{% endif %}</strong></li>
+				<li>Pays :</li>
+				<li><strong>{% if projet.adresse.pays != None %}{{projet.adresse.pays}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+
+
+		<div class="content_wrapper" id="infos_int">
+			<h2>Informations internes<span class="boutonMod" id="Bmodinfosint"><a href="">Modifier</a></span></h2>
+			<ul class="liste_prop">
+				<li><img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/></li>
+				<li>Agence en charge du projet :</li>
+				<li><strong>{{projet.agence}}</strong></li>
+				<li>Type de consultation :</li>
+				<li><strong>Marché global/par lot</strong></li>
+				<li>Echéance de rendu de la consultation :</li>
+				<li><strong>{% if projet.proprietes.date_fin != None %}{{projet.proprietes.date_fin}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+
+		
+
+		<div class="content_wrapper" id="infos_bat">
+			<h2>Informations sur le bâtiment<span class="boutonMod" id="Bmodinfosbat"><a href="">Modifier</a></span></h2>
+			<ul class="liste_prop">
+				<li>Nombre d'étage du bâtiment :</li>
+				<li><strong>{% if projet.proprietes.nb_etages > 0 %}{{projet.proprietes.nb_etages}}{% endif %}</strong></li>
+				<li>Nombre de lots du bâtiment :</li>
+				<li><strong>{% if projet.proprietes.nb_logements > 0 %}{{projet.proprietes.nb_logements}}{% endif %}</strong></li>
+				<li>Surface au sol du bâtiment :</li>
+				<li><strong>{% if projet.proprietes.surf_sol > 0 %}{{projet.proprietes.surf_sol}}{% endif %}</strong></li>
+				<li>Surface Hors Oeuvre Nette  :</li>
+				<li><strong>{% if projet.proprietes.surf_shon > 0 %}{{projet.proprietes.surf_shon}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+
+		<div class="content_wrapper" id="infos_clent">
+			<h2>Informations sur le client<span class="boutonMod" id="Bmodinfosclient"><a href="">Modifier</a></span></h2>
+			<ul class="liste_prop">
+				<li>Nom :</li>
+				<li><strong></strong></li>
+				<li>Prénom :</li>
+				<li><strong></strong></li>
+				<li>E-mail :</li>
+				<li><strong></strong></li>
+				<li>Téléphone :</li>
+				<li><strong></strong></li>
+				<li>Agence :</li>
+				<li><strong></strong></li>
+			</ul>
+
+		</div>
+
+	</div>
+
+</div>
 
 {% endblock %}
 
