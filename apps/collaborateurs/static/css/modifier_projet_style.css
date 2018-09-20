@@ -35,6 +35,7 @@
 }
 
 
+
 .left_nav_projet {
 	
 	box-sizing: border-box;
@@ -98,9 +99,43 @@
 	border-bottom:solid white 2px;
 	border-top:solid white 2px;
 }
+form {
+	width:80%;
+	display: flex;
+	
+}
+
+form a {
+	color:green;
+}
+
+form li {
+	margin-bottom: 5px;
+}
+
+form input {
+	margin-top: 10px;
+	margin-bottom: 0px;
+
+}
+
+select {
+	margin-right: 10px;
+}
+
+#Beditprojet {
+	background-color:#3e6a87 ;
+	color:white;
+	font-size: 20px;
+}
+
+#Beditprojet:hover {
+	background-color: #e00025;
+}
+
 
 .contenu_projet {
-	width:80%;
+	
 	
 	/*padding:25px;*/
 	display: flex;

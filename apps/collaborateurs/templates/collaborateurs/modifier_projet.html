@@ -1,0 +1,140 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/modifier_projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	<div class="left_nav_projet">
+
+		<div class="bouton" id="Baccueil"><a href='{% url "voir_projet" projet.pk %}'>Accueil projet</a></div>
+		<div class="bouton" id="Bmodifier"><a href='{% url "modifier_projet" projet.pk %}'>Modifier le projet</a></div>
+
+		<div class="list_wrapper" id="ao_wrapper">
+
+			<a href=""><h1>Appels d'offres :</h1></a>
+
+			<ol class="liste" id="liste_ao">
+				<li><a href="">ao 1</a></li>
+				<li><a href="">ao 2</a></li>
+			</ol>
+
+			<div class="bouton" id="Bnouveauao"><a href="">Nouvel Appel d'Offres</a></div>
+
+		</div>
+
+		<div class="list_wrapper" id="lots_wrapper">
+
+			<a href=""><h1>Lots :</h1></a>
+
+			<ol class="liste" id="liste_lots">
+				<li><a href="">ao 1</a></li>
+				<li><a href="">ao 2</a></li>
+			</ol>
+
+			<div class="bouton" id="Bnouveaulot"><a href="">Nouveau Lot</a></div>
+
+		</div>
+
+	</div>
+
+
+
+
+
+	<form enctype="mutlipart/form-data" method"post" action="{% url 'voir_projet' projet.pk %}">
+		{% csrf_token %}
+
+		<div class="contenu_projet">
+			
+
+				<div class="content_wrapper" id="infos_gene">
+					<h2>Informations générales</h2>
+
+					
+					<ul class="liste_prop">
+						<li>Numéro du projet :</li>
+						<li><strong>{{formprojet.numero_teamber}}</strong></li>
+						<li>Nom du projet :</li>
+						<li><strong>{{formprojet.nom}}</strong></li>
+						<li>Adresse :</li>
+						<li><strong>{{formadresse.adresse1}}</strong></li>
+						<li><strong>{{formadresse.adresse2}}</strong></li>
+						<li><strong>{{formadresse.code_postal}}</strong></li>
+						<li><strong>{{formadresse.ville}}</strong></li>
+						<li><strong>{{formadresse.pays}}</strong></li>
+					</ul>
+
+				</div>
+
+
+				<div class="content_wrapper" id="infos_int">
+					<h2>Informations internes</h2>
+					<ul class="liste_prop">
+						<li>{{formprojet.photo}}</li>
+						<li>Agence en charge du projet :</li>
+						<li><strong>{{formprojet.agence}}</strong></li>
+						<li>Type de consultation :</li>
+						<li><strong>Marché global/par lot</strong></li>
+						<li>Echéance de rendu de la consultation :</li>
+						<li><strong>{{formproprietes.date_fin}}</strong></li>
+					</ul>
+
+				</div>
+
+				
+
+				<div class="content_wrapper" id="infos_bat">
+					<h2>Informations sur le bâtiment</h2>
+					<ul class="liste_prop">
+						<li>Nombre d'étage du bâtiment :</li>
+						<li><strong>{{formproprietes.nb_etages}}</strong></li>
+						<li>Nombre de lots du bâtiment :</li>
+						<li><strong>{{formproprietes.nb_logements}}</strong></li>
+						<li>Surface au sol du bâtiment :</li>
+						<li><strong>{{formproprietes.surf_sol}}</strong></li>
+						<li>Surface Hors Oeuvre Nette  :</li>
+						<li><strong>{{formproprietes.surf_shon}}</strong></li>
+					</ul>
+
+				</div>
+
+				<div class="content_wrapper" id="infos_clent">
+					<h2>Informations sur le client</h2>
+					<ul class="liste_prop">
+						<li>Nom :</li>
+						<li><strong></strong></li>
+						<li>Prénom :</li>
+						<li><strong></strong></li>
+						<li>E-mail :</li>
+						<li><strong></strong></li>
+						<li>Téléphone :</li>
+						<li><strong></strong></li>
+						<li>Agence :</li>
+						<li><strong></strong></li>
+					</ul>
+
+				</div>
+
+				<input type="submit" value="Sauvegarder les modifications" id="Beditprojet"/>
+			
+		</div>
+	</form>
+
+</div>
+
+{% endblock %}
+
+

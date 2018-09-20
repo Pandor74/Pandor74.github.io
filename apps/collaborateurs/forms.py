@@ -46,5 +46,8 @@ class PropProjetForm(forms.ModelForm):
 	class Meta:
 		model=PropProjet
 		fields='__all__'
+		widgets= {
+			'date_fin': SelectDateWidget,
+			}
 
 

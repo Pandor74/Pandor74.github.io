@@ -56,6 +56,20 @@ def new_projet(request):
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
 
 
+def modifier_projet(request,pk):
+	envoi=False
+
+	projet=Projet.objects.get(numero_teamber=pk)
+	adresse=projet.adresse
+	proprietes=projet.proprietes
+	formprojet=ProjetForm(instance=projet)
+	formproprietes=PropProjetForm(instance=proprietes)
+	formadresse=AdresseForm(instance=adresse)
+
+
+	
+
+	return render(request,'collaborateurs/modifier_projet.html',locals())
 
 
 
