@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,PropProjetForm
 from collaborateurs.models import Projet,Adresse,PropProjet
 from django.core.mail import send_mail
@@ -57,20 +57,43 @@ def new_projet(request):
 
 
 def modifier_projet(request,pk):
-	envoi=False
+	modif=False
+	oui=False
+	projet=get_object_or_404(Projet,pk=pk)
 
-	projet=Projet.objects.get(numero_teamber=pk)
-	adresse=projet.adresse
-	proprietes=projet.proprietes
-	formprojet=ProjetForm(instance=projet)
-	formproprietes=PropProjetForm(instance=proprietes)
-	formadresse=AdresseForm(instance=adresse)
+
+	if request.method == 'POST':
+		modif=True
+		formprojet=ProjetForm(request.POST,request.FILES,instance=projet)
+		formproprietes=PropProjetForm(request.POST,instance=projet.proprietes)
+		formadresse=AdresseForm(request.POST,instance=projet.adresse)
+
+		if formproprietes.is_valid() and formadresse.is_valid():
+			
+			#formprojet.adresse=formadresse.save(commit=False)
+			#formprojet.proprietes=formproprietes.save(commit=False)
+
+			if formprojet.is_valid():
+				modif=True
+				formadresse.save()
+				formproprietes.save()
+				formprojet.save()
+				#projet.photo.save(request.POST.get('photo'),request.FILES['photo'],save=True)
+			
+
+
+				return render(request,'collaborateurs/projet.html',locals())
+
+
+		return render(request,'collaborateurs/modifier_projet.html',locals())
 
 
 	
+	formprojet=ProjetForm(instance=projet)
+	formproprietes=PropProjetForm(instance=projet.proprietes)
+	formadresse=AdresseForm(instance=projet.adresse)
 
 	return render(request,'collaborateurs/modifier_projet.html',locals())
-
 
 
 

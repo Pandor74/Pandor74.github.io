@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 import datetime
 from django import forms
+from storage import OverwriteStorage
+import os
+from django.conf import settings
+
+
+
 
 # Create your models here.
 class Adresse(models.Model):
@@ -12,7 +18,10 @@ class Adresse(models.Model):
 	pays=models.CharField(default="France",null=True,blank=True,max_length=255,verbose_name="Pays ")
 
 	def __str__(self):
-		return self.adresse1 + '-' + self.adresse2 + '-' + self.code_postal +'-' + self.ville + '-' + self.pays
+		return 'adresse'
+
+	
+
 
 
 class PropProjet(models.Model):
@@ -26,12 +35,19 @@ class PropProjet(models.Model):
 		return 'je suis les propriétés du projet'
 
 
+def right(name,char):
+	left,right=name.split(char)
+	return right
+
+
+def image_path(instance,filename):
+	return os.path.join('images/',str(instance.numero_teamber),'logo_projet'+'.'+right(filename,"."))
 
 class Projet(models.Model):
 	numero_teamber=models.CharField(max_length=255,verbose_name="Numéro Teamber ",primary_key=True,unique=True)
 	nom=models.CharField(max_length=255,verbose_name="Nom du projet ")
 	agence=models.CharField(max_length=20,default="Annecy",choices=(('Annecy','Annecy'),('Lyon','Lyon')),null=True,blank=True,verbose_name="Agence interne")
-	photo=models.ImageField(upload_to="images/",default="images/logo.jpg",blank=True,null=True,verbose_name="Photo du projet (facultatif) ")
+	photo=models.ImageField(upload_to=image_path,default="images/logo.jpg",blank=True,null=True,verbose_name="Photo du projet (facultatif) ",storage=OverwriteStorage())
 
 	
 	date_creation = models.DateField(default=datetime.date.today,verbose_name="Date de création ")
@@ -50,6 +66,9 @@ class Projet(models.Model):
 
 	def save(self,*args,**kwargs):
 		super().save(*args,**kwargs)
+
+	def image_path(instance,filename):
+		return os.path.join('images/',str(instance.numero_teamber),'/')
 
 
 

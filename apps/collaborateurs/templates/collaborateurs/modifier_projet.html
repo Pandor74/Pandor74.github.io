@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block scriptpers %}
-<script src="../../static/js/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="../../static/js/projet.js"></script>
+<script src="{{STATICFILES_DIRS}}/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="{{STATICFILES_DIRS}}/static/js/projet.js"></script>
 {% endblock %}
 
 
@@ -54,7 +54,7 @@
 
 
 
-	<form enctype="mutlipart/form-data" method"post" action="{% url 'voir_projet' projet.pk %}">
+	<form enctype="multipart/form-data" method="post" action='{% url "modifier_projet" projet.pk %}'>
 		{% csrf_token %}
 
 		<div class="contenu_projet">
