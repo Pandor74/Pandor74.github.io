@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,PropProjetForm
-from collaborateurs.models import Projet,Adresse,PropProjet
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm
+from collaborateurs.models import Projet,Adresse,Propriete
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
@@ -31,18 +31,20 @@ def new_projet(request):
 		formAdresse=AdresseForm(request.POST or None,)
 		projet=Projet()
 		form=ProjetForm(request.POST, request.FILES)
-		proprietes=PropProjet()
-		formProp=PropProjetForm(request.POST or None,)
+		propriete=Propriete()
+		formProp=ProprietesForm(request.POST or None,)
 		if form.is_valid() and formAdresse.is_valid() and formProp.is_valid():
 
 			envoi=True
 			
 			adresse=formAdresse.save()
 			projet=form.save()
-			projet.adresse=adresse
-			proprietes=formProp.save()
-			projet.proprietes=proprietes
-			projet.save()
+			adresse.projet=projet
+			adresse.save()
+
+			propriete=formProp.save()
+			propriete.projet=projet
+			propriete.save()
 			
 			
 
@@ -65,7 +67,7 @@ def modifier_projet(request,pk):
 	if request.method == 'POST':
 		modif=True
 		formprojet=ProjetForm(request.POST,request.FILES,instance=projet)
-		formproprietes=PropProjetForm(request.POST,instance=projet.proprietes)
+		formproprietes=ProprietesForm(request.POST,instance=projet.propriete)
 		formadresse=AdresseForm(request.POST,instance=projet.adresse)
 
 		if formproprietes.is_valid() and formadresse.is_valid():
@@ -90,7 +92,7 @@ def modifier_projet(request,pk):
 
 	
 	formprojet=ProjetForm(instance=projet)
-	formproprietes=PropProjetForm(instance=projet.proprietes)
+	formproprietes=ProprietesForm(instance=projet.propriete)
 	formadresse=AdresseForm(instance=projet.adresse)
 
 	return render(request,'collaborateurs/modifier_projet.html',locals())

@@ -1,5 +1,5 @@
 from django import forms
-from collaborateurs.models import Projet,Adresse,PropProjet
+from collaborateurs.models import Projet,Adresse,Propriete
 from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.widgets import AdminDateWidget
@@ -7,7 +7,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 class ProjetForm(forms.ModelForm):
 	class Meta:
 		model=Projet
-		exclude=['date_creation','adresse','proprietes']
+		exclude=['date_creation']
 		localized_fields=('__all__')
 		widgets= {
 			'nom':TextInput(attrs={'size':40,'placeholder':'Nom du projet'}),
@@ -32,7 +32,7 @@ class FiltreForm(forms.Form):
 class AdresseForm(forms.ModelForm):
 	class Meta:
 		model=Adresse
-		fields='__all__'
+		exclude=['projet']
 		widgets= {
 			'adresse1':TextInput(attrs={'size':40}),
 			'adresse2':TextInput(attrs={'size':40}),
@@ -42,10 +42,10 @@ class AdresseForm(forms.ModelForm):
 		}
 		
 
-class PropProjetForm(forms.ModelForm):
+class ProprietesForm(forms.ModelForm):
 	class Meta:
-		model=PropProjet
-		fields='__all__'
+		model=Propriete
+		exclude=['projet']
 		widgets= {
 			'date_fin': SelectDateWidget(),
 			}

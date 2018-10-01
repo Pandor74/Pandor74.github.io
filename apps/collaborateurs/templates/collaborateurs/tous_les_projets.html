@@ -35,7 +35,13 @@
 
 	{% for projet in projets %}
 	<div class="line_wrapper">
-		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" ><img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100" /></a></div>
+		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >
+			{% if projet.photo %}
+				<img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100" />
+			{% else %}
+				<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100" />
+			{% endif %}
+		</a></div>
 		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.numero_teamber}}</a></div>
 		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.nom}}</a></div>
 		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" ><ul><li>{{projet.adresse.adresse1}}</li><li>{{projet.adresse.adresse2}}</li><li>{{projet.adresse.code_postal}}</li><li>{{projet.adresse.ville|upper}}</li></ul></a></div> 
