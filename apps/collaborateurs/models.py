@@ -41,7 +41,16 @@ def right(name,char):
 
 
 def image_path(instance,filename):
-	return os.path.join('images/',str(instance.numero_teamber),'logo_projet'+'.'+right(filename,"."))
+	path=os.path.join(settings.BASE_DIR,'media','images',str(instance.numero_teamber))
+
+	if not os.path.isdir(path):
+		print(path,' n\'existe pas')
+		os.makedirs(path)
+
+	else :
+		print(path, 'existe')
+
+	return os.path.join(path,'logo_projet'+'.'+right(filename,"."))
 
 class Projet(models.Model):
 	numero_teamber=models.CharField(max_length=255,verbose_name="Numéro Teamber ",primary_key=True,unique=True)
