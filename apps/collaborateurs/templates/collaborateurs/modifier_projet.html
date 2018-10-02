@@ -17,38 +17,7 @@
 
 <div class="contenu_wrapper">
 
-	<div class="left_nav_projet">
-
-		<div class="bouton" id="Baccueil"><a href='{% url "voir_projet" projet.pk %}'>Accueil projet</a></div>
-		<div class="bouton" id="Bmodifier"><a href='{% url "modifier_projet" projet.pk %}'>Modifier le projet</a></div>
-
-		<div class="list_wrapper" id="ao_wrapper">
-
-			<a href=""><h1>Appels d'offres :</h1></a>
-
-			<ol class="liste" id="liste_ao">
-				<li><a href="">ao 1</a></li>
-				<li><a href="">ao 2</a></li>
-			</ol>
-
-			<div class="bouton" id="Bnouveauao"><a href="">Nouvel Appel d'Offres</a></div>
-
-		</div>
-
-		<div class="list_wrapper" id="lots_wrapper">
-
-			<a href=""><h1>Lots :</h1></a>
-
-			<ol class="liste" id="liste_lots">
-				<li><a href="">ao 1</a></li>
-				<li><a href="">ao 2</a></li>
-			</ol>
-
-			<div class="bouton" id="Bnouveaulot"><a href="">Nouveau Lot</a></div>
-
-		</div>
-
-	</div>
+	{% include "././navigation.html" %}
 
 
 
@@ -67,12 +36,16 @@
 					<ul class="liste_prop">
 						<li>Numéro du projet :</li>
 						<li><strong>{{formprojet.numero_teamber}}</strong></li>
+
 						<li>Nom du projet :</li>
 						<li><strong>{{formprojet.nom}}</strong></li>
+
 						<li>Adresse :</li>
 						<li><strong>{{formadresse.adresse1}}</strong></li>
+
 						<li><strong>{{formadresse.adresse2}}</strong></li>
 						<li><strong>{{formadresse.code_postal}}</strong></li>
+						
 						<li><strong>{{formadresse.ville}}</strong></li>
 						<li><strong>{{formadresse.pays}}</strong></li>
 					</ul>
@@ -83,13 +56,27 @@
 				<div class="content_wrapper" id="infos_int">
 					<h2>Informations internes</h2>
 					<ul class="liste_prop">
+						<li>Photo :</li>
 						<li>{{formprojet.photo}}</li>
+
 						<li>Agence en charge du projet :</li>
 						<li><strong>{{formprojet.agence}}</strong></li>
+
+						<li>Type de client :</li>
+						<li><strong>{{formproprietes.secteur}}</strong></li>
+
+						<li>Catégorie de travaux :</li>
+						<li><strong>{{formproprietes.travaux}}</strong></li>
+
 						<li>Type de consultation :</li>
-						<li><strong>Marché global/par lot</strong></li>
+						<li><strong>{{formproprietes.consultation}}</strong></li>
+
 						<li>Echéance de rendu de la consultation :</li>
 						<li><strong>{{formproprietes.date_fin}}</strong></li>
+
+						
+
+
 					</ul>
 
 				</div>
@@ -99,6 +86,8 @@
 				<div class="content_wrapper" id="infos_bat">
 					<h2>Informations sur le bâtiment</h2>
 					<ul class="liste_prop">
+						<li>Type architecture du bâtiment :</li>
+						<li><strong>{{formproprietes.architecture}}</strong></li>
 						<li>Nombre d'étage du bâtiment :</li>
 						<li><strong>{{formproprietes.nb_etages}}</strong></li>
 						<li>Nombre de lots du bâtiment :</li>

@@ -1,6 +1,6 @@
-from django.shortcuts import render,redirect,get_object_or_404
-from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm
-from collaborateurs.models import Projet,Adresse,Propriete
+from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm,LotForm,DocumentForm
+from collaborateurs.models import Projet,Adresse,Propriete,Lot,Document
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
@@ -62,6 +62,7 @@ def modifier_projet(request,pk):
 	modif=False
 	oui=False
 	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
 
 
 	if request.method == 'POST':
@@ -75,7 +76,10 @@ def modifier_projet(request,pk):
 			#formprojet.adresse=formadresse.save(commit=False)
 			#formprojet.proprietes=formproprietes.save(commit=False)
 
+
+			print('avant validation projet')
 			if formprojet.is_valid():
+				print('après validation projet')
 				modif=True
 				formadresse.save()
 				formproprietes.save()
@@ -154,17 +158,88 @@ class ListeProjets(FormListView):
 
 
 
-class VoirProjet(DetailView):
-	context_object_name="projet"
-	model=Projet
-	template_name="collaborateurs/projet.html"
-
-	
 
 
-	
+def Afficher_Projet(request,pk):
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+
+	return render(request,'collaborateurs/projet.html',locals())
 	
 
 	
-
 		
+def new_lot(request,pk):
+	envoi=False
+	print(pk)
+	print('ok')
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+
+	if request.method=='POST':
+		lot=Lot()
+		formLot=LotForm(request.POST or None,)
+
+		docDPGF=Document()
+		docCCTP=Document()
+		docAUTRE=Document()
+		formDocDPGF=DocumentForm(request.POST,request.FILES)
+		formDocCCTP=DocumentForm(request.POST,request.FILES)
+		formDocAUTRE=DocumentForm(request.POST,request.FILES)
+
+		if formLot.is_valid():
+
+			envoi=True
+			lot=formLot.save(commit=False)
+			lot.projet=projet
+			lot.save()
+
+			if formDocDPGF.is_valid():
+				print('DPGF')
+				docDPGF=formDocDPGF.save(commit=False)
+				docDPGF.lot=lot
+				docDPGF.save()
+
+			if formDocCCTP.is_valid():
+				print('CCTP')
+				docCCTP=formDocCCTP.save(commit=False)
+				docCCTP.lot=lot
+				docCCTP.save()
+
+			if formDocAUTRE.is_valid():
+				print('AUTRE')
+				docAUTRE=formDocAUTRE.save(commit=False)
+				docAUTRE.lot=lot
+				docAUTRE.save()
+			
+			
+
+			return redirect('lister_lot',pk=projet.pk)
+
+		return render(request,'collaborateurs/nouveau_lot.html',locals())
+	else:
+		formLot=LotForm()
+		formDocDPGF=DocumentForm(initial={'categorie':'DPGF'})
+		formDocCCTP=DocumentForm(initial={'categorie':'CCTP'})
+		formDocAUTRE=DocumentForm(initial={'categorie':'AUTRE'})
+
+	return render(request,'collaborateurs/nouveau_lot.html',locals())
+
+
+def liste_lot(request,pk):
+	projet=get_object_or_404(Projet,pk=pk)
+
+	lots=Lot.objects.filter(projet=projet)
+
+	return render(request,'collaborateurs/tous_les_lots.html',locals())
+
+	
+
+
+
+def Afficher_Lot(request,pk,id):
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+	lot=get_object_or_404(Lot,pk=id)
+
+	return render(request,'collaborateurs/lot.html',locals())

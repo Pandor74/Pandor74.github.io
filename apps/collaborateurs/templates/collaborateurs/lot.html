@@ -1,0 +1,52 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Informations générales</h2>
+			<ul class="liste_prop">
+				<li>Numéro du projet :</li>
+				<li><strong>{{projet.numero_teamber}}</strong></li>
+				<li>Nom du projet :</li>
+				<li><strong>{{projet.nom}}</strong></li>
+				<li>Adresse :</li>
+				<li><strong>{% if projet.adresse.adresse1 != None %}{{projet.adresse.adresse1}}{% endif %}</strong></li>
+				<li><strong>{% if projet.adresse.adresse2 != None %}{{projet.adresse.adresse2}}{% endif %}</strong></li>
+				<li><strong>{% if projet.adresse.code_postal != None %}{{projet.adresse.code_postal}}{% endif %} - {% if projet.adresse.ville != None %}{{projet.adresse.ville}}{% endif %}</strong></li>
+				<li><strong>{% if projet.adresse.pays != None %}{{projet.adresse.pays}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+			je suis le lot {{lot}}
+	</div>
+
+</div>
+
+{% endblock %}
+
+

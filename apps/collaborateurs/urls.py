@@ -26,6 +26,10 @@ urlpatterns = [
 	path('nouveau_projet',views.new_projet,name="nouveau_projet"),
     re_path('projets/',views.ListeProjets.as_view(),name="projets_liste"),
     url(r'^projet/modifier/(?P<pk>.+)$',views.modifier_projet,name="modifier_projet"),
-    url(r'^projet/(?P<pk>.+)$',views.VoirProjet.as_view(),name="voir_projet"),
+    url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="voir_projet"),
+    url(r'^projet/(?P<pk>.{1,9})/nouveau-lot$',views.new_lot,name="nouveau_lot"),
+    url(r'^projet/(?P<pk>.{1,9})/lots$',views.liste_lot,name="lister_lot"),
+    url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>.{1,3})$',views.Afficher_Lot,name="voir_lot"),
+
 
 ]

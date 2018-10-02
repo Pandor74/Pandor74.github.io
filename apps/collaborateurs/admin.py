@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Projet,Adresse,Propriete
+from .models import Projet,Adresse,Propriete,Lot,Document
 
 # Register your models here.
 
@@ -7,3 +7,5 @@ from .models import Projet,Adresse,Propriete
 admin.site.register(Projet)
 admin.site.register(Adresse)
 admin.site.register(Propriete)
+admin.site.register(Document)
+admin.site.register(Lot)

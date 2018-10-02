@@ -17,38 +17,7 @@
 
 <div class="contenu_wrapper">
 
-	<div class="left_nav_projet">
-
-		<div class="bouton" id="Baccueil"><a href='{% url "voir_projet" projet.pk %}'>Accueil projet</a></div>
-		<div class="bouton" id="Bmodifier"><a href='{% url "modifier_projet" projet.pk %}'>Modifier le projet</a></div>
-
-		<div class="list_wrapper" id="ao_wrapper">
-
-			<a href=""><h1>Appels d'offres :</h1></a>
-
-			<ol class="liste" id="liste_ao">
-				<li><a href="">ao 1</a></li>
-				<li><a href="">ao 2</a></li>
-			</ol>
-
-			<div class="bouton" id="Bnouveauao"><a href="">Nouvel Appel d'Offres</a></div>
-
-		</div>
-
-		<div class="list_wrapper" id="lots_wrapper">
-
-			<a href=""><h1>Lots :</h1></a>
-
-			<ol class="liste" id="liste_lots">
-				<li><a href="">ao 1</a></li>
-				<li><a href="">ao 2</a></li>
-			</ol>
-
-			<div class="bouton" id="Bnouveaulot"><a href="">Nouveau Lot</a></div>
-
-		</div>
-
-	</div>
+	{% include "././navigation.html" %}
 
 
 
@@ -85,10 +54,19 @@
 					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
 					{% endif %}
 				</li>
+
 				<li>Agence en charge du projet :</li>
 				<li><strong>{{projet.agence}}</strong></li>
+
+				<li>Type de client :</li>
+				<li><strong>{% if projet.proprietes.secteur != None %}{{projet.proprietes.secteur}}{% endif %}</strong></li>
+
+				<li>Catégorie de travaux :</li>
+				<li><strong>{% if projet.proprietes.travaux != None %}{{projet.proprietes.travaux}}{% endif %}</strong></li>
+
 				<li>Type de consultation :</li>
-				<li><strong>Marché global/par lot</strong></li>
+				<li><strong>{% if projet.proprietes.consultation != None %}{{projet.proprietes.consultation}}{% endif %}</strong></li>
+
 				<li>Echéance de rendu de la consultation :</li>
 				<li><strong>{% if projet.proprietes.date_fin != None %}{{projet.proprietes.date_fin}}{% endif %}</strong></li>
 			</ul>
@@ -100,12 +78,18 @@
 		<div class="content_wrapper" id="infos_bat">
 			<h2>Informations sur le bâtiment</h2>
 			<ul class="liste_prop">
+				<li>Type architecture du bâtiment :</li>
+				<li><strong>{% if projet.proprietes.architecture != None %}{{projet.projet.proprietes.architecture}}{% endif %}</strong></li>
+
 				<li>Nombre d'étage du bâtiment :</li>
 				<li><strong>{% if projet.propriete.nb_etages > 0 %}{{projet.propriete.nb_etages}}{% endif %}</strong></li>
+
 				<li>Nombre de lots du bâtiment :</li>
 				<li><strong>{% if projet.propriete.nb_logements > 0 %}{{projet.propriete.nb_logements}}{% endif %}</strong></li>
+
 				<li>Surface au sol du bâtiment :</li>
 				<li><strong>{% if projet.propriete.surf_sol > 0 %}{{projet.propriete.surf_sol}}{% endif %}</strong></li>
+
 				<li>Surface Hors Oeuvre Nette  :</li>
 				<li><strong>{% if projet.propriete.surf_shon > 0 %}{{projet.propriete.surf_shon}}{% endif %}</strong></li>
 			</ul>

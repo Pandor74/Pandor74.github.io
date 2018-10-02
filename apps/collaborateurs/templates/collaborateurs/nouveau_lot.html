@@ -1,0 +1,82 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/modifier_projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="{{STATICFILES_DIRS}}/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="{{STATICFILES_DIRS}}/static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+	<form enctype="multipart/form-data" method="post" action='{% url "nouveau_lot" projet.pk %}'>
+		{% csrf_token %}
+
+		<div class="contenu_projet">
+			
+			<div class="content_wrapper" id="infos_lot">
+				<h2>Création d'un Lot</h2>
+
+					
+				<ul class="liste_prop">
+					<li>Numéro du Lot :</li>
+					<li><strong>{{formLot.numero}}</strong></li>
+
+					<li>Nom du Lot :</li>
+					<li><strong>{{formLot.nom}}</strong></li>
+
+					<li>Nom court :</li>
+					<li><strong>{{formLot.short_name}}</strong></li>
+
+					<li>Activités relatives au lot :</li>
+					<li>{{formLot.activites}}</li>
+
+					<li>Description :</li>
+					<li><strong>{{formLot.description}}</strong></li>
+				</ul>
+
+			</div>
+
+
+
+			<div class="content_wrapper" id="infos_docs">
+				<h2>Documents associés</h2>
+
+					
+				<ul class="liste_prop">
+					<li>{{formDocDPGF.categorie}} {{formDocDPGF.fichier}}</li>
+
+					<li>{{formDocCCTP.categorie}} {{formDocCCTP.fichier}}</li>
+
+					<li>{{formDocAUTRE.categorie}} {{formDocAUTRE.fichier}}</li>
+
+
+				</ul>
+
+			</div>
+
+
+			<input type="submit" value="Créér le lot" id="Beditprojet"/>
+			
+		</div>
+	</form>
+
+</div>
+
+{% endblock %}
+
+
