@@ -123,10 +123,20 @@ LISTE_ACTIVITES =(
 		('Elec','Electricité'),
 	)
 
+LISTE_SUFFIXE=(
+		('','Aucun'),
+		('A','A'),
+		('B','B'),
+		('C','C'),
+		('bis','Bis'),
+		('ter','Ter'),
+	)
+
 
 
 class Lot(models.Model):
-	numero=models.CharField(max_length=7,null=True,verbose_name="Numéro du lot ")
+	numero=models.IntegerField(default=0,verbose_name="Numéro du lot ")
+	suffixe=models.CharField(max_length=5,default='',blank=True,choices=LISTE_SUFFIXE,verbose_name="Suffixe")
 	description=models.TextField(null=True,blank=True,verbose_name="Description succincte ",help_text="Décrivez de manière succincte les éléments constitutifs du travail à faire")
 	short_name=models.CharField(max_length=10,null=True,verbose_name="Nom court pour identifier le lot facilement",help_text="Sera utilisé dans la barre de navigation")
 	nom=models.CharField(max_length=255,null=True,verbose_name="Nom du lot ")
@@ -137,17 +147,20 @@ class Lot(models.Model):
 	activites=models.CharField(max_length=255,choices=LISTE_ACTIVITES,verbose_name="Types d'activités relative au lot")
 
 	class Meta:
-		ordering=['numero']
+		ordering=['numero','suffixe']
 
 
 	def __str__(self):
-		return 'N° ' + self.numero + ' - ' + self.short_name
+		return 'N° ' + str(self.numero) + ' ' + self.suffixe + ' - ' + self.short_name
+
+	def decris_toi(self):
+		return ' N°' + str(self.numero) + ' ' + self.suffixe + ' : ' + self.short_name + ' - ' + self.nom
 
 
 
 #défini le chemin d'enregistrement des fichiers des lots
 def fichier_path(instance,filename):
-	path=os.path.join(settings.BASE_DIR,'media','fichiers',str(instance.lot.projet.numero_teamber))
+	path=os.path.join(settings.BASE_DIR,'media','fichiers',str(instance.lot.projet.numero_teamber),str(instance.lot.nom))
 
 	if not os.path.isdir(path):
 		print(path,' chemin fichier n\'existe pas')

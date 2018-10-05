@@ -30,7 +30,7 @@
 		<div class="content_wrapper" id="infos_gene">
 			<h2>Les lots du projet</h2>
 				{% for lot in lots %}
-					<p>{{lot}}</p>
+					<p>{{lot.decris_toi|upper}}</p>
 				{% empty %}
 					<p>Aucun lot n'a été créé a ce jour !</p>
 				{% endfor %}

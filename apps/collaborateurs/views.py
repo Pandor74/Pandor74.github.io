@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
-from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm,LotForm,DocumentForm
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm,LotForm,DocumentForm,FichiersForm
 from collaborateurs.models import Projet,Adresse,Propriete,Lot,Document
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
@@ -20,7 +20,6 @@ def deconnexion(request):
 	deco=True
 
 	return render(request,'visiteurs/base.html',locals())
-
 
 def new_projet(request):
 	envoi=False
@@ -56,7 +55,6 @@ def new_projet(request):
 		formAdresse=AdresseForm()
 
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
-
 
 def modifier_projet(request,pk):
 	modif=False
@@ -101,9 +99,6 @@ def modifier_projet(request,pk):
 
 	return render(request,'collaborateurs/modifier_projet.html',locals())
 
-
-
-
 #sert a préparer le terrain pour LIsteprojets
 class FormListView(ListView,FormMixin):
 	def get(self, request, *args, **kwargs):
@@ -123,7 +118,6 @@ class FormListView(ListView,FormMixin):
 
 	def post(self, request, *args, **kwargs):
 		return self.get(request, *args, **kwargs)
-
 
 class ListeProjets(FormListView):
 	form_class=FiltreForm
@@ -156,36 +150,27 @@ class ListeProjets(FormListView):
 		
 		return context
 
-
-
-
-
 def Afficher_Projet(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
 
 	return render(request,'collaborateurs/projet.html',locals())
-	
-
-	
 		
 def new_lot(request,pk):
 	envoi=False
-	print(pk)
-	print('ok')
+	print('pk du projet ' + str(pk))
+	print('création d\'un lot')
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
 
 	if request.method=='POST':
 		lot=Lot()
 		formLot=LotForm(request.POST or None,)
+		formFichiers=FichiersForm(request.POST or None,)
 
 		docDPGF=Document()
 		docCCTP=Document()
 		docAUTRE=Document()
-		formDocDPGF=DocumentForm(request.POST,request.FILES)
-		formDocCCTP=DocumentForm(request.POST,request.FILES)
-		formDocAUTRE=DocumentForm(request.POST,request.FILES)
 
 		if formLot.is_valid():
 
@@ -194,24 +179,91 @@ def new_lot(request,pk):
 			lot.projet=projet
 			lot.save()
 
-			if formDocDPGF.is_valid():
-				print('DPGF')
-				docDPGF=formDocDPGF.save(commit=False)
-				docDPGF.lot=lot
-				docDPGF.save()
+			if formFichiers.is_valid():
+				print('fichiers validés')
+				print(request.FILES)
 
-			if formDocCCTP.is_valid():
-				print('CCTP')
-				docCCTP=formDocCCTP.save(commit=False)
-				docCCTP.lot=lot
-				docCCTP.save()
+				if "fDPGF" in request.FILES:
+					print('fichier DPGF associé')
+					docDPGF.fichier=request.FILES['fDPGF']
+					docDPGF.categorie="DPGF"
+					docDPGF.lot=lot
+					docDPGF.save()
 
-			if formDocAUTRE.is_valid():
-				print('AUTRE')
-				docAUTRE=formDocAUTRE.save(commit=False)
-				docAUTRE.lot=lot
-				docAUTRE.save()
-			
+				if "fCCTP" in request.FILES:
+					print('fichier CCTP associé')
+					docCCTP.fichier=request.FILES['fCCTP']
+					docCCTP.categorie="CCTP"
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f1" in request.FILES:
+					print('fichier annexe 1 associé')
+					docCCTP.fichier=request.FILES['f1']
+					docCCTP.categorie=formFichiers.cleaned_data['c1']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f2" in request.FILES:
+					print('fichier annexe 2 associé')
+					docCCTP.fichier=request.FILES['f2']
+					docCCTP.categorie=formFichiers.cleaned_data['c2']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f3" in request.FILES:
+					print('fichier annexe 3 associé')
+					docCCTP.fichier=request.FILES['f3']
+					docCCTP.categorie=formFichiers.cleaned_data['c3']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f4" in request.FILES:
+					print('fichier annexe 4 associé')
+					docCCTP.fichier=request.FILES['f4']
+					docCCTP.categorie=formFichiers.cleaned_data['c4']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f5" in request.FILES:
+					print('fichier annexe 5 associé')
+					docCCTP.fichier=request.FILES['f5']
+					docCCTP.categorie=formFichiers.cleaned_data['c5']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f6" in request.FILES:
+					print('fichier annexe 6 associé')
+					docCCTP.fichier=request.FILES['f6']
+					docCCTP.categorie=formFichiers.cleaned_data['c6']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f7" in request.FILES:
+					print('fichier annexe 7 associé')
+					docCCTP.fichier=request.FILES['f7']
+					docCCTP.categorie=formFichiers.cleaned_data['c7']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f8" in request.FILES:
+					print('fichier annexe 8 associé')
+					docCCTP.fichier=request.FILES['f8']
+					docCCTP.categorie=formFichiers.cleaned_data['c8']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+				if "f9" in request.FILES:
+					print('fichier annexe 9 associé')
+					docCCTP.fichier=request.FILES['f9']
+					docCCTP.categorie=formFichiers.cleaned_data['c9']
+					docCCTP.lot=lot
+					docCCTP.save()
+
+
+
+
+
 			
 
 			return redirect('lister_lot',pk=projet.pk)
@@ -219,9 +271,7 @@ def new_lot(request,pk):
 		return render(request,'collaborateurs/nouveau_lot.html',locals())
 	else:
 		formLot=LotForm()
-		formDocDPGF=DocumentForm(initial={'categorie':'DPGF'})
-		formDocCCTP=DocumentForm(initial={'categorie':'CCTP'})
-		formDocAUTRE=DocumentForm(initial={'categorie':'AUTRE'})
+		formFichiers=FichiersForm()
 
 	return render(request,'collaborateurs/nouveau_lot.html',locals())
 
