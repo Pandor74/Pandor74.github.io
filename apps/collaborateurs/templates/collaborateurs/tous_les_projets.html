@@ -44,7 +44,15 @@
 		</a></div>
 		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.numero_teamber}}</a></div>
 		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.nom}}</a></div>
-		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" ><ul><li>{{projet.adresse.adresse1}}</li><li>{{projet.adresse.adresse2}}</li><li>{{projet.adresse.code_postal}}</li><li>{{projet.adresse.ville|upper}}</li></ul></a></div> 
+		<div class="projet_prop">
+			<a href="{% url 'voir_projet' projet.pk %}" >
+				<ul>
+					{% if projet.adresse.adresse1 %}<li>{{projet.adresse.adresse1}}</li>{% endif %}
+					{% if projet.adresse.adresse2 %}<li>{{projet.adresse.adresse2}}</li>{% endif %}
+					{% if projet.adresse.code_postal %}<li>{{projet.adresse.code_postal}}</li>{% endif %}
+					{% if projet.adresse.ville %}<li>{{projet.adresse.ville|upper}}</li>{% endif %}
+				</ul>
+			</a></div> 
 		<div class="projet_prop">projet.date retour AO</div>
 		<div class="projet_prop">projet.avancement</div>
 	</div>

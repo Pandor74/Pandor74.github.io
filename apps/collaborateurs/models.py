@@ -124,7 +124,7 @@ LISTE_ACTIVITES =(
 	)
 
 LISTE_SUFFIXE=(
-		('','Aucun'),
+		('','Suffixe'),
 		('A','A'),
 		('B','B'),
 		('C','C'),

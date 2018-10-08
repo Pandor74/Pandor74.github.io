@@ -1,0 +1,26 @@
+[1mdiff --git a/apps/collaborateurs/apps.py b/apps/collaborateurs/apps.py[m
+[1mindex ddbbc66..d602d9f 100644[m
+[1m--- a/apps/collaborateurs/apps.py[m
+[1m+++ b/apps/collaborateurs/apps.py[m
+[36m@@ -2,4 +2,4 @@[m [mfrom django.apps import AppConfig[m
+ [m
+ [m
+ class CollaborateursConfig(AppConfig):[m
+[31m-    name = 'collaborateurs'[m
+[32m+[m[32m    name = 'collaborateurs'[m
+\ No newline at end of file[m
+[1mdiff --git a/apps/collaborateurs/templates/collaborateurs/base.html b/apps/collaborateurs/templates/collaborateurs/base.html[m
+[1mindex da72608..fa01b84 100644[m
+[1m--- a/apps/collaborateurs/templates/collaborateurs/base.html[m
+[1m+++ b/apps/collaborateurs/templates/collaborateurs/base.html[m
+[36m@@ -5,6 +5,7 @@[m
+   [m
+ [m
+    <link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/base_style.css" />[m
+[32m+[m[32m   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">[m
+    {% block stylepers %}[m
+    {% endblock %}[m
+ [m
+[1mdiff --git a/db.sqlite3 b/db.sqlite3[m
+[1mindex 31fa90b..ee05626 100644[m
+Binary files a/db.sqlite3 and b/db.sqlite3 differ
