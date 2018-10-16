@@ -11,12 +11,13 @@ from django.conf import settings
 
 
 
-
+#Extrait l'extension d'un fichier si char est un .
 def right(name,char):
 	left,right=name.split(char)
 	return right
 
 
+#définit et créé si besoin le chemin d'enregistrement des fichiers de type image pour le logo du projet
 def image_path(instance,filename):
 	path=os.path.join(settings.BASE_DIR,'media','images',str(instance.numero_teamber))
 
@@ -31,7 +32,7 @@ def image_path(instance,filename):
 
 
 
-
+#défini le modèle Projet
 class Projet(models.Model):
 	numero_teamber=models.CharField(max_length=255,verbose_name="Numéro Teamber (unique) ",primary_key=True,unique=True)
 	nom=models.CharField(max_length=255,verbose_name="Nom du projet ")
@@ -61,7 +62,7 @@ class Projet(models.Model):
 
 
 
-# Create your models here.
+# définit le modèle Adresse
 class Adresse(models.Model):
 	adresse1=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Adresse N°1 ")
 	adresse2=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Adresse N°2 ")
@@ -75,13 +76,15 @@ class Adresse(models.Model):
 	def __str__(self):
 		return 'adresse de ' + self.projet.numero_teamber
 
-	
+
+#comporte la liste des types d'architecture
 LISTE_ARCHITECTURE =(
 		('basique','Basique'),
 		('moyenne','Moyenne'),
 		('complexe','Complexe'),
 	)
 
+#comporte la liste des secteurs d'activités
 LISTE_SECTEUR=(
 		('copro','Copropriété'),
 		('tertiaire','Tertiaire'),
@@ -89,17 +92,19 @@ LISTE_SECTEUR=(
 		('individuel','Individuel')
 	)
 
+#définit la liste des catégories de travaux
 LISTE_TRAVAUX=(
 		('reno','Rénovation'),
 		('sinistre','Sinistre'),
 		('neuf','Neuf'),
 	)
-
+#définit la liste des types de consultations
 LISTE_CONSULTATION=(
 		('lot','Marché par lot'),
 		('global','Marché global'),
 	)
 
+#définit le modèle des propriétés d'un projet
 class Propriete(models.Model):
 	nb_logements=models.IntegerField(default=0,null=True,blank=True,verbose_name="Nombre de logements ")
 	nb_etages=models.IntegerField(default=0,null=True,blank=True,verbose_name="Nombre d'étages ")
@@ -117,12 +122,13 @@ class Propriete(models.Model):
 		return 'propriétés de ' + self.projet.numero_teamber
 
 
-
+#définit la liste des activités possibles des entreprises
 LISTE_ACTIVITES =(
 		('Faca','Façades'),
 		('Elec','Electricité'),
 	)
 
+#définit la liste des suffixes possibles pour les lots
 LISTE_SUFFIXE=(
 		('','Suffixe'),
 		('A','A'),
@@ -133,7 +139,7 @@ LISTE_SUFFIXE=(
 	)
 
 
-
+#définit le modèle des lots
 class Lot(models.Model):
 	numero=models.IntegerField(default=0,verbose_name="Numéro du lot ")
 	suffixe=models.CharField(max_length=5,default='',blank=True,choices=LISTE_SUFFIXE,verbose_name="Suffixe")
@@ -158,7 +164,7 @@ class Lot(models.Model):
 
 
 
-#défini le chemin d'enregistrement des fichiers des lots
+#défini le chemin d'enregistrement des fichiers des lots et créé le chemin si besoin
 def fichier_path(instance,filename):
 	path=os.path.join(settings.BASE_DIR,'media','fichiers',str(instance.lot.projet.numero_teamber),str(instance.lot.nom))
 
@@ -172,7 +178,7 @@ def fichier_path(instance,filename):
 	return os.path.join(path, filename)
 
 
-
+#définit la liste des types de fichiers DPGF, CTTP, autres .....
 LISTE_CATEGORIE_FICHIER=(
 		('DPGF','DPGF'),
 		('CCTP','CCTP'),
@@ -181,6 +187,7 @@ LISTE_CATEGORIE_FICHIER=(
 		('AUTRE','Autre'),
 	)
 
+#définit le modèle des documents
 class Document(models.Model):
 	fichier=models.FileField(upload_to=fichier_path,blank=True,null=True,verbose_name="Document du projet : ",storage=OverwriteStorage())
 	categorie=models.CharField(max_length=255,choices=LISTE_CATEGORIE_FICHIER,default="AUTRE",null=True,blank=True,verbose_name="Catégorie de document")
@@ -189,3 +196,7 @@ class Document(models.Model):
 
 	def __str__(self):
 		return self.fichier.name
+
+
+
+
