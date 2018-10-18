@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os,sys
 
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APPS_DIR=os.path.realpath(os.path.join(BASE_DIR,'apps'))
@@ -27,6 +29,11 @@ SECRET_KEY = 'hxo)%j8!uyy^4ue#hs^01b9=uscqn&hn#_tohi8(*-4qpk44oz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/pdf",".pdf",True)
+    
 
 ALLOWED_HOSTS = []
 

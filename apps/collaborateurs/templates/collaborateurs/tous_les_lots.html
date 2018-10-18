@@ -30,7 +30,7 @@
 		<div class="content_wrapper" id="infos_gene">
 			<h2>Les lots du projet</h2>
 				{% for lot in lots %}
-					<p>{{lot.decris_toi|upper}}</p>
+					<p><a href="{% url 'voir_lot' projet.pk lot.pk %}">{{lot.decris_toi|upper}}</a></p>
 				{% empty %}
 					<p>Aucun lot n'a été créé a ce jour !</p>
 				{% endfor %}

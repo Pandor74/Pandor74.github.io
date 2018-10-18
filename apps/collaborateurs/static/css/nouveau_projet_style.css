@@ -40,7 +40,10 @@ form {
 }
 
 #wrap-form input:focus {
-	background-color: yellow;
+	background-color: #a0a2a3;
+	border-color: #b20c1a;
+	color:black;
+	font-weight: bold;
 }
 
 form a {
@@ -57,8 +60,23 @@ form label {
 }
 form input {
 	margin-bottom: 10px;
-	cursor: pointer;
+	outline: none;
+	
 }
+
+form select {
+	cursor: pointer;
+	height:21px;
+	outline: none;
+}
+
+form select:focus {
+	background-color: #a0a2a3;
+	border-color: #b20c1a;
+	color:black;
+	font-weight: bold;
+}
+
 
 #Bcreateprojet {
 	font-size: 25px;
@@ -70,16 +88,20 @@ form input {
 	padding: 10px;
 	padding-top:5px;
 	padding-bottom: 5px;
-
-
 }
+
 
 #Bcreateprojet:hover {
 	
 	background-color:#ff6624;
+	cursor:pointer;
 }
 
 #Bcreateprojet:active {
 	
 	background-color:#ff6624;
+}
+
+#id_photo {
+	cursor:pointer;
 }

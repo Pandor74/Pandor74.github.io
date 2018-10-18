@@ -1,0 +1,122 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation_contact.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Informations générales</h2>
+			<ul class="liste_prop">
+				<li>Numéro du projet :</li>
+				<li><strong>{{projet.numero_teamber}}</strong></li>
+				<li>Nom du projet :</li>
+				<li><strong>{{projet.nom}}</strong></li>
+				<li>Adresse :</li>
+				{% if projet.adresse.adresse1 != None %}<li><strong>{{projet.adresse.adresse1}}</strong></li>{% endif %}
+				{% if projet.adresse.adresse2 != None %}<li><strong>{{projet.adresse.adresse2}}</strong></li>{% endif %}
+				<li><strong>{% if projet.adresse.code_postal != None %}{{projet.adresse.code_postal}}{% endif %} - {% if projet.adresse.ville != None %}{{projet.adresse.ville}}{% endif %}</strong></li>
+				{% if projet.adresse.pays != None %}<li><strong>{{projet.adresse.pays}}</strong></li>{% endif %}
+			</ul>
+
+		</div>
+
+
+		<div class="content_wrapper" id="infos_int">
+			<h2>Informations internes</h2>
+			<ul class="liste_prop">
+				<li>
+					{% if projet.photo %}
+					<img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					{% else %}
+					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					{% endif %}
+				</li>
+
+				<li>Agence en charge du projet :</li>
+				<li><strong>{{projet.agence}}</strong></li>
+
+				<li>Type de client :</li>
+				<li><strong>{% if projet.proprietes.secteur != None %}{{projet.proprietes.secteur}}{% endif %}</strong></li>
+
+				<li>Catégorie de travaux :</li>
+				<li><strong>{% if projet.proprietes.travaux != None %}{{projet.proprietes.travaux}}{% endif %}</strong></li>
+
+				<li>Type de consultation :</li>
+				<li><strong>{% if projet.proprietes.consultation != None %}{{projet.proprietes.consultation}}{% endif %}</strong></li>
+
+				<li>Echéance de rendu de la consultation :</li>
+				<li><strong>{% if projet.proprietes.date_fin != None %}{{projet.proprietes.date_fin}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+
+		
+
+		<div class="content_wrapper" id="infos_bat">
+			<h2>Informations sur le bâtiment</h2>
+			<ul class="liste_prop">
+				<li>Type architecture du bâtiment :</li>
+				<li><strong>{% if projet.proprietes.architecture != None %}{{projet.projet.proprietes.architecture}}{% endif %}</strong></li>
+
+				<li>Nombre d'étage du bâtiment :</li>
+				<li><strong>{% if projet.propriete.nb_etages > 0 %}{{projet.propriete.nb_etages}}{% endif %}</strong></li>
+
+				<li>Nombre de lots du bâtiment :</li>
+				<li><strong>{% if projet.propriete.nb_logements > 0 %}{{projet.propriete.nb_logements}}{% endif %}</strong></li>
+
+				<li>Surface au sol du bâtiment :</li>
+				<li><strong>{% if projet.propriete.surf_sol > 0 %}{{projet.propriete.surf_sol}}{% endif %}</strong></li>
+
+				<li>Surface Hors Oeuvre Nette  :</li>
+				<li><strong>{% if projet.propriete.surf_shon > 0 %}{{projet.propriete.surf_shon}}{% endif %}</strong></li>
+			</ul>
+
+		</div>
+
+		<div class="content_wrapper" id="infos_clent">
+			<h2>Informations sur le client</h2>
+			<ul class="liste_prop">
+				<li>Nom :</li>
+				<li><strong></strong></li>
+				<li>Prénom :</li>
+				<li><strong></strong></li>
+				<li>E-mail :</li>
+				<li><strong></strong></li>
+				<li>Téléphone :</li>
+				<li><strong></strong></li>
+				<li>Agence :</li>
+				<li><strong></strong></li>
+			</ul>
+
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

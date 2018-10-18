@@ -54,6 +54,11 @@ textarea {
 	max-width: 100%;
 }
 
+form #id_competences {
+	height: auto;
+	width:auto;
+}
+
 
 .plus {
 	display:inline-flex;

@@ -1,8 +1,10 @@
 from django import forms
-from collaborateurs.models import Projet,Adresse,Propriete,Lot,Document
-from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput
+from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,DomaineCompetence,Agence,Entreprise,SecteurGeographique
+from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput,SelectMultiple
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.widgets import AdminDateWidget
+
+from collaborateurs.models import LISTE_ACTIVITES,LISTE_CATEGORIE_FICHIER_LOT
 
 class ProjetForm(forms.ModelForm):
 	class Meta:
@@ -32,7 +34,7 @@ class FiltreForm(forms.Form):
 class AdresseForm(forms.ModelForm):
 	class Meta:
 		model=Adresse
-		exclude=['projet']
+		exclude=['projet','agence']
 		widgets= {
 			'adresse1':TextInput(attrs={'size':40,'placeholder':'N° et nom de rue'}),
 			'adresse2':TextInput(attrs={'size':40,'placeholder':'Batiment, étage ...'}),
@@ -55,24 +57,20 @@ class LotForm(forms.ModelForm):
 	class Meta:
 		model=Lot
 		exclude=['projet','publier']
-
+		widgets= {
+			'nom':TextInput(attrs={'size':40,'placeholder':'Nom complet du lot'}),
+			'short_name':TextInput(attrs={'size':40,'placeholder':'Nom court du lot (max 10 char)'}),
+			'numero':TextInput(attrs={'size':40,'placeholder':'Numéro du lot'}),
+		}
 
 
 #inutilisé en raison de la compléxité de la gestion de plusieurs fichiers
-class DocumentForm(forms.ModelForm):
+class DocumentLotForm(forms.ModelForm):
 	class Meta:
-		model=Document
+		model=DocumentLot
 		exclude=['lot']
 
 
-
-LISTE_CATEGORIE_FICHIER=(
-		('DPGF','DPGF'),
-		('CCTP','CCTP'),
-		('PLAN','Plan'),
-		('DIAG','Diagnostic'),
-		('AUTRE','Autre'),
-	)
 
 class FichiersForm(forms.Form):
 	fDPGF=forms.FileField(required=False,label="Fichier DPGF (Excel) :")
@@ -88,13 +86,30 @@ class FichiersForm(forms.Form):
 	f9=forms.FileField(required=False,label="Fichier annexe N°9:")
 	
 
-	c1=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c2=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c3=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c4=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c5=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c6=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c7=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c8=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	c9=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER,initial="AUTRE",required=False)
-	
+	c1=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c2=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c3=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c4=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c5=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c6=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c7=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c8=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+	c9=forms.ChoiceField(choices=LISTE_CATEGORIE_FICHIER_LOT,initial="AUTRE",required=False)
+
+
+
+
+class CompetenceForm(forms.Form):
+	competences=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=LISTE_ACTIVITES,required=True)
+
+
+class AgenceForm(forms.ModelForm):
+	class Meta:
+		model=Agence
+		exclude=['entreprise','lots','date_inscription_agence']
+
+
+class EntrepriseForm(forms.ModelForm):
+	class Meta:
+		model=Entreprise
+		exclude=['date_inscription_ent']

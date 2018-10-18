@@ -1,0 +1,52 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/tous_les_contacts_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/tous_les_projets.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+
+	<div id="filtres_wrapper">
+		<div class="filtres" id="photo_projet">Photo</div>
+		<div class="filtres" id="num_projet">N° projet</div>
+		<div class="filtres" id="nom_projet">Nom projet</div>
+		<div class="filtres" id="loc_projet">Localisation</div>
+		<div class="filtres" id="date_projet">Date retour AO</div>
+		<div class="filtres" id="avancement_projet">Avancement</div>
+	</div>
+
+
+
+	{% for entreprise in entreprises %}
+	<div class="line_wrapper">
+		<div class="projet_prop">
+			<a href="{% url 'voir_entreprise' entreprise.pk %}" >
+				<ul>
+					<li>{{entreprise.nom_ent}} : avec les agences</li>
+					{% for agence in agences %}
+						<li>{{agence.nom}}</li>
+					{% empty %}
+						pas d'agences
+					{% endfor %}
+				</ul>
+			</a>
+		</div>
+	</div>
+	{% empty %}
+		<p>Il n'y a pas de contacts actuellement ! </p>
+	{% endfor %}
+
+
+
+
+{% endblock %}
+
+

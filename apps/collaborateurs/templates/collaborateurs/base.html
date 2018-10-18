@@ -39,7 +39,8 @@
     <nav class="bandeau_sup" id="BS1">
 
        <ul class="list_nav_sup" id="LNS1">
-            <li><a href="/contacts">Liste des contacts</a></li>
+            <li><a href="{% url 'nouveau_entreprise' %}">Créer un contact</a></li>
+            <li><a href="{% url 'contacts_liste' %}">Liste des contacts</a></li>
             <li><a href="/mon-compte">Mon compte</a></li>
             <li><a href='{% url "deconnexion" %}' id="bdeco">Déconnexion</a></li>
        </ul>

@@ -5,16 +5,13 @@ from django import forms
 from storage import OverwriteStorage
 import os
 from django.conf import settings
+from django.core.validators import RegexValidator
+from collaborateurs.fonction import right,right_path
 
 
 
 
 
-
-#Extrait l'extension d'un fichier si char est un .
-def right(name,char):
-	left,right=name.split(char)
-	return right
 
 
 #définit et créé si besoin le chemin d'enregistrement des fichiers de type image pour le logo du projet
@@ -62,19 +59,7 @@ class Projet(models.Model):
 
 
 
-# définit le modèle Adresse
-class Adresse(models.Model):
-	adresse1=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Adresse N°1 ")
-	adresse2=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Adresse N°2 ")
-	code_postal=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Code Postal ")
-	ville=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Ville ")
-	pays=models.CharField(default="France",null=True,blank=True,max_length=255,verbose_name="Pays ")
 
-	projet=models.OneToOneField(Projet,on_delete=models.CASCADE,null=True)
-	
-
-	def __str__(self):
-		return 'adresse de ' + self.projet.numero_teamber
 
 
 #comporte la liste des types d'architecture
@@ -122,11 +107,7 @@ class Propriete(models.Model):
 		return 'propriétés de ' + self.projet.numero_teamber
 
 
-#définit la liste des activités possibles des entreprises
-LISTE_ACTIVITES =(
-		('Faca','Façades'),
-		('Elec','Electricité'),
-	)
+
 
 #définit la liste des suffixes possibles pour les lots
 LISTE_SUFFIXE=(
@@ -139,9 +120,35 @@ LISTE_SUFFIXE=(
 	)
 
 
+
+#définit la liste des activités possibles des entreprises
+LISTE_ACTIVITES =(
+		('Façades','Façades'),
+		('Electricité','Electricité'),
+		('Non renseigné','Non renseigné'),
+		('Autre','Autre'),
+		('Autre','Autre'),
+		('Autre','Autre'),
+		('Autre','Autre'),
+	)
+
+
+class DomaineCompetence(models.Model):
+	competence=models.CharField(max_length=255,choices=LISTE_ACTIVITES,default="NR")
+
+	def __str__(self):
+		return self.competence
+
+	class Meta:
+		ordering =['competence']
+
+
+
+
+
 #définit le modèle des lots
 class Lot(models.Model):
-	numero=models.IntegerField(default=0,verbose_name="Numéro du lot ")
+	numero=models.IntegerField(verbose_name="Numéro du lot ")
 	suffixe=models.CharField(max_length=5,default='',blank=True,choices=LISTE_SUFFIXE,verbose_name="Suffixe")
 	description=models.TextField(null=True,blank=True,verbose_name="Description succincte ",help_text="Décrivez de manière succincte les éléments constitutifs du travail à faire")
 	short_name=models.CharField(max_length=10,null=True,verbose_name="Nom court pour identifier le lot facilement",help_text="Sera utilisé dans la barre de navigation")
@@ -150,7 +157,7 @@ class Lot(models.Model):
 	publier=models.BooleanField(default=False)
 
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE)
-	activites=models.CharField(max_length=255,choices=LISTE_ACTIVITES,verbose_name="Types d'activités relative au lot")
+	activites=models.ManyToManyField(DomaineCompetence,blank=True)
 
 	class Meta:
 		ordering=['numero','suffixe']
@@ -164,9 +171,9 @@ class Lot(models.Model):
 
 
 
-#défini le chemin d'enregistrement des fichiers des lots et créé le chemin si besoin
-def fichier_path(instance,filename):
-	path=os.path.join(settings.BASE_DIR,'media','fichiers',str(instance.lot.projet.numero_teamber),str(instance.lot.nom))
+#défini le chemin d'enregistrement des fichiers des lots et créé le chemin si besoin dans le dossier projets
+def fichier_lot_path(instance,filename):
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','projets',str(instance.lot.projet.numero_teamber),str(instance.lot.nom))
 
 	if not os.path.isdir(path):
 		print(path,' chemin fichier n\'existe pas')
@@ -179,7 +186,7 @@ def fichier_path(instance,filename):
 
 
 #définit la liste des types de fichiers DPGF, CTTP, autres .....
-LISTE_CATEGORIE_FICHIER=(
+LISTE_CATEGORIE_FICHIER_LOT=(
 		('DPGF','DPGF'),
 		('CCTP','CCTP'),
 		('PLAN','Plan'),
@@ -187,12 +194,163 @@ LISTE_CATEGORIE_FICHIER=(
 		('AUTRE','Autre'),
 	)
 
-#définit le modèle des documents
-class Document(models.Model):
-	fichier=models.FileField(upload_to=fichier_path,blank=True,null=True,verbose_name="Document du projet : ",storage=OverwriteStorage())
-	categorie=models.CharField(max_length=255,choices=LISTE_CATEGORIE_FICHIER,default="AUTRE",null=True,blank=True,verbose_name="Catégorie de document")
+#définit le modèle des documents pour les lots
+class DocumentLot(models.Model):
+	fichier=models.FileField(upload_to=fichier_lot_path,blank=True,null=True,verbose_name="Document du projet : ",storage=OverwriteStorage())
+	categorie=models.CharField(max_length=255,choices=LISTE_CATEGORIE_FICHIER_LOT,default="AUTRE",null=True,blank=True,verbose_name="Catégorie de document")
 
-	lot=models.ForeignKey(Lot,on_delete=models.CASCADE)
+	lot=models.ForeignKey(Lot,on_delete=models.CASCADE,related_name="documents")
+
+	def nom(self):
+		nom=right_path(self.fichier.path,"\\")
+		return nom
+
+	def taille(self):
+		mem=self.fichier.size/1024
+		mem=round(mem)
+
+		return str(mem) + ' Mo'
+
+
+	def __str__(self):
+		return self.fichier.name
+
+
+def fichier_entreprise_path(instance,filename):
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','entreprises',str(instance.nom_ent))
+
+	if not os.path.isdir(path):
+		print(path,' chemin fichier n\'existe pas')
+		os.makedirs(path)
+
+	else :
+		print(path, 'chemin fichier existe déjà')
+
+	return os.path.join(path, filename)
+
+
+#définit le modèle de l'entreprise principale
+class Entreprise(models.Model):
+	nom_ent=models.CharField(max_length=255,blank=True,null=True,verbose_name="Nom de l'entreprise : ")
+	date_inscription_ent=models.DateTimeField(default=datetime.date.today,blank=True,verbose_name="Date d'inscription : ")
+	date_creation_ent=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'entreprise")
+	logo_ent=models.ImageField(upload_to=fichier_entreprise_path,blank=True,null=True,verbose_name="Logo de l'entreprise (facultatif) ",storage=OverwriteStorage())
+	
+
+	def __str__(self):
+		return self.nom_ent
+
+
+
+
+LISTE_DEPARTEMENT =(
+	('rhone','Rhône'),
+	('ain','Ain'),
+	('haute savoie','Haute-Savoie'),
+	('isere','Isère'),
+	('autre','Autre'),
+	('NR','Non renseigné'),
+	)
+
+LISTE_REGION = (
+	('AUV-RN','Auvergne Rhône Alpes'),
+	('france','France entière'),
+	('autre','Autre'),
+	('NR','Non renseigné'),
+	)
+
+
+
+#définit le/les secteurs geographique d'intervention de l'entreprise
+class SecteurGeographique(models.Model):
+	departement=models.CharField(max_length=255,choices=LISTE_DEPARTEMENT,default="NR",blank=True)
+	region=models.CharField(max_length=255,choices=LISTE_REGION,default="NR",blank=True)
+
+	def __str__(self):
+		return 'Secteur geographique ' + self.departement
+
+
+
+
+#défini le chemin d'enregistrement des fichiers des agence et créé le chemin si besoin dans le dossier entreprise
+def fichier_agence_path(instance,filename):
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','entreprises',str(instance.agence.entreprise.nom_ent),str(instance.agence.nom))
+
+	if not os.path.isdir(path):
+		print(path,' chemin fichier n\'existe pas')
+		os.makedirs(path)
+
+	else :
+		print(path, 'chemin fichier existe déjà')
+
+	return os.path.join(path, filename)
+
+
+#défini le chemin d'enregistrement du logo des agence et créé le chemin si besoin dans le dossier entreprise
+def image_agence_path(instance,filename):
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','entreprises',str(instance.entreprise.nom_ent),str(instance.nom))
+
+	if not os.path.isdir(path):
+		print(path,' chemin fichier n\'existe pas')
+		os.makedirs(path)
+
+	else :
+		print(path, 'chemin fichier existe déjà')
+
+	return os.path.join(path, filename)
+
+
+#définit la liste des catégories d'agences
+LISTE_CAT_AGENCE=(
+	('siege','Siege'),
+	('antenne','Antenne'),
+	)
+
+
+#définit le modèle de l'agence
+class Agence(models.Model):
+	nom=models.CharField(max_length=255,verbose_name="Dénomination de l'agence : ")
+	categorie=models.CharField(max_length=255,choices=LISTE_CAT_AGENCE)
+	
+
+	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir 10 chiffres")
+	telephone=models.CharField(validators=[phone_regex],max_length=10,blank=True)
+	fax=models.CharField(validators=[phone_regex],max_length=10,blank=True)
+	mail_contact=models.EmailField(max_length=254)
+	logo_agence=models.ImageField(upload_to=image_agence_path,blank=True,null=True,verbose_name="Logo de l'agence si différent (facultatif) ",storage=OverwriteStorage())
+
+	entreprise=models.ForeignKey(Entreprise,on_delete=models.CASCADE)
+	lots=models.ManyToManyField(Lot,related_name="repondants",blank=True,null=True)
+	#competences=models.CharField(max_length=255,choices=LISTE_ACTIVITES,default="NR",verbose_name="Domaine de compétences : ")
+	#secteur_geographique=models
+
+	date_inscription_agence=models.DateTimeField(default=datetime.date.today,verbose_name="Date d'inscription : ")
+	date_creation_agence=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'agence")
+
+	def __str__(self):
+		return 'agence ' + self.nom 
+
+
+
+
+
+
+
+
+#définit la liste des catégorie de fichier pour les agences d'entreprises
+LISTE_CAT_FICHIER_AGENCE=(
+		('assurance','Assurance'),
+		('RC','Responsabilité civile'),
+		('autre','Autre'),
+)
+
+
+#définit le modèle des documents pour les lots
+class DocumentAgence(models.Model):
+	fichier=models.FileField(upload_to=fichier_agence_path,blank=True,null=True,verbose_name="Document de l'agence : ",storage=OverwriteStorage())
+	categorie=models.CharField(max_length=255,choices=LISTE_CAT_FICHIER_AGENCE,default="autre",null=True,blank=True,verbose_name="Catégorie de document")
+
+	agence=models.ForeignKey(Agence,on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.fichier.name
@@ -200,3 +358,19 @@ class Document(models.Model):
 
 
 
+
+
+# définit le modèle Adresse
+class Adresse(models.Model):
+	adresse1=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Adresse ")
+	adresse2=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Complément d'adresse ")
+	code_postal=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Code Postal ")
+	ville=models.CharField(default="",null=True,blank=True,max_length=255,verbose_name="Ville ")
+	pays=models.CharField(default="France",null=True,blank=True,max_length=255,verbose_name="Pays ")
+
+	projet=models.OneToOneField(Projet,on_delete=models.CASCADE,null=True,blank=True)
+	agence=models.OneToOneField(Agence,on_delete=models.CASCADE,null=True,blank=True)
+	
+
+	def __str__(self):
+		return 'adresse de ' + self.projet.numero_teamber

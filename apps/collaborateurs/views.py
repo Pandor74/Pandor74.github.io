@@ -1,27 +1,35 @@
 from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
-from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm,LotForm,DocumentForm,FichiersForm
-from collaborateurs.models import Projet,Adresse,Propriete,Lot,Document
+from collaborateurs.forms import ProjetForm,FiltreForm,AdresseForm,ProprietesForm,LotForm,DocumentLotForm,FichiersForm,AgenceForm,EntrepriseForm
+from collaborateurs.forms import CompetenceForm
+from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,DomaineCompetence,Entreprise,Agence
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
-from django.http import Http404
+from django.http import Http404,FileResponse
 from django.utils.translation import ugettext as _
 from django.urls import reverse_lazy,reverse
-from collaborateurs.fonction import chercherProjet
+from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence
+
+#copié depuis un site pour l'utilsaition de PyPDF
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
+
+from django.http import HttpResponse
+
 
 
 # Create your views here.
 
-def home(request):
+def Home(request):
 
 	return render(request,'collaborateurs/accueil_col.html')
 
-def deconnexion(request):
+def Deconnexion(request):
 	deco=True
 
 	return render(request,'visiteurs/base.html',locals())
 
-def new_projet(request):
+def New_Projet(request):
 	envoi=False
 	
 
@@ -56,7 +64,7 @@ def new_projet(request):
 
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
 
-def modifier_projet(request,pk):
+def Modifier_Projet(request,pk):
 	modif=False
 	oui=False
 	projet=get_object_or_404(Projet,pk=pk)
@@ -156,10 +164,13 @@ def Afficher_Projet(request,pk):
 
 	return render(request,'collaborateurs/projet.html',locals())
 		
-def new_lot(request,pk):
+def New_Lot(request,pk):
+
+
+
 	envoi=False
 	print('pk du projet ' + str(pk))
-	print('création d\'un lot')
+	print('début de création d\'un lot')
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
 
@@ -167,17 +178,42 @@ def new_lot(request,pk):
 		lot=Lot()
 		formLot=LotForm(request.POST or None,)
 		formFichiers=FichiersForm(request.POST or None,)
+		formCompetence=CompetenceForm(request.POST or None,)
 
-		docDPGF=Document()
-		docCCTP=Document()
-		docAUTRE=Document()
+		docDPGF=DocumentLot()
+		docCCTP=DocumentLot()
+		docAUTRE=DocumentLot()
+		if formCompetence.is_valid():
+			print('competence validées')
 
-		if formLot.is_valid():
+		if formLot.is_valid() and formCompetence.is_valid():
+			print('formulaires validés')
+			competences=formCompetence.cleaned_data['competences']
+
+			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
+			liste_competences=DomaineCompetence.objects.all()
+			for competence in competences:
+				if ExistOrNotCompetence(liste_competences,competence):
+					print('domaine de compétence éxiste déjà on passe')
+				else:
+					DomaineCompetence.objects.create(competence=competence)
+			
+					print('création du domaine de compétence inexistant')
+			
+
+			
+
 
 			envoi=True
 			lot=formLot.save(commit=False)
 			lot.projet=projet
 			lot.save()
+			
+			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
+			for competence in competences:
+				compvalid=liste_competences.filter(competence=competence).get()
+				lot.activites.add(compvalid)
+
 
 			if formFichiers.is_valid():
 				print('fichiers validés')
@@ -260,23 +296,18 @@ def new_lot(request,pk):
 					docCCTP.lot=lot
 					docCCTP.save()
 
-
-
-
-
-			
-
-			return redirect('lister_lot',pk=projet.pk)
+			return redirect('voir_lot',pk=projet.pk,id=lot.pk)
 
 		return render(request,'collaborateurs/nouveau_lot.html',locals())
 	else:
 		formLot=LotForm()
 		formFichiers=FichiersForm()
+		formCompetence=CompetenceForm()
 
 	return render(request,'collaborateurs/nouveau_lot.html',locals())
 
 
-def liste_lot(request,pk):
+def Liste_Lot(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 
 	lots=Lot.objects.filter(projet=projet)
@@ -291,5 +322,75 @@ def Afficher_Lot(request,pk,id):
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
 	lot=get_object_or_404(Lot,pk=id)
+	competences=get_list_or_404(DomaineCompetence)
 
 	return render(request,'collaborateurs/lot.html',locals())
+
+
+
+#fonction qui permet d'ouvrir un fichier PDF dans le browser... Il faut intégrer le MIMETYPE pour les autres formats de documents qui seront au final téléchargé
+def Voir_Fichier_PDF_Lot(request,pk,id,iddoc,nom):
+
+	doc=get_object_or_404(DocumentLot,pk=iddoc)
+
+	try:
+		response=FileResponse(open(doc.fichier.path,'rb'),content_type='application/pdf')
+		response['Content-Disposition']='inline;filename='+ nom
+	except FileNotFoundError:
+		raise Http404()
+	return response
+
+
+
+def New_Entreprise(request):
+	envoi=False
+
+	if request.method=='POST':
+		adresse=Adresse()
+		formAdresse=AdresseForm(request.POST or None,)
+
+		agence=Agence()
+		formAgence=AgenceForm(request.POST, request.FILES)
+
+		entreprise=Propriete()
+		formEntreprise=EntrepriseForm(request.POST,request.FILES)
+
+		if formAgence.is_valid() and formAdresse.is_valid() and formEntreprise.is_valid():
+
+			envoi=True
+			
+			adresse=formAdresse.save(commit=False)
+			agence=formAgence.save(commit=False)
+			entreprise=formEntreprise.save()
+			agence.entreprise=entreprise
+			adresse.agence=agence
+			agence.save()
+			adresse.save()
+
+			
+			
+			
+			return redirect('voir_entreprise', pk=entreprise.pk)
+
+		return render(request,'collaborateurs/nouveau_entreprise.html',locals())
+	else:
+		formAgence=AgenceForm()
+		formAdresse=AdresseForm()
+		formEntreprise=EntrepriseForm()
+
+	return render(request,'collaborateurs/nouveau_entreprise.html',locals())
+
+
+
+def Afficher_Entreprise(request,pk):
+	entreprise=get_object_or_404(Entreprise,pk=pk)
+
+	return render(request,'collaborateurs/entreprise.html',locals())
+
+
+def Liste_Contact(request):
+	entreprises=Entreprise.objects.all()
+	agences=Agence.objects.all()
+
+
+	return render(request,'collaborateurs/tous_les_contacts.html',locals())
