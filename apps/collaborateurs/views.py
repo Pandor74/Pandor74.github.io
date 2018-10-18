@@ -188,11 +188,11 @@ def New_Lot(request,pk):
 
 		if formLot.is_valid() and formCompetence.is_valid():
 			print('formulaires validés')
-			competences=formCompetence.cleaned_data['competences']
+			competences_form=formCompetence.cleaned_data['competences']
 
 			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
 			liste_competences=DomaineCompetence.objects.all()
-			for competence in competences:
+			for competence in competences_form:
 				if ExistOrNotCompetence(liste_competences,competence):
 					print('domaine de compétence éxiste déjà on passe')
 				else:
@@ -210,7 +210,7 @@ def New_Lot(request,pk):
 			lot.save()
 			
 			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
-			for competence in competences:
+			for competence in competences_form:
 				compvalid=liste_competences.filter(competence=competence).get()
 				lot.activites.add(compvalid)
 
@@ -355,35 +355,58 @@ def New_Entreprise(request):
 		entreprise=Propriete()
 		formEntreprise=EntrepriseForm(request.POST,request.FILES)
 
-		if formAgence.is_valid() and formAdresse.is_valid() and formEntreprise.is_valid():
+
+		formCompetence=CompetenceForm(request.POST or None,)
+
+		if formAgence.is_valid() and formAdresse.is_valid() and formEntreprise.is_valid() and formCompetence.is_valid():
 
 			envoi=True
+
+
+			competences_form=formCompetence.cleaned_data['competences']
+
+			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
+			liste_competences=DomaineCompetence.objects.all()
+			for competence in competences_form:
+				if ExistOrNotCompetence(liste_competences,competence):
+					print('domaine de compétence éxiste déjà on passe')
+				else:
+					DomaineCompetence.objects.create(competence=competence)
+			
+					print('création du domaine de compétence inexistant')
 			
 			adresse=formAdresse.save(commit=False)
 			agence=formAgence.save(commit=False)
 			entreprise=formEntreprise.save()
 			agence.entreprise=entreprise
-			adresse.agence=agence
 			agence.save()
+			adresse.agence=agence
+			
 			adresse.save()
+
+			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
+			for competence in competences_form:
+				compvalid=liste_competences.filter(competence=competence).get()
+				agence.competences_agence.add(compvalid)
 
 			
 			
 			
-			return redirect('voir_entreprise', pk=entreprise.pk)
+			return redirect('voir_entreprise', nom=entreprise.nom_ent)
 
 		return render(request,'collaborateurs/nouveau_entreprise.html',locals())
 	else:
 		formAgence=AgenceForm()
 		formAdresse=AdresseForm()
 		formEntreprise=EntrepriseForm()
+		formCompetence=CompetenceForm()
 
 	return render(request,'collaborateurs/nouveau_entreprise.html',locals())
 
 
 
-def Afficher_Entreprise(request,pk):
-	entreprise=get_object_or_404(Entreprise,pk=pk)
+def Afficher_Entreprise(request,nom):
+	entreprise=get_object_or_404(Entreprise,nom_ent=nom)
 
 	return render(request,'collaborateurs/entreprise.html',locals())
 

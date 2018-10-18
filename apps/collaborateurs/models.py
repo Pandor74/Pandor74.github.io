@@ -231,11 +231,13 @@ def fichier_entreprise_path(instance,filename):
 
 #définit le modèle de l'entreprise principale
 class Entreprise(models.Model):
-	nom_ent=models.CharField(max_length=255,blank=True,null=True,verbose_name="Nom de l'entreprise : ")
-	date_inscription_ent=models.DateTimeField(default=datetime.date.today,blank=True,verbose_name="Date d'inscription : ")
+	nom_ent=models.CharField(max_length=255,blank=True,null=True,verbose_name="Nom de l'entreprise ",unique=True)
+	date_inscription_ent=models.DateTimeField(default=datetime.date.today,blank=True,verbose_name="Date d'inscription ")
 	date_creation_ent=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'entreprise")
 	logo_ent=models.ImageField(upload_to=fichier_entreprise_path,blank=True,null=True,verbose_name="Logo de l'entreprise (facultatif) ",storage=OverwriteStorage())
-	
+	SIREN_regex=RegexValidator(regex=r'^(?P<siren>\d{9})$',message="Le numéro SIREN doit être composé de 9 chiffres exactement ")
+	num_SIREN=models.CharField(validators=[SIREN_regex],max_length=9,null=True,verbose_name="N°SIREN (9 premiers chiffres du N°SIRET) ")
+
 
 	def __str__(self):
 		return self.nom_ent
@@ -309,22 +311,26 @@ LISTE_CAT_AGENCE=(
 
 #définit le modèle de l'agence
 class Agence(models.Model):
-	nom=models.CharField(max_length=255,verbose_name="Dénomination de l'agence : ")
+	nom=models.CharField(max_length=255,verbose_name="Dénomination de l'agence ")
 	categorie=models.CharField(max_length=255,choices=LISTE_CAT_AGENCE)
 	
 
-	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir 10 chiffres")
+	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir exactement 10 chiffres")
 	telephone=models.CharField(validators=[phone_regex],max_length=10,blank=True)
 	fax=models.CharField(validators=[phone_regex],max_length=10,blank=True)
 	mail_contact=models.EmailField(max_length=254)
 	logo_agence=models.ImageField(upload_to=image_agence_path,blank=True,null=True,verbose_name="Logo de l'agence si différent (facultatif) ",storage=OverwriteStorage())
 
+	SIRET_regex=RegexValidator(regex=r'^(?P<siret>\d{13})$',message="Le numéro SIRET doit être composé de 13 chiffres exactement")
+	num_SIRET=models.CharField(validators=[SIRET_regex],max_length=13,null=True,verbose_name="N°SIRET")
+
 	entreprise=models.ForeignKey(Entreprise,on_delete=models.CASCADE)
-	lots=models.ManyToManyField(Lot,related_name="repondants",blank=True,null=True)
-	#competences=models.CharField(max_length=255,choices=LISTE_ACTIVITES,default="NR",verbose_name="Domaine de compétences : ")
+	lots=models.ManyToManyField(Lot,related_name="repondants",blank=True)
+
+	competences_agence=models.ManyToManyField(DomaineCompetence,blank=True)
 	#secteur_geographique=models
 
-	date_inscription_agence=models.DateTimeField(default=datetime.date.today,verbose_name="Date d'inscription : ")
+	date_inscription_agence=models.DateTimeField(default=datetime.date.today,verbose_name="Date d'inscription ")
 	date_creation_agence=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'agence")
 
 	def __str__(self):
@@ -373,4 +379,13 @@ class Adresse(models.Model):
 	
 
 	def __str__(self):
-		return 'adresse de ' + self.projet.numero_teamber
+
+		if self.projet:
+			return 'adresse projet : ' + self.projet.nom
+		else:
+			if self.agence:
+				return 'adresse agence : ' + self.agence.nom
+			else:
+				return 'adresse non assignée'
+
+

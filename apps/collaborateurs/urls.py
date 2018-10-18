@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="voir_fichier"),
     url('contacts/',views.Liste_Contact,name="contacts_liste"),
     url('nouvelle_entreprise',views.New_Entreprise,name="nouveau_entreprise"),
-    url(r'^entreprise/(?P<pk>\d+)$',views.Afficher_Entreprise,name="voir_entreprise"),
+    url(r'^entreprise/(?P<nom>.+)$',views.Afficher_Entreprise,name="voir_entreprise"),
 
 
 ]

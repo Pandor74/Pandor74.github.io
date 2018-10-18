@@ -12,38 +12,61 @@
 
 
 {% block content %}
-
-
-	<div id="filtres_wrapper">
-		<div class="filtres" id="photo_projet">Photo</div>
-		<div class="filtres" id="num_projet">N° projet</div>
-		<div class="filtres" id="nom_projet">Nom projet</div>
-		<div class="filtres" id="loc_projet">Localisation</div>
-		<div class="filtres" id="date_projet">Date retour AO</div>
-		<div class="filtres" id="avancement_projet">Avancement</div>
+	
+	<div class="contact_nav">
+		<a href=""><div class="contact_nav_choice" id="CNC_tous">Tous</div></a>
+		<a href=""><div class="contact_nav_choice" id="CNC_ent">Entreprises</div></a>
+		<a href=""><div class="contact_nav_choice" id="CNC_agence">Agences</div></a>
+		<a href=""><div class="contact_nav_choice" id="CNC_pers">Personnes</div></a>
 	</div>
 
 
 
-	{% for entreprise in entreprises %}
-	<div class="line_wrapper">
-		<div class="projet_prop">
-			<a href="{% url 'voir_entreprise' entreprise.pk %}" >
-				<ul>
-					<li>{{entreprise.nom_ent}} : avec les agences</li>
-					{% for agence in agences %}
-						<li>{{agence.nom}}</li>
-					{% empty %}
-						pas d'agences
-					{% endfor %}
-				</ul>
-			</a>
+
+
+
+	<div class="contact_content">
+
+		<div class="filtres">
+
+
+		</div>
+
+		<div class="list_wrapper">
+			{% for entreprise in entreprises %}
+			<div class="line_wrapper">
+				<a href="{% url 'voir_entreprise' entreprise.nom_ent %}" >
+					<div class="contact_titre">
+						{{entreprise.nom_ent|upper}}
+					</div>
+				</a>
+					<div class="contact_prop">
+							<a href="{% url 'voir_entreprise' entreprise.nom_ent %}" >
+								{% if entreprise.logo_ent %}
+									<img src="{{BASE_DIR}}/{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+								
+								{% else %}
+										<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100" />
+								{% endif %}
+							</a>
+
+							<ul>
+								{% for agence in entreprise.agence_set.all %}
+								<li>{{agence.nom}} - {{agence.adresse.ville}}
+
+								</li>
+								{% empty %}
+									<li>Aucune agence enregistrée à ce jour</li>
+								{% endfor %}
+							</ul>
+						</ul>
+					</div>
+			</div>
+			{% empty %}
+				<p>Il n'y a pas de contacts actuellement ! </p>
+			{% endfor %}
 		</div>
 	</div>
-	{% empty %}
-		<p>Il n'y a pas de contacts actuellement ! </p>
-	{% endfor %}
-
 
 
 

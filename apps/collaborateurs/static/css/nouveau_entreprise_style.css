@@ -69,6 +69,10 @@ form .errorlist {
 
 }
 
+form select:hover {
+	cursor:pointer;
+}
+
 #BcreateEntreprise {
 	font-size: 25px;
 	background-color:#3e6a87;

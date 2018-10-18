@@ -3,6 +3,8 @@ from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,Domai
 from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput,SelectMultiple
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.widgets import AdminDateWidget
+import datetime
+from django.utils import timezone
 
 from collaborateurs.models import LISTE_ACTIVITES,LISTE_CATEGORIE_FICHIER_LOT
 
@@ -106,10 +108,17 @@ class CompetenceForm(forms.Form):
 class AgenceForm(forms.ModelForm):
 	class Meta:
 		model=Agence
-		exclude=['entreprise','lots','date_inscription_agence']
+		exclude=['entreprise','lots','date_inscription_agence','competences_agence']
+		widgets = {
+			'date_creation_agence' : SelectDateWidget(years=range(timezone.now().year,1900,-1)),
+		}
+
 
 
 class EntrepriseForm(forms.ModelForm):
 	class Meta:
 		model=Entreprise
 		exclude=['date_inscription_ent']
+		widgets = {
+			'date_creation_ent' : SelectDateWidget(years=range(timezone.now().year,1900,-1)),
+		}
