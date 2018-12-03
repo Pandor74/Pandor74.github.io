@@ -21,7 +21,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def Home(request):
-
+	
 	return render(request,'collaborateurs/accueil_col.html')
 
 def Deconnexion(request):
