@@ -31,6 +31,10 @@ urlpatterns = [
     url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="lister_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})$',views.Afficher_Lot,name="voir_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="voir_fichier"),
+    url(r'^projet/(?P<pk>.{1,9})/nouveau-ao$',views.New_AO,name="nouveau_ao"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})$',views.Afficher_AO,name="voir_ao"),
+
+
     url(r'contacts/$',views.Liste_Contact,name="contacts_liste"),
     url(r'^contacts/nouvelle_entreprise/$',views.New_Entreprise_Et_Agence,name="nouvelle_entreprise"),
     url(r'^contacts/nouvelle_personne/$',views.New_Personne,name="nouvelle_personne"),

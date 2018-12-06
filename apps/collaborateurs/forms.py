@@ -1,5 +1,6 @@
 from django import forms
 from collaborateurs.models import Projet,Adresse,Personne,Propriete,Lot,DocumentLot,DomaineCompetence,Agence,Entreprise,SecteurGeographique
+from collaborateurs.models import Echeance,AppelOffre,AppelOffreLot,AppelOffreGlobal
 from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput,SelectMultiple
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.widgets import AdminDateWidget
@@ -151,3 +152,39 @@ class SiretForm(forms.Form):
 	num_SIRET=forms.CharField(validators=[SIRET_regex],max_length=14,label="N°SIRET de l'agence")
 
 
+class EcheanceForm(forms.ModelForm):
+	class Meta:
+		model=Echeance
+		exclude=['appel','appelLot','projet','appelGlobal']
+		widgets ={
+			'date':SelectDateWidget(years=range(timezone.now().year,2100,+1))
+		}
+
+	def clean_date(self):
+		date = self.cleaned_data['date']
+		if date <= datetime.date.today():
+			raise forms.ValidationError("La date ne peut pas être dans le passé !")
+		return date
+
+
+
+class AppelOffreForm(forms.ModelForm):
+	class Meta:
+		model=AppelOffre
+		exclude=['projet']
+		widgets ={
+			'lots':forms.CheckboxSelectMultiple(),
+		}
+
+
+		
+
+class AppelOffreLotForm(forms.ModelForm):
+	class Meta:
+		model=AppelOffreLot
+		exclude=['projet','AO','lot','date_lancement']
+
+class AppelOffreGlobalForm(forms.ModelForm):
+	class Meta:
+		model=AppelOffreGlobal
+		fields='__all__'

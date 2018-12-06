@@ -1,0 +1,85 @@
+#content {
+	display:flex;
+	flex-direction: column;
+
+	padding:0;
+	flex-grow: 1;
+}
+
+
+
+form {
+	width:100%;
+	display: flex;
+	flex-direction: column;
+	
+}
+
+
+form input {
+	
+	margin-bottom: 0px;
+	cursor:pointer;
+
+}
+
+select {
+	height:auto;
+	cursor:pointer;
+}
+
+
+
+
+
+#BcreateAO {
+	background-color:#3e6a87 ;
+	color:white;
+	font-size: 20px;
+	padding:5px 10px 5px 10px;
+	width:250px;
+	border-radius:20px;
+}
+
+#BcreateAO:hover {
+	background-color: #e00025;
+}
+
+
+
+
+.contenu_projet {
+	
+	
+	/*padding:25px;*/
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: flex-start;
+
+}
+
+
+
+.contenu_projet h1 {
+	color:#ff6624;
+	font-size: 22px;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+}
+
+.contenu_projet h2 {
+	color:#ff6624;
+	font-size: 18px;
+	display: flex;
+	justify-content: flex-start;
+	align-items:center;
+}
+
+
+
+
+
+

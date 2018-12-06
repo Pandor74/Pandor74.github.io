@@ -5,7 +5,7 @@ from django import forms
 from storage import OverwriteStorage
 import os
 from django.conf import settings
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator,MaxValueValidator
 from collaborateurs.fonction import right,right_path
 
 
@@ -53,10 +53,6 @@ class Projet(models.Model):
 
 	def image_path(instance,filename):
 		return os.path.join('images/',str(instance.numero_teamber),'/')
-
-
-
-
 
 
 
@@ -403,3 +399,67 @@ class Adresse(models.Model):
 				return 'adresse non assignée'
 
 
+
+
+
+
+
+class AppelOffre(models.Model):
+
+	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
+	lots=models.ManyToManyField(Lot,blank=True)
+
+	#createur
+
+	def __str__(self):
+		return 'AO par lot du projet ' + self.projet.nom
+
+
+
+class AppelOffreLot(models.Model):
+
+
+	date_lancement=models.DateField(default=datetime.date.today,verbose_name="Date de démarrage de la consultation")
+	relance=models.IntegerField(validators=[MaxValueValidator(99)],blank=True)
+
+	AO_agences=models.ManyToManyField(Agence,blank=True)
+	AO_personnes=models.ManyToManyField(Personne,blank=True)
+
+	AO=models.ForeignKey(AppelOffre,on_delete=models.CASCADE,blank=True)
+	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
+	lot=models.ForeignKey(Lot,on_delete=models.CASCADE,blank=True)
+
+	def __str__(self):
+		return 'AO' + str(self.projet.numero_teamber) + self.projet.nom + ' _ ' + self.lot.short_name 
+
+
+class Offre(models.Model):
+
+	AO=models.ForeignKey(AppelOffre,on_delete=models.PROTECT,blank=True)
+	agence=models.ForeignKey(Agence,on_delete=models.PROTECT,blank=True)
+	personne=models.ForeignKey(Personne,on_delete=models.PROTECT,blank=True)
+
+	def __str__(self):
+		return 'Offre de' + personne.nom + ' ' + personne.prenom + 'sur lot ' + AO.lot.numero + ' du projet ' + AO.projet.nom
+
+
+
+
+class AppelOffreGlobal(models.Model):
+
+	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
+
+	def __str__(self):
+		return 'AO Global du projet ' + self.projet.nom
+
+
+class Echeance(models.Model):
+	date=models.DateField(verbose_name="Date de fin de la consultation")
+
+	appel=models.OneToOneField(AppelOffre,on_delete=models.CASCADE,null=True)
+	appelLot=models.OneToOneField(AppelOffreLot,on_delete=models.CASCADE,null=True)
+	projet=models.OneToOneField(Projet,on_delete=models.CASCADE,null=True)
+	appelGlobal=models.OneToOneField(AppelOffreGlobal,on_delete=models.CASCADE,null=True)
+
+	def __str__(self):
+		return 'date de fin le ' + self.date

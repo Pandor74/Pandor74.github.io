@@ -13,11 +13,14 @@
 			<a href=""><h1>Appels d'offres :</h1></a>
 
 			<ol class="liste" id="liste_ao">
-				<li><a href="">ao 1</a></li>
-				<li><a href="">ao 2</a></li>
+				{% for appel in appels %}
+					<li><a href=''>{{appel}}</a></li>
+				{% empty %}
+					<li>Aucun appel d'offres !</li>
+				{% endfor %}
 			</ol>
 
-			<div class="bouton" id="Bnouveauao"><a href="">Nouvel Appel d'Offres</a></div>
+			<div class="bouton" id="Bnouveauao"><a href="{% url 'nouveau_ao' projet.pk %}">Nouvel Appel d'Offres</a></div>
 
 		</div>
 

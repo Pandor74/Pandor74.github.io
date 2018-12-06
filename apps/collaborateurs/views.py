@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
 from collaborateurs.forms import ProjetForm,FiltreFormProjet,AdresseForm,ProprietesForm,LotForm,DocumentLotForm,FichiersForm,AgenceForm,EntrepriseForm
 from collaborateurs.forms import CompetenceForm,FiltreFormContact,SiretForm,PersonneForm
+from collaborateurs.forms import AppelOffreForm,AppelOffreLotForm,AppelOffreGlobalForm,EcheanceForm
 from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,DomaineCompetence,Entreprise,Agence,Personne
 from collaborateurs.models import LISTE_ACTIVITES
+from collaborateurs.models import AppelOffre,AppelOffreLot,AppelOffreGlobal,Echeance
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
@@ -913,3 +915,63 @@ def Liste_Contact(request):
 
 	#si il n'y a pas de requete de filtrage alors on affiche tout
 	return render(request,'collaborateurs/tous_les_contacts.html',locals())
+
+
+#démarre la création d'un appel d'offres du projet a partir de son pk
+def New_AO(request,pk):
+
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+
+	if request.method=='POST':
+		print(request.POST)
+		formAO=AppelOffreForm(request.POST or None,)
+		formEcheance=EcheanceForm(request.POST or None,)
+
+		AO=AppelOffre(projet=projet)
+
+		liste_lots=request.POST.getlist('lots')
+
+		if formAO.is_valid() and formEcheance.is_valid():
+			print('ok')
+			echeance=formEcheance.save()
+
+			AO.echeance=echeance
+			AO.save()
+
+			#boucle pour ajouter les lots qui ont été séléctionnée dans le formulaire
+			for num_lot in liste_lots:
+				lotvalid=Lot.objects.get(pk=num_lot)
+				AO.lots.add(lotvalid)
+
+
+			return redirect('voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
+		else:
+
+			
+
+			return render(request,'collaborateurs/nouveau_ao.html',locals())
+
+
+
+	else:
+		echeance=Echeance()
+		formEcheance=EcheanceForm()
+		AO=AppelOffre(projet=projet)
+		formAO=AppelOffreForm(instance=AO)
+		
+
+		return render(request,'collaborateurs/nouveau_ao.html',locals())
+
+
+
+def Afficher_AO(request,pkprojet,pkAO):
+	projet=Projet.objects.get(pk=pkprojet)
+	lots=projet.lot_set.all()
+	appels=projet.appeloffre_set.all()
+
+
+	AO=AppelOffre.objects.get(pk=pkAO)
+	lots_AO=AO.lots.all()
+
+	return render(request,'collaborateurs/AO.html',locals())

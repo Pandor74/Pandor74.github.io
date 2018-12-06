@@ -1,0 +1,45 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Les lots de l'appel d'offres</h2>
+				{% for lot in lots_AO %}
+					<p><a href="{% url 'voir_lot' projet.pk lot.pk %}">{{lot.decris_toi|upper}}</a></p>
+				{% empty %}
+					<p>Aucun lot n'a été créé a ce jour !</p>
+				{% endfor %}
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+
