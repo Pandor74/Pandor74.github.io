@@ -49,7 +49,7 @@
 			<ul class="liste_prop">
 				<li>
 					{% if projet.photo %}
-					<img src="{{BASE_DIR}}/{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					<img src="{{projet.photo.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
 					{% else %}
 					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
 					{% endif %}

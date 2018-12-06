@@ -16,7 +16,7 @@ from collaborateurs.fonction import right,right_path
 
 #définit et créé si besoin le chemin d'enregistrement des fichiers de type image pour le logo du projet
 def image_path(instance,filename):
-	path=os.path.join(settings.BASE_DIR,'media','images',str(instance.numero_teamber))
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','projets',str(instance.numero_teamber)+'-'+instance.nom)
 
 	if not os.path.isdir(path):
 		print(path,' chemin image n\'existe pas')
@@ -46,7 +46,7 @@ class Projet(models.Model):
 		ordering =['-numero_teamber']
 
 	def __str__(self):
-		return self.nom
+		return str(self.numero_teamber) + '-' + self.nom
 
 	def save(self,*args,**kwargs):
 		super().save(*args,**kwargs)
@@ -126,9 +126,6 @@ LISTE_ACTIVITES =(
 		('Façades','Façades'),
 		('Electricité','Electricité'),
 		('Non renseigné','Non renseigné'),
-		('Autre','Autre'),
-		('Autre','Autre'),
-		('Autre','Autre'),
 		('Autre','Autre'),
 	)
 
@@ -236,8 +233,10 @@ class Entreprise(models.Model):
 	date_creation_ent=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'entreprise")
 	logo_ent=models.ImageField(upload_to=fichier_entreprise_path,blank=True,null=True,verbose_name="Logo de l'entreprise (facultatif) ",storage=OverwriteStorage())
 	SIREN_regex=RegexValidator(regex=r'^(?P<siren>\d{9})$',message="Le numéro SIREN doit être composé de 9 chiffres exactement ")
-	num_SIREN=models.CharField(validators=[SIREN_regex],max_length=9,null=True,verbose_name="N°SIREN (9 premiers chiffres du N°SIRET) ")
+	num_SIREN=models.CharField(validators=[SIREN_regex],max_length=9,null=True,unique=True,verbose_name="N°SIREN (9 premiers chiffres du N°SIRET) ")
 
+	class Meta :
+		ordering=['nom_ent']
 
 	def __str__(self):
 		return self.nom_ent
@@ -318,11 +317,11 @@ class Agence(models.Model):
 	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir exactement 10 chiffres")
 	telephone=models.CharField(validators=[phone_regex],max_length=10,blank=True)
 	fax=models.CharField(validators=[phone_regex],max_length=10,blank=True)
-	mail_contact=models.EmailField(max_length=254)
+	mail_contact=models.EmailField(max_length=255)
 	logo_agence=models.ImageField(upload_to=image_agence_path,blank=True,null=True,verbose_name="Logo de l'agence si différent (facultatif) ",storage=OverwriteStorage())
 
-	SIRET_regex=RegexValidator(regex=r'^(?P<siret>\d{13})$',message="Le numéro SIRET doit être composé de 13 chiffres exactement")
-	num_SIRET=models.CharField(validators=[SIRET_regex],max_length=13,null=True,verbose_name="N°SIRET")
+	SIRET_regex=RegexValidator(regex=r'^(?P<siret>\d{14})$',message="Le numéro SIRET doit être composé de 14 chiffres")
+	num_SIRET=models.CharField(validators=[SIRET_regex],max_length=14,unique=True,null=True,verbose_name="N°SIRET")
 
 	entreprise=models.ForeignKey(Entreprise,on_delete=models.CASCADE)
 	lots=models.ManyToManyField(Lot,related_name="repondants",blank=True)
@@ -332,6 +331,9 @@ class Agence(models.Model):
 
 	date_inscription_agence=models.DateTimeField(default=datetime.date.today,verbose_name="Date d'inscription ")
 	date_creation_agence=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'agence")
+
+	class Meta :
+		ordering=['-categorie','nom']
 
 	def __str__(self):
 		return 'agence ' + self.nom 
@@ -362,7 +364,19 @@ class DocumentAgence(models.Model):
 		return self.fichier.name
 
 
+class Personne(models.Model):
+	prenom=models.CharField(max_length=255,verbose_name="Prénom ")
+	nom=models.CharField(max_length=255,verbose_name="Nom ")
+	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir exactement 10 chiffres et commencer par 0")
+	portable=models.CharField(validators=[phone_regex],max_length=10,blank=True)
+	ligne_directe=models.CharField(validators=[phone_regex],max_length=10,blank=True)
+	mail=models.EmailField(max_length=255)
+	date_inscription_personne=models.DateTimeField(default=timezone.now(),verbose_name="Date d'inscription ")
 
+	agence=models.ForeignKey(Agence,on_delete=models.CASCADE,null=True,blank=True)
+
+	def __str__(self):
+		return self.nom + ' ' + self.prenom
 
 
 

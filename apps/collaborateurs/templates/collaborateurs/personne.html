@@ -1,0 +1,141 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/navigation_contact_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre">{{personne.nom|upper}} {{personne.prenom|capfirst}} / {{entreprise.nom_ent|capfirst}} - {{agence.nom|capfirst}}</div>
+
+<div class="contenu_wrapper">
+
+	<div class="left_nav">
+
+		<div class="bouton" id="Baccueil">
+			<a href='{% url "voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
+		</div>
+
+		<div class="bouton" id="Bmodifier">
+			<a href="{% url 'modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
+		</div>
+
+		<div class="list_wrapper" id="lots_wrapper">
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+	<div class="contenu_contact">
+
+		<div class="content_wrapper" id="infos_personne">
+			<h2>Informations personelles</h2>
+			<ul class="liste_prop">
+				<li><span class="prop">{{personne.nom|upper}} {{personne.prenom|capfirst}}</span></li>
+				<li><h3>Ligne directe :</h3><span class="prop">{{personne.ligne_directe}}</span></li>
+				<li><h3>Portable :</h3><span class="prop">{{personne.portable}}</span></li>
+				<li><h3>E-mail :</h3><span class="prop"><a href="mailto:{{personne.mail}}">{{personne.mail}}</a></span></li>
+	
+				
+
+
+			</ul>
+
+		</div>
+
+		<div class="content_wrapper" id="infos_agence">
+			<h2>Coordonnées de l'agence</h2>
+			<ul class="liste_prop">
+				<li><h3>Nom :</h3></li>
+				<li><span class="prop"><a href="{% url 'voir_agence' agence.pk agence.nom %}">{{agence.nom|capfirst}}</a></span></li>
+
+				<li><h3>Adresse :</h3></li>
+				{% if adresse.adresse1 != None %}
+					<li><span class="prop">{{adresse.adresse1}}</span></li>
+				{% endif %}
+				{% if adresse.adresse2 != None %}
+					<li><span class="prop">{{adresse.adresse2}}</span></li>
+				{% endif %}
+
+				<li><span class="prop">
+					{% if adresse.code_postal != None %}
+						{{adresse.code_postal}}
+					{% endif %}
+					 - 
+					{% if adresse.ville != None %}
+						{{adresse.ville}}
+					{% endif %}
+				</span></li>
+
+				{% if adresse.pays != None %}
+					<li><span class="prop">{{adresse.pays}}</span></li>
+				{% else %}
+					<li><span class="prop">Non renseigné</span></li>
+				{% endif %}
+
+				<li><h3>Téléphone :</h3></li>
+				{% if agence.telephone != None %}
+					<li><span class="prop">{{agence.telephone}}</span></li>
+				{% else %}
+					<li><span class="prop">Non renseigné</span></li>
+				{% endif %}
+
+				<li><h3>Fax :</h3></li>
+				{% if agence.fax != None %}
+					<li><span class="prop">{{agence.fax}}</span></li>
+				{% else %}
+					<li><span class="prop">Non renseigné</span></li>
+				{% endif %}
+
+				<li><h3>Mail de contact</h3></li>
+				{% if agence.mail_contact != None %}
+					<li><span class="prop"><a href="mailto:{{agence.mail_contact}}">{{agence.mail_contact}}</a></span></li>
+				{% else %}
+					<li><span class="prop">Non renseigné</span></li>
+				{% endif %}
+				
+
+
+			</ul>
+
+		</div>
+
+		<div class="content_wrapper" id="infos_ent">
+			<h2>Informations sur l'entreprise</h2>
+			<ul class="liste_prop">
+				<li>
+					{% if entreprise.logo_ent %}
+					<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					{% else %}
+					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					{% endif %}
+				</li>
+				<li><h3>Nom de l'entreprise :</h3></li>
+				<li><span class="prop"><a href="{% url 'voir_entreprise' entreprise.pk entreprise.nom_ent %}">{{entreprise.nom_ent}}</a></span></li>
+				
+				<li><h3>Numéro SIREN :</h3></li>
+				<li><span class="prop">{{entreprise.num_SIREN}}</span></li>
+			</ul>
+
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+
+

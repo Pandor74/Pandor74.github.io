@@ -1,6 +1,6 @@
 
 
-.titre_projet {
+.titre {
 	font-size: 25px;
 	border-bottom:solid white;
 	display: flex;
@@ -17,9 +17,9 @@
 }
 
 @media all and (min-height:300px) {
-	.titre_projet {
+	.titre {
 		position:sticky;
-		top:74px;
+		top:76px;
 	}
 }
 
@@ -31,7 +31,7 @@
 }
 
 
-.left_nav_projet {
+.left_nav {
 	
 	box-sizing: border-box;
 	width:20%;
@@ -41,18 +41,18 @@
 }
 
 
-.left_nav_projet h1 {
+.left_nav h1 {
 	color:#ff6624;
 	text-decoration: underline;
 	margin-left: 15px;
 }
 
-.left_nav_projet li {
+.left_nav li {
 	margin-left: 15px;
 	list-style-type: 
 }
 
-.left_nav_projet a {
+.left_nav a {
 	color:white;
 	text-decoration: none;
 
@@ -71,7 +71,7 @@
 	padding:2px 0px 2px 0px;
 	font-weight: bold;
 	align-self: center;
-	
+	border-bottom:solid white 2px;
 }
 
 .bouton:hover {
@@ -84,20 +84,3 @@
 	text-align: center;
 }
 
-#Baccueil {
-	border-bottom:solid white 2px;
-}
-
-#Bmodifier {
-	border-bottom:solid white 2px;
-}
-
-#Bnouveaulot {
-	border-bottom:solid white 2px;
-	border-top:solid white 2px;
-}
-
-#Bnouveauao {
-	border-bottom:solid white 2px;
-	border-top:solid white 2px;
-}

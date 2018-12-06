@@ -17,6 +17,9 @@
 	margin-right: 10px;
 }
 
+#content form input,select {
+	font-size: 25px;
+}
 
 #content a {
 	text-decoration: none;
@@ -60,11 +63,11 @@
 }
 
 .projet_prop {
-
+	box-sizing: border-box;
 	width:207px;
 	height: 100px;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	padding: 0px 5px 0px 5px;
 }
@@ -95,10 +98,16 @@
 }
 
 .projet_prop li {
+	display: block;
 	list-style-type: none;
-
+	max-height: 20px;
 	margin-bottom: 2px;
-	word-break: break-all;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow:ellipsis;
+
+	text-align:left;
+
 	
 }
 

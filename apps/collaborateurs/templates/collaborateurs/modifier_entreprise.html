@@ -1,0 +1,50 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouvelle_entreprise_style.css" />
+{% endblock %}
+
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<!--<script src="../../static/js/nouveau_projet.js"></script>-->
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+
+
+
+
+
+<form enctype="multipart/form-data" method="post"  action="{% url 'modifier_entreprise' pk=entreprise.pk nom=entreprise.nom_ent %}">
+
+	{% csrf_token %}
+	<div id="wrap-form">
+
+
+		<div class="set-wrapper">
+			<h1> Veuillez saisir les informations sur l'entreprise </h1>
+
+			{{ formEntreprise.as_p }}
+		</div>
+
+
+
+
+	</div>
+	<input type="submit" value="Modifier l'entreprise" id="BcreateEntreprise" />
+	
+	
+
+</form>
+
+
+
+{% endblock %}
+
+

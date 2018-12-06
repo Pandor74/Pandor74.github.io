@@ -31,9 +31,19 @@ urlpatterns = [
     url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="lister_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})$',views.Afficher_Lot,name="voir_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="voir_fichier"),
-    url('contacts/',views.Liste_Contact,name="contacts_liste"),
-    url('nouvelle_entreprise',views.New_Entreprise,name="nouveau_entreprise"),
-    url(r'^entreprise/(?P<nom>.+)$',views.Afficher_Entreprise,name="voir_entreprise"),
+    url(r'contacts/$',views.Liste_Contact,name="contacts_liste"),
+    url(r'^contacts/nouvelle_entreprise/$',views.New_Entreprise_Et_Agence,name="nouvelle_entreprise"),
+    url(r'^contacts/nouvelle_personne/$',views.New_Personne,name="nouvelle_personne"),
+    url(r'^contacts/nouvelle_personne/nouvelle_entreprise/(?P<siret>\d{14})-(?P<pk>.{1,9})$',views.Associer_New_Entreprise_Et_Agence,name="associer_nouvelle_entreprise_et_agence"),
+    url(r'^contacts/nouvelle_personne/nouvelle_agence/(?P<siret>\d{14})-(?P<pk>.{1,9})$',views.Associer_New_Agence,name="associer_nouvelle_agence"),
+    url(r'^contacts/entreprises/(?P<pk>.{1,9})-(?P<nom>.+)/$',views.Afficher_Entreprise,name="voir_entreprise"),
+    url(r'^contacts/entreprises/modifier/(?P<pk>.{1,9})-(?P<nom>.+)/$',views.Modifier_Entreprise,name="modifier_entreprise"),
+    url(r'^contacts/entreprises/nouvelle_agence/(?P<pk>.{1,9})-(?P<nom>.+)/$',views.Add_Agence,name="ajouter_agence"),
+    url(r'^contacts/entreprises/nouvelle_personne/(?P<pk>.{1,9})-(?P<nom>.+)/$',views.Add_Personne,name="ajouter_personne"),
+    url(r'^contacts/agences/(?P<pk>.{1,9})-(?P<nom>.+)$',views.Afficher_Agence,name="voir_agence"),
+    url(r'^contacts/agences/modifier/(?P<pk>.{1,9})-(?P<nom>.+)$',views.Modifier_Agence,name="modifier_agence"),
+    url(r'^contacts/personnes/(?P<pk>.{1,9})-(?P<nom>.+)-(?P<prenom>.+)$',views.Afficher_Personne,name="voir_personne"),
+    url(r'^contacts/personnes/modifier/(?P<pk>.{1,9})-(?P<nom>.+)-(?P<prenom>.+)$',views.Modifier_Personne,name="modifier_personne"),
 
 
 ]

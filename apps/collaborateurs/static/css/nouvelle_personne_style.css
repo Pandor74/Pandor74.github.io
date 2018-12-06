@@ -1,0 +1,111 @@
+#content p {
+	list-style-type: none;
+	margin-bottom: 10px;
+	margin-top:0;
+	margin-left: 50px;
+	
+}
+
+
+
+form .errorlist {
+	color:red;
+	display: flex;
+	margin: 0;
+
+}
+
+.errorlist li {
+	margin-bottom: 0;
+}
+
+form {
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+#wrap-form {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	width:100%;
+}
+
+.set-wrapper {
+	
+	width:45%;
+	
+	
+}
+
+.set-wrapper ul {
+	list-style-type: none;
+}
+
+#wrap-form input:focus {
+	background-color: #a0a2a3;
+	border-color: #b20c1a;
+	color:black;
+	font-weight: bold;
+
+}
+
+form a {
+	color:orange;
+}
+
+form h1 {
+	color:orange;
+}
+
+form label {
+	display:flex;
+	margin-bottom: 5px;
+}
+form input {
+	margin-bottom: 10px;
+	outline: none;
+}
+
+form .errorlist {
+	color:#ff6624;
+
+}
+
+form select:hover {
+	cursor:pointer;
+}
+
+#BcreateEntreprise {
+	font-size: 25px;
+	background-color:#3e6a87;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color:white;
+	border-radius: 15px;
+	padding: 10px;
+	padding-top:5px;
+	padding-bottom: 5px;
+
+
+}
+
+#BcreateEntreprise:hover {
+	
+	background-color:#ff6624;
+	cursor:pointer;
+}
+
+#BcreateEntreprise:active {
+	
+	background-color:#ff6624;
+}
+
+
+#id_logo_ent, #id_logo_agence:hover {
+	cursor:pointer;
+}

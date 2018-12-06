@@ -1,0 +1,45 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouvelle_personne_style.css" />
+{% endblock %}
+
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<!--<script src="../../static/js/nouveau_projet.js"></script>-->
+
+{% endblock %}
+
+
+
+{% block content %}
+
+{% if envoi %} Votre message a bien été envoyé ! {% endif %}
+
+
+<form enctype="multipart/form-data" method="post"  action="{% url 'nouvelle_personne' %}">
+
+	{% csrf_token %}
+	<div id="wrap-form">
+		<div class="set-wrapper">
+			<h1> Veuillez saisir les informations personnelles</h1>
+
+			{{ formPersonne.as_p }}
+
+			{{formSiret.as_p}}
+		</div>
+
+
+	</div>
+	<input type="submit" value="Créer le contact" id="BcreatePersonne" />
+	
+	
+
+</form>
+
+
+
+{% endblock %}
+
+

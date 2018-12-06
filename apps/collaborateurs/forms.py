@@ -1,10 +1,11 @@
 from django import forms
-from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,DomaineCompetence,Agence,Entreprise,SecteurGeographique
+from collaborateurs.models import Projet,Adresse,Personne,Propriete,Lot,DocumentLot,DomaineCompetence,Agence,Entreprise,SecteurGeographique
 from django.forms import ModelForm,SelectDateWidget,Textarea,TextInput,FileInput,SelectMultiple
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.widgets import AdminDateWidget
 import datetime
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 from collaborateurs.models import LISTE_ACTIVITES,LISTE_CATEGORIE_FICHIER_LOT
 
@@ -22,15 +23,29 @@ class ProjetForm(forms.ModelForm):
 
 
 
-class FiltreForm(forms.Form):
-	FILTRES=(
+class FiltreFormProjet(forms.Form):
+	FILTRES_PROJET=(
 		('-numero_teamber', 'Numero Teamber'),
 		('nom', 'Nom de projet'),
 		
 	)
 	
-	filtre=forms.ChoiceField(choices=FILTRES,initial='-numero_teamber',label="Filtrer par ")
+	filtre=forms.ChoiceField(choices=FILTRES_PROJET,initial='-numero_teamber',label="Trier par ")
 	search=forms.CharField(max_length=255,required=False,label="Recherche ")
+
+
+
+class FiltreFormContact(forms.Form):
+	FILTRES_CONTACT=(
+		('tous', 'Tous'),
+		('entreprise', 'Entreprises'),
+		('agence', 'Agences'),
+		('personne', 'Personnes'),
+	)
+	
+	filtre=forms.ChoiceField(choices=FILTRES_CONTACT,initial='tous',label="Afficher ",widget=forms.Select(attrs={'title':'Permet de filtrer par catégorie de contact'}))
+	search=forms.CharField(max_length=255,required=False,label="Recherche ",widget=forms.TextInput(attrs={'title':'Recherche dans le nom, le prénom ou le numéro SIREN/SIRET le cas échéant'}))
+
 
 
 class AdresseForm(forms.ModelForm):
@@ -108,9 +123,10 @@ class CompetenceForm(forms.Form):
 class AgenceForm(forms.ModelForm):
 	class Meta:
 		model=Agence
-		exclude=['entreprise','lots','date_inscription_agence','competences_agence']
+		exclude=['entreprise','lots','date_inscription_agence']
 		widgets = {
 			'date_creation_agence' : SelectDateWidget(years=range(timezone.now().year,1900,-1)),
+			'competences_agence': forms.CheckboxSelectMultiple(),
 		}
 
 
@@ -122,3 +138,16 @@ class EntrepriseForm(forms.ModelForm):
 		widgets = {
 			'date_creation_ent' : SelectDateWidget(years=range(timezone.now().year,1900,-1)),
 		}
+
+
+class PersonneForm(forms.ModelForm):
+	class Meta:
+		model=Personne
+		exclude=['date_inscription_personne','agence']
+
+
+class SiretForm(forms.Form):
+	SIRET_regex=RegexValidator(regex=r'^(?P<siret>\d{14})$',message="Le numéro SIRET doit être composé de 13 chiffres")
+	num_SIRET=forms.CharField(validators=[SIRET_regex],max_length=14,label="N°SIRET de l'agence")
+
+

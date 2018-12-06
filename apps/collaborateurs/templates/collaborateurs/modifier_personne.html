@@ -1,0 +1,74 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/navigation_contact_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre">{{personne.nom|upper}} {{personne.prenom|capfirst}} / {{entreprise.nom_ent|capfirst}} - {{agence.nom|capfirst}}</div>
+
+<div class="contenu_wrapper">
+
+	<div class="left_nav">
+
+		<div class="bouton" id="Baccueil">
+			<a href='{% url "voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
+		</div>
+
+		<div class="bouton" id="Bmodifier">
+			<a href="{% url 'modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
+		</div>
+
+		<div class="list_wrapper" id="lots_wrapper">
+
+		</div>
+
+	</div>
+
+
+	<div class="contenu_contact">
+
+		<form enctype="multipart/form-data" method="post"  action="{% url 'modifier_personne' pk nom prenom %}">
+
+			{% csrf_token %}
+			<div id="wrap-form">
+				<div class="set-wrapper">
+					<h1> Veuillez saisir les informations personnelles</h1>
+
+					{{ formPersonne.as_p }}
+
+					{% if liste|length > 1 %}
+						<select name="selectionAgence" id="selectAgence">
+							{% for i in liste %}
+								{% if agence.pk == i.0 %}
+									<option value="{{i.0}}" selected>{{i.1}}</option>
+								{% else %}
+									<option value="{{i.0}}">{{i.1}}</option>
+								
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% endif %}
+
+				</div>
+
+
+			</div>
+			<input type="submit" value="Modifier le Contact" id="BcreatePersonne" />
+		</form>
+	</div>
+
+</div>
+
+{% endblock %}
+
+
