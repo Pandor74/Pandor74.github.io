@@ -23,7 +23,7 @@
 
 
 
-	<form enctype="multipart/form-data" method="post" action='{% url "nouveau_lot" projet.pk %}'>
+	<form enctype="multipart/form-data" method="post" action='{% url "modifier_lot" projet.pk lot.pk %}'>
 		{% csrf_token %}
 
 		<div class="contenu_projet">
@@ -53,7 +53,7 @@
 
 
 
-			<input type="submit" value="Créér le lot" id="Beditlot"/>
+			<input type="submit" value="Modifier le lot" id="Beditlot"/>
 			
 		</div>
 	</form>

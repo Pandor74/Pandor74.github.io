@@ -8,6 +8,9 @@ from django.conf import settings
 from django.core.validators import RegexValidator,MaxValueValidator
 from collaborateurs.fonction import right,right_path
 
+from django.dispatch import receiver
+import shutil
+
 
 
 
@@ -51,8 +54,17 @@ class Projet(models.Model):
 	def save(self,*args,**kwargs):
 		super().save(*args,**kwargs)
 
-	def image_path(instance,filename):
-		return os.path.join('images/',str(instance.numero_teamber),'/')
+
+
+#delete files on delete call from Projet
+@receiver(models.signals.post_delete,sender=Projet)
+def auto_delete_files_on_delete(sender,instance,**kwargs):
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','projets',str(instance.numero_teamber)+'-'+instance.nom)
+	if os.path.exists(path):
+		shutil.rmtree(path,ignore_erros=true)
+	else:
+		print('impossible de supprimer le dossier du projet ',str(instance.numero_teamber,str(instance.nom)))
+
 
 
 
@@ -149,7 +161,7 @@ class Lot(models.Model):
 
 	publier=models.BooleanField(default=False)
 
-	projet=models.ForeignKey(Projet,on_delete=models.CASCADE)
+	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True,null=True)
 	activites=models.ManyToManyField(DomaineCompetence,blank=True)
 
 	class Meta:
@@ -204,9 +216,42 @@ class DocumentLot(models.Model):
 
 		return str(mem) + ' Mo'
 
+	def get_extension(self):
+		nom=self.nom()
+		return right(nom,'.')
+
 
 	def __str__(self):
 		return self.fichier.name
+
+
+#delete file on delete call from DocumentLot
+@receiver(models.signals.post_delete,sender=DocumentLot)
+def auto_delete_file_on_delete(sender,instance,**kwargs):
+	if instance.fichier:
+		if os.path.isfile(instance.fichier.path):
+			os.remove(instance.fichier.path)
+
+
+
+
+#delete file before saving the new one called from DocumentLot
+@receiver(models.signals.pre_save,sender=DocumentLot)
+def auto_delete_file_on_change(sender,instance,**kwargs):
+	if not instance.pk:
+		return False
+
+	try:
+		old_file=DocumentLot.objects.get(pk=instance.pk).fichier
+	except DocumentLot.DoesNotExist:
+		return False
+
+	new_file = instance.fichier
+	if not old_file == new_file:
+		if os.path.isfile(old_file.path):
+			os.remove(old_file.path)
+
+
 
 
 def fichier_entreprise_path(instance,filename):
@@ -372,7 +417,7 @@ class Personne(models.Model):
 	agence=models.ForeignKey(Agence,on_delete=models.CASCADE,null=True,blank=True)
 
 	def __str__(self):
-		return self.nom + ' ' + self.prenom
+		return self.nom + ' ' + self.prenom + ' (' + self.agence.nom +')'
 
 
 

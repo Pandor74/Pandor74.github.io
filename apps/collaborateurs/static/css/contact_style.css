@@ -63,8 +63,8 @@
 .content_wrapper img {
 	box-sizing: border-box;
 	border: solid white 2px;
-	height:100px;
-	width: 150px;
+	max-height:100px;
+	max-width: 150px;
 }
 
 .content_wrapper .prop {

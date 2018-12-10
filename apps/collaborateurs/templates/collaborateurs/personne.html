@@ -119,9 +119,9 @@
 			<ul class="liste_prop">
 				<li>
 					{% if entreprise.logo_ent %}
-					<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px"/>
 					{% else %}
-					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px" />
 					{% endif %}
 				</li>
 				<li><h3>Nom de l'entreprise :</h3></li>
@@ -129,6 +129,28 @@
 				
 				<li><h3>Numéro SIREN :</h3></li>
 				<li><span class="prop">{{entreprise.num_SIREN}}</span></li>
+			</ul>
+
+		</div>
+
+
+		<div class="content_wrapper" id="liste_appels">
+			<h2>Liste des appels d'offres du contact</h2>
+			<h3>Les appels d'offre de la personne</h3>
+			<ul class="liste_prop">
+				{% for appel in appels %}
+					<li><a href="{% url 'voir_ao_lot' appel.projet.pk appel.AO.pk appel.lot.pk appel.pk  %}"> {{appel.lot.nom}}</a></li>
+				{% empty %}
+					<li>Aucun appel d'offre en cours !</li>
+				{% endfor %}
+			</ul>
+			<h3>Les appels d'offres de son agence</h3>
+			<ul class="liste_prop">
+				{% for appel_agence in appels_agence %}
+					<li><a href="{% url 'voir_ao_lot' appel_agence.projet.pk appel_agence.AO.pk appel_agence.lot.pk appel_agence.pk  %}"> {{appel_agence.lot.nom}}</a></li>
+				{% empty %}
+					<li>Aucun appel d'offre en cours !</li>
+				{% endfor %}
 			</ul>
 
 		</div>

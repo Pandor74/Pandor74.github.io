@@ -29,6 +29,7 @@
 
 		<div class="content_wrapper" id="infos_gene">
 			<h2>Informations générales</h2>
+			<a href="{% url 'modifier_lot' projet.pk lot.pk %}">Modifier le lot</a>
 			<ul class="liste_prop">
 				<li>Numéro du lot :</li>
 				<li><strong>{{lot.numero}}</strong></li>
@@ -46,9 +47,11 @@
 			</ul>
 
 			<h2>Fichiers associés</h2>
+			<a href="{% url 'modifier_fichiers_lot' projet.pk lot.pk %}">Modifier les fichiers</a>
 			<ul class="liste_prop">
+
 				{% for doc in lot.documents.all %}
-				<li>{{doc.categorie}} : <a href="{% url 'voir_fichier' projet.pk lot.pk doc.pk doc.nom %}">{{doc.nom}} - {{doc.taille}}</a></li>
+				<li>{{doc.categorie}} : <a href="{% url 'voir_fichier' projet.pk lot.pk doc.pk doc.nom %}" target="_blank">{{doc.nom}} - {{doc.taille}}</a></li>
 				<li>{% empty %}Aucun fichier n'a été associé pour le lot !{% endfor %}</li>
 			</ul>
 

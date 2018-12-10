@@ -28,6 +28,7 @@ def right(name,char):
 	left,right=name.split(char)
 	return right
 
+#extrait la dernière partie d'un path si char est un /
 def right_path(name,char):
 	elements=name.split(char)
 
@@ -102,7 +103,7 @@ def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
 def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne):
 	if len(competences)>0:
 		#requete de filtrage
-		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)
+		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)|Q(agence__nom__contains=filtre)
 		q2=Q()
 		for competence in competences:
 			q2|=Q(agence__competences_agence__competence__contains=competence)
@@ -116,7 +117,7 @@ def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne
 		personnes=groupe_personne.filter(q3|q4).distinct()
 	else:
 		#requete de filtrage
-		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)
+		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)|Q(agence__nom__contains=filtre)
 
 		#requete de selection
 		q2=Q()

@@ -1,0 +1,104 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouveau_lot_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="{{STATICFILES_DIRS}}/static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="{{STATICFILES_DIRS}}/static/js/nouveau_lot.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+	<form enctype="multipart/form-data" method="post" action='{% url "modifier_fichiers_lot" projet.pk lot.pk %}'>
+		{% csrf_token %}
+
+		<div class="contenu_projet">
+			
+
+			<div class="content_wrapper" id="infos_docs">
+				<h2>Documents associés</h2>
+
+					
+				<ul class="liste_prop">
+					<div class="fich_wrapper" id="fDPGF">
+						<li class="titre_form">{{formFichiers.fDPGF.label}}</li>
+						<li>{{formFichiers.fDPGF}}</li>
+					</div>
+
+					<div class="fich_wrapper" id="fCCTP">
+						<li class="titre_form">{{formFichiers.fCCTP.label}}</li>
+						<li>{{formFichiers.fCCTP}}</li>
+					</div>
+
+					<div class="fich_wrapper" id="fannexe">
+						<ol id="list_fannexe" ><p class="titre_form">Fichier(s) annexe(s) :</p>
+							<li>{{formFichiers.c1}} : {{formFichiers.f1}}</li>
+							<li class="form_line" id="forml2">
+								<div class="plus" id="p2">+</div>
+								<div class="fich_line" id="fl2">{{formFichiers.c2}} : {{formFichiers.f2}}</div>
+							</li>
+							<li class="form_line" id="forml3">
+								<div class="plus" id="p3">+</div>
+								<div class="fich_line" id="fl3">{{formFichiers.c3}} : {{formFichiers.f3}}</div>
+							</li>
+							<li class="form_line" id="forml4">
+								<div class="plus" id="p4">+</div>
+								<div class="fich_line" id="fl4">{{formFichiers.c4}} : {{formFichiers.f4}}</div>
+							</li>
+							<li class="form_line" id="forml5">
+								<div class="plus" id="p5">+</div>
+								<div class="fich_line" id="fl5">{{formFichiers.c5}} : {{formFichiers.f5}}</div>
+							</li>
+							<li class="form_line" id="forml6">
+								<div class="plus" id="p6">+</div>
+								<div class="fich_line" id="fl6">{{formFichiers.c6}} : {{formFichiers.f6}}</div>
+							</li>
+							<li class="form_line" id="forml7">
+								<div class="plus" id="p7">+</div>
+								<div class="fich_line" id="fl7">{{formFichiers.c7}} : {{formFichiers.f7}}</div>
+							</li>
+							<li class="form_line" id="forml8">
+								<div class="plus" id="p8">+</div>
+								<div class="fich_line" id="fl8">{{formFichiers.c8}} : {{formFichiers.f8}}</div>
+							</li>
+							<li class="form_line" id="forml9">
+								<div class="plus" id="p9">+</div>
+								<div class="fich_line" id="fl9">{{formFichiers.c9}} : {{formFichiers.f9}}</div>
+							</li>
+						
+
+						</ol>
+
+
+					</div>
+
+
+				</ul>
+
+			</div>
+
+
+			<input type="submit" value="Modifier les fichiers" id="Beditlot"/>
+			
+		</div>
+	</form>
+
+</div>
+
+{% endblock %}
+
+

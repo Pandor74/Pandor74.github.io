@@ -12,7 +12,7 @@ from django.views.generic.edit import FormMixin
 from django.http import Http404,FileResponse
 from django.utils.translation import ugettext as _
 from django.urls import reverse_lazy,reverse
-from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence,chercherContact,chercherAgencePourAO,chercherPersonnePourAO
+from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence,chercherContact,chercherAgencePourAO,chercherPersonnePourAO,right
 from django.db.models import Q
 
 #copié depuis un site pour l'utilsaition de PyPDF
@@ -60,7 +60,7 @@ def New_Projet(request):
 			
 			
 
-			return redirect('projet/%s' % projet.pk)
+			return redirect('Afficher_Projet',pk=projet.pk)
 
 		return render(request,'collaborateurs/nouveau_projet.html',locals())
 	else:
@@ -186,143 +186,278 @@ def New_Lot(request,pk):
 	if request.method=='POST':
 		lot=Lot()
 		formLot=LotForm(request.POST or None,)
-		formFichiers=FichiersForm(request.POST or None,)
-		formCompetence=CompetenceForm(request.POST or None,)
+		
 
-		docDPGF=DocumentLot()
-		docCCTP=DocumentLot()
 
-		if formCompetence.is_valid():
-			print('competence validées')
-
-		if formLot.is_valid() and formCompetence.is_valid():
-			print('formulaires validés')
-			competences_form=formCompetence.cleaned_data['competences']
-
-			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
-			liste_competences=DomaineCompetence.objects.all()
-			for competence in competences_form:
-				if ExistOrNotCompetence(liste_competences,competence):
-					print('domaine de compétence éxiste déjà on passe')
-				else:
-					DomaineCompetence.objects.create(competence=competence)
-			
-					print('création du domaine de compétence inexistant')
-			
-
-			
+		if formLot.is_valid():
+			print('formulaire lot validé')
 
 
 			envoi=True
-			lot=formLot.save(commit=False)
+			
+			lot=formLot.save()
 			lot.projet=projet
 			lot.save()
 			
-			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
-			for competence in competences_form:
-				compvalid=liste_competences.filter(competence=competence).get()
-				lot.activites.add(compvalid)
+			
+			
 
 
-			if formFichiers.is_valid():
-				print('fichiers validés')
-				print(request.FILES)
+			return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
 
-				if "fDPGF" in request.FILES:
-					print('fichier DPGF associé')
-					docDPGF.fichier=request.FILES['fDPGF']
-					docDPGF.categorie="DPGF"
-					docDPGF.lot=lot
-					docDPGF.save()
+		else:
+			return render(request,'collaborateurs/nouveau_lot.html',locals())
 
-				if "fCCTP" in request.FILES:
-					print('fichier CCTP associé')
-					docCCTP.fichier=request.FILES['fCCTP']
-					docCCTP.categorie="CCTP"
-					docCCTP.lot=lot
-					docCCTP.save()
-
-				if "f1" in request.FILES:
-					print('fichier annexe 1 associé')
-					docAn1=DocumentLot()
-					docAn1.fichier=request.FILES['f1']
-					docAn1.categorie=formFichiers.cleaned_data['c1']
-					docAn1.lot=lot
-					docAn1.save()
-
-				if "f2" in request.FILES:
-					print('fichier annexe 2 associé')
-					docAn2=DocumentLot()
-					docAn2.fichier=request.FILES['f2']
-					docAn2.categorie=formFichiers.cleaned_data['c2']
-					docAn2.lot=lot
-					docAn2.save()
-
-				if "f3" in request.FILES:
-					print('fichier annexe 3 associé')
-					docAn3=DocumentLot()
-					docAn3.fichier=request.FILES['f3']
-					docAn3.categorie=formFichiers.cleaned_data['c3']
-					docAn3.lot=lot
-					docAn3.save()
-
-				if "f4" in request.FILES:
-					print('fichier annexe 4 associé')
-					docAn4=DocumentLot()
-					docAn4.fichier=request.FILES['f4']
-					docAn4.categorie=formFichiers.cleaned_data['c4']
-					docAn4.lot=lot
-					docAn4.save()
-
-				if "f5" in request.FILES:
-					print('fichier annexe 5 associé')
-					docAn5=DocumentLot()
-					docAn5.fichier=request.FILES['f5']
-					docAn5.categorie=formFichiers.cleaned_data['c5']
-					docAn5.lot=lot
-					docAn5.save()
-
-				if "f6" in request.FILES:
-					print('fichier annexe 6 associé')
-					docAn6=DocumentLot()
-					docAn6.fichier=request.FILES['f6']
-					docAn6.categorie=formFichiers.cleaned_data['c6']
-					docAn6.lot=lot
-					docAn6.save()
-
-				if "f7" in request.FILES:
-					print('fichier annexe 7 associé')
-					docAn7=DocumentLot()
-					docAn7.fichier=request.FILES['f7']
-					docAn7.categorie=formFichiers.cleaned_data['c7']
-					docAn7.lot=lot
-					docAn7.save()
-
-				if "f8" in request.FILES:
-					print('fichier annexe 8 associé')
-					docAn8=DocumentLot()
-					docAn8.fichier=request.FILES['f8']
-					docAn8.categorie=formFichiers.cleaned_data['c8']
-					docAn8.lot=lot
-					docAn8.save()
-
-				if "f9" in request.FILES:
-					print('fichier annexe 9 associé')
-					docAn9=DocumentLot()
-					docAn9.fichier=request.FILES['f9']
-					docAn9.categorie=formFichiers.cleaned_data['c9']
-					docAn9.lot=lot
-					docAn9.save()
-
-			return redirect('voir_lot',pk=projet.pk,id=lot.pk)
-
-		return render(request,'collaborateurs/nouveau_lot.html',locals())
 	else:
 		formLot=LotForm()
-		formFichiers=FichiersForm()
-		formCompetence=CompetenceForm()
+	
 
 	return render(request,'collaborateurs/nouveau_lot.html',locals())
+
+
+def Modifier_Lot(request,pk,pklot):
+
+
+
+	envoi=False
+	print('pk du projet ' + str(pk))
+	print('début de modification d\'un lot')
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	lot=get_object_or_404(Lot,pk=pklot)
+
+	if request.method=='POST':
+
+		formLot=LotForm(request.POST or None,instance=lot)
+		
+
+		if formLot.is_valid():
+			print('formulaires validés')
+
+			envoi=True
+			lot=formLot.save()
+			
+
+			return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
+
+		return render(request,'collaborateurs/modifier_parametres_lot.html',locals())
+	else:
+		formLot=LotForm(instance=lot)
+		
+
+	return render(request,'collaborateurs/modifier_parametres_lot.html',locals())
+
+
+
+def Modifier_Fichiers_Lot(request,pk,pklot):
+
+
+
+	envoi=False
+	print('début de modification  des fichiers d\'un lot')
+	print('pk du projet ' + str(pk))
+	projet=get_object_or_404(Projet,pk=pk)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	lot=get_object_or_404(Lot,pk=pklot)
+	liste_doc_lot=lot.documents.all()
+
+	if request.method=='POST':
+		
+		formFichiers=FichiersForm(liste_doc_lot,request.POST or None,)
+
+
+
+		if formFichiers.is_valid():
+			print('fichiers validés')
+			print(request.FILES)
+			print(request.POST)
+
+			if "f1" in request.FILES:
+				print('fichier annexe 1 associé')
+				try:
+					docAn1=liste_doc_lot[0]
+				except:
+					docAn1=DocumentLot()
+				docAn1.fichier=request.FILES['f1']
+				docAn1.categorie=formFichiers.cleaned_data['c1']
+				docAn1.lot=lot
+				docAn1.save()
+			elif "f1-clear" in request.POST:
+				try:
+					docAn1=liste_doc_lot[0]
+				except:
+					docAn1=None
+				if docAn1:
+					docAn1.delete()
+
+			
+
+			if "f2" in request.FILES:
+				print('fichier annexe 2 associé')
+				try:
+					docAn2=liste_doc_lot[1]
+				except:
+					docAn2=DocumentLot()
+				docAn2.fichier=request.FILES['f2']
+				docAn2.categorie=formFichiers.cleaned_data['c2']
+				docAn2.lot=lot
+				docAn2.save()
+			elif "f2-clear" in request.POST:
+				try:
+					docAn2=liste_doc_lot[1]
+				except:
+					docAn2=None
+				if docAn2:
+					docAn2.delete()
+
+			if "f3" in request.FILES:
+				print('fichier annexe 3 associé')
+				try:
+					docAn3=liste_doc_lot[2]
+				except:
+					docAn3=DocumentLot()
+				docAn3.fichier=request.FILES['f3']
+				docAn3.categorie=formFichiers.cleaned_data['c3']
+				docAn3.lot=lot
+				docAn3.save()
+			elif "f3-clear" in request.POST:
+				try:
+					docAn3=liste_doc_lot[2]
+				except:
+					docAn3=None
+				if docAn3:
+					docAn3.delete()
+
+			if "f4" in request.FILES:
+				print('fichier annexe 4 associé')
+				try:
+					docAn4=liste_doc_lot[3]
+				except:
+					docAn4=DocumentLot()
+				docAn4.fichier=request.FILES['f4']
+				docAn4.categorie=formFichiers.cleaned_data['c4']
+				docAn4.lot=lot
+				docAn4.save()
+			elif "f4-clear" in request.POST:
+				try:
+					docAn4=liste_doc_lot[3]
+				except:
+					docAn4=None
+				if docAn4:
+					docAn4.delete()
+
+			if "f5" in request.FILES:
+				print('fichier annexe 5 associé')
+				try:
+					docAn5=liste_doc_lot[4]
+				except:
+					docAn5=DocumentLot()
+				docAn5.fichier=request.FILES['f5']
+				docAn5.categorie=formFichiers.cleaned_data['c5']
+				docAn5.lot=lot
+				docAn5.save()
+			elif "f5-clear" in request.POST:
+				try:
+					docAn5=liste_doc_lot[4]
+				except:
+					docAn5=None
+				if docAn5:
+					docAn5.delete()
+
+			if "f6" in request.FILES:
+				print('fichier annexe 6 associé')
+				try:
+					docAn6=liste_doc_lot[5]
+				except:
+					docAn6=DocumentLot()
+				docAn6.fichier=request.FILES['f6']
+				docAn6.categorie=formFichiers.cleaned_data['c6']
+				docAn6.lot=lot
+				docAn6.save()
+			elif "f6-clear" in request.POST:
+				try:
+					docAn6=liste_doc_lot[5]
+				except:
+					docAn6=None
+				if docAn6:
+					docAn6.delete()
+
+			if "f7" in request.FILES:
+				print('fichier annexe 7 associé')
+				try:
+					docAn7=liste_doc_lot[6]
+				except:
+					docAn7=DocumentLot()
+				docAn7.fichier=request.FILES['f7']
+				docAn7.categorie=formFichiers.cleaned_data['c7']
+				docAn7.lot=lot
+				docAn7.save()
+			elif "f7-clear" in request.POST:
+				try:
+					docAn7=liste_doc_lot[6]
+				except:
+					docAn7=None
+				if docAn7:
+					docAn7.delete()
+
+			if "f8" in request.FILES:
+				print('fichier annexe 8 associé')
+				try:
+					docAn8=liste_doc_lot[7]
+				except:
+					docAn8=DocumentLot()
+				docAn8.fichier=request.FILES['f8']
+				docAn8.categorie=formFichiers.cleaned_data['c8']
+				docAn8.lot=lot
+				docAn8.save()
+			elif "f8-clear" in request.POST:
+				try:
+					docAn8=liste_doc_lot[7]
+				except:
+					docAn8=None
+				if docAn8:
+					docAn8.delete()
+
+			if "f9" in request.FILES:
+				print('fichier annexe 9 associé')
+				try:
+					docAn9=liste_doc_lot[8]
+				except:
+					docAn9=DocumentLot()
+				docAn9.fichier=request.FILES['f9']
+				docAn9.categorie=formFichiers.cleaned_data['c9']
+				docAn9.lot=lot
+				docAn9.save()
+			elif "f9-clear" in request.POST:
+				try:
+					docAn9=liste_doc_lot[8]
+				except:
+					docAn9=None
+				if docAn9:
+					docAn9.delete()
+
+		return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
+
+		return render(request,'collaborateurs/modifier_fichiers_lot.html',locals())
+	else:
+		formLot=LotForm()
+		
+
+		
+		nombre=liste_doc_lot.count()
+
+		formFichiers=FichiersForm(liste_doc_lot)
+
+
+
+
+	
+
+	return render(request,'collaborateurs/modifier_fichiers_lot.html',locals())
 
 
 def Liste_Lot(request,pk):
@@ -337,10 +472,10 @@ def Liste_Lot(request,pk):
 
 
 
-def Afficher_Lot(request,pk,id):
+def Afficher_Lot(request,pk,pklot):
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
-	lot=get_object_or_404(Lot,pk=id)
+	lot=get_object_or_404(Lot,pk=pklot)
 	competences=get_list_or_404(DomaineCompetence)
 	appels=projet.appeloffre_set.all()
 
@@ -351,16 +486,37 @@ def Afficher_Lot(request,pk,id):
 
 
 #fonction qui permet d'ouvrir un fichier PDF dans le browser... Il faut intégrer le MIMETYPE pour les autres formats de documents qui seront au final téléchargé
-def Voir_Fichier_PDF_Lot(request,pk,id,iddoc,nom):
+def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 
 	doc=get_object_or_404(DocumentLot,pk=iddoc)
+	extension=doc.get_extension()
+	print('extension :',extension)
 
-	try:
-		response=FileResponse(open(doc.fichier.path,'rb'),content_type='application/pdf')
-		response['Content-Disposition']='inline;filename='+ nom
-	except FileNotFoundError:
-		raise Http404()
-	return response
+	if extension =="pdf":
+		try:
+			response=FileResponse(open(doc.fichier.path,'rb'),content_type='application/pdf')
+			response['Content-Disposition']='inline;filename='+ nom
+		except FileNotFoundError:
+			raise Http404()
+		return response
+	elif extension == ("jpg" or "jpeg"):
+		try:
+			response=FileResponse(open(doc.fichier.path,'rb'),content_type='image/jpeg')
+			response['Content-Disposition']='inline;filename='+ nom
+		except FileNotFoundError:
+			raise Http404()
+		return response
+	elif extension == ("png"):
+		try:
+			response=FileResponse(open(doc.fichier.path,'rb'),content_type='image/png')
+			response['Content-Disposition']='inline;filename='+ nom
+		except FileNotFoundError:
+			raise Http404()
+		return response
+	else:
+		return Http404()
+
+
 
 
 #permet la création d'une entreprise et de son agence principale sans lier de personne dedans
@@ -857,6 +1013,9 @@ def Afficher_Personne(request,pk,nom,prenom):
 	agence=personne.agence
 	entreprise=agence.entreprise
 	adresse=agence.adresse
+	appels_personne=personne.appeloffrelot_set.all()
+	appels_agence=agence.appeloffrelot_set.all()
+
 	
 	return render(request,'collaborateurs/personne.html',locals())
 
@@ -1135,7 +1294,9 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 		formEcheance=EcheanceForm()
 
 		AOlot=AppelOffreLot()
-		formAOlot=AppelOffreLotForm()
+		agences=Agence.objects.none()
+		personnes=Personne.objects.none()
+		formAOlot=AppelOffreLotForm(agences,personnes)
 		
 
 		return render(request,'collaborateurs/nouveau_ao_lot.html',locals())
