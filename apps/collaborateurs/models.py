@@ -60,24 +60,24 @@ class Projet(models.Model):
 
 #comporte la liste des types d'architecture
 LISTE_ARCHITECTURE =(
-		('basique','Basique'),
-		('moyenne','Moyenne'),
-		('complexe','Complexe'),
+		('Basique','Basique'),
+		('Moyenne','Moyenne'),
+		('Complexe','Complexe'),
 	)
 
 #comporte la liste des secteurs d'activités
 LISTE_SECTEUR=(
-		('copro','Copropriété'),
-		('tertiaire','Tertiaire'),
-		('social','Social'),
-		('individuel','Individuel')
+		('Copropriété','Copropriété'),
+		('Tertiaire','Tertiaire'),
+		('Social','Social'),
+		('Individuel','Individuel')
 	)
 
 #définit la liste des catégories de travaux
 LISTE_TRAVAUX=(
-		('reno','Rénovation'),
-		('sinistre','Sinistre'),
-		('neuf','Neuf'),
+		('Rénovation','Rénovation'),
+		('Sinistre','Sinistre'),
+		('Neuf','Neuf'),
 	)
 #définit la liste des types de consultations
 LISTE_CONSULTATION=(
@@ -166,7 +166,7 @@ class Lot(models.Model):
 
 #défini le chemin d'enregistrement des fichiers des lots et créé le chemin si besoin dans le dossier projets
 def fichier_lot_path(instance,filename):
-	path=os.path.join(settings.BASE_DIR,'media','fichiers','projets',str(instance.lot.projet.numero_teamber),str(instance.lot.nom))
+	path=os.path.join(settings.BASE_DIR,'media','fichiers','projets',str(instance.lot.projet.numero_teamber)+'-'+str(instance.lot.projet.nom),str(instance.lot.nom))
 
 	if not os.path.isdir(path):
 		print(path,' chemin fichier n\'existe pas')
@@ -408,6 +408,7 @@ class AppelOffre(models.Model):
 
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
 	lots=models.ManyToManyField(Lot,blank=True)
+	numero=models.IntegerField(default=0)
 
 	#createur
 
@@ -420,7 +421,7 @@ class AppelOffreLot(models.Model):
 
 
 	date_lancement=models.DateField(default=datetime.date.today,verbose_name="Date de démarrage de la consultation")
-	relance=models.IntegerField(validators=[MaxValueValidator(99)],blank=True)
+	relance=models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(99)],verbose_name="Intervalle de relance (jours calendaires)")
 
 	AO_agences=models.ManyToManyField(Agence,blank=True)
 	AO_personnes=models.ManyToManyField(Personne,blank=True)
@@ -462,4 +463,4 @@ class Echeance(models.Model):
 	appelGlobal=models.OneToOneField(AppelOffreGlobal,on_delete=models.CASCADE,null=True)
 
 	def __str__(self):
-		return 'date de fin le ' + self.date
+		return 'date de fin le ' + str(self.date)

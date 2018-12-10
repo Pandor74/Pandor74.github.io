@@ -1,0 +1,62 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouveau_ao_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+
+			
+		<form enctype="multipart/form-data" method="post"  action="{% url 'nouveau_ao_lot' projet.pk AO.pk lot.pk %}">
+
+			{% csrf_token %}
+			<div id="wrap-form">
+				<div class="set-wrapper">
+					<h1> Création d'un appel d'offres pour le lot : {{lot.decris_toi|upper}}</h1>
+
+					
+					<h2> Veuillez sélectionner les paramètres de l'appel d'offres</h2>
+					{{formEcheance}}
+					<h2> Veuillez sélectionner les entreprises à consulter</h2>
+					{{formAOlot}}
+				</div>
+
+
+			</div>
+
+			<input type="submit" value="Créer l'appel d'offres" id="BcreateAO" />
+
+
+
+		</form>
+
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

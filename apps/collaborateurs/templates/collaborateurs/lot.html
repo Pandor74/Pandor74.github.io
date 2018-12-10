@@ -52,6 +52,13 @@
 				<li>{% empty %}Aucun fichier n'a été associé pour le lot !{% endfor %}</li>
 			</ul>
 
+			<h2>Les appels d'offres associés</h2>
+			<ul class="liste_prop">
+				{% for appel_lot in appels_lot %}
+				<li>Appel offre : <a href="{% url 'voir_ao_lot' projet.pk appel_lot.AO.pk lot.pk appel_lot.pk %}">{{appel_lot.AO.numero}}</a></li>
+				<li>{% empty %}Aucun appel d'offres pour le lot !{% endfor %}</li>
+			</ul>
+
 		</div>
 	</div>
 

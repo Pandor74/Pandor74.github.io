@@ -23,8 +23,9 @@ from django.conf.urls import url
 urlpatterns = [
 	path('',views.Home,name='accueil_col'),
 	path('deconnexion',views.Deconnexion,name='deconnexion'),
-	path('nouveau_projet',views.New_Projet,name="nouveau_projet"),
+	
     url('projets/',views.ListeProjets.as_view(),name="projets_liste"),
+    path('projets/nouveau-projet',views.New_Projet,name="nouveau_projet"),
     url(r'^projet/modifier/(?P<pk>.+)$',views.Modifier_Projet,name="modifier_projet"),
     url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="voir_projet"),
     url(r'^projet/(?P<pk>.{1,9})/nouveau-lot$',views.New_Lot,name="nouveau_lot"),
@@ -33,9 +34,13 @@ urlpatterns = [
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<id>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="voir_fichier"),
     url(r'^projet/(?P<pk>.{1,9})/nouveau-ao$',views.New_AO,name="nouveau_ao"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})$',views.Afficher_AO,name="voir_ao"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/modifier$',views.Modifier_AO,name="modifier_ao"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/gerer$',views.Gerer_AO_Lot,name="gerer_ao_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/nouveau-ao-lot$',views.New_AO_Lot,name="nouveau_ao_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})$',views.Afficher_AO_Lot,name="voir_ao_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})/selectionner-contacts$',views.Selectionner_Contact_AO_Lot,name="select_contact_ao_lot"),
 
-
-    url(r'contacts/$',views.Liste_Contact,name="contacts_liste"),
+    url(r'^contacts/$',views.Liste_Contact,name="contacts_liste"),
     url(r'^contacts/nouvelle_entreprise/$',views.New_Entreprise_Et_Agence,name="nouvelle_entreprise"),
     url(r'^contacts/nouvelle_personne/$',views.New_Personne,name="nouvelle_personne"),
     url(r'^contacts/nouvelle_personne/nouvelle_entreprise/(?P<siret>\d{14})-(?P<pk>.{1,9})$',views.Associer_New_Entreprise_Et_Agence,name="associer_nouvelle_entreprise_et_agence"),

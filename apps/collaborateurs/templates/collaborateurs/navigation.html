@@ -14,7 +14,7 @@
 
 			<ol class="liste" id="liste_ao">
 				{% for appel in appels %}
-					<li><a href=''>{{appel}}</a></li>
+					<li><a href="{% url 'voir_ao' projet.pk appel.pk %}">{{appel}}</a></li>
 				{% empty %}
 					<li>Aucun appel d'offres !</li>
 				{% endfor %}

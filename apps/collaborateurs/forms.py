@@ -67,8 +67,17 @@ class ProprietesForm(forms.ModelForm):
 		model=Propriete
 		exclude=['projet']
 		widgets= {
-			'date_fin': SelectDateWidget(),
+			'date_fin': SelectDateWidget(years=range(timezone.now().year,2100,+1)),
 			}
+		
+
+	def clean_date_fin(self):
+		date = self.cleaned_data['date_fin']
+		if date:
+			if date <= datetime.date.today():
+				raise forms.ValidationError("La date ne peut pas être dans le passé !")
+			return date
+
 
 
 class LotForm(forms.ModelForm):
@@ -176,6 +185,10 @@ class AppelOffreForm(forms.ModelForm):
 			'lots':forms.CheckboxSelectMultiple(),
 		}
 
+	def __init__(self,projet,*args,**kwargs):
+		super(AppelOffreForm,self).__init__(*args,**kwargs)
+		self.fields['lots'].queryset=Lot.objects.filter(projet=projet)
+
 
 		
 
@@ -183,8 +196,28 @@ class AppelOffreLotForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffreLot
 		exclude=['projet','AO','lot','date_lancement']
+		widgets ={
+			'AO_agences':forms.CheckboxSelectMultiple(),
+			'AO_personnes':forms.CheckboxSelectMultiple(),
+		}
+
+	def __init__(self,agences,personnes,*args,**kwargs):
+		super(AppelOffreLotForm,self).__init__(*args,**kwargs)
+		self.fields['AO_agences'].queryset=agences
+		self.fields['AO_personnes'].queryset=personnes
+
 
 class AppelOffreGlobalForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffreGlobal
 		fields='__all__'
+
+
+
+class FiltreFormAgenceAO(forms.Form):
+	competences=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'title':'Selectionner les activités recherchées'}),choices=LISTE_ACTIVITES,required=False)
+	search=forms.CharField(max_length=255,required=False,label="Recherche ")
+
+
+class FiltreFormPersonneAO(forms.Form):
+	competences=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=LISTE_ACTIVITES)

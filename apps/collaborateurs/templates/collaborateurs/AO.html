@@ -28,12 +28,17 @@
 	<div class="contenu_projet">
 
 		<div class="content_wrapper" id="infos_gene">
-			<h2>Les lots de l'appel d'offres</h2>
+			<h2>Les lots de l'appel d'offres N°{{AO.numero}}</h2>
 				{% for lot in lots_AO %}
-					<p><a href="{% url 'voir_lot' projet.pk lot.pk %}">{{lot.decris_toi|upper}}</a></p>
+					<li>AO du lot : {{lot.decris_toi|upper}}</li>
+					<li> <a href="{% url 'gerer_ao_lot' projet.pk AO.pk lot.pk %}">Gérer l'appel d'offres du lot</a></li>
 				{% empty %}
-					<p>Aucun lot n'a été créé a ce jour !</p>
+					<li>Aucun lot n'a été associé à ce jour !</li>
 				{% endfor %}
+
+				<p>La date de fin de l'appel d'offres est le : {{AO.echeance.date}}</p>
+
+				<a href="{% url 'modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
 		</div>
 
 	</div>

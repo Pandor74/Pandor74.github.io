@@ -1,0 +1,63 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Les lots de l'appel d'offres N°{{AO.numero}} concernant le lot {{lot.decris_toi}}</h2>
+				<h3>Paramètres de la consultation</h3>
+				<li>Date de création : {{AOlot.date_lancement}}</li>
+				<li>Intervalle de relance : tous les {{AOlot.relance}} jours calendaires</li>
+				<li>Date limite : {{AOlot.echeance.date}}</li>
+				
+
+				<h3>Agences consultées</h3>
+				{% for agence in agences %}
+					<li><a href="{% url 'voir_agence' agence.pk agence.nom %}">{{agence.nom}}</a></li>
+				{% empty %}
+					<li>Aucunne agence n'a été consultée à ce jour !</li>
+				{% endfor %}
+
+				<h3>Personnes consultées</h3>
+				{% for personne in personnes %}
+					<li><a href="{% url 'voir_personne' personne.pk personne.nom personne.prenom %}">{{personne.nom|upper}} {{personne.prenom|capfirst}}</a></li>
+				{% empty %}
+					<li>Aucunne personne n'a été associée à ce jour !</li>
+				{% endfor %}
+
+				<p>La date de fin de l'appel d'offres est le : {{AOlot.echeance.date}}</p>
+
+				<a href="{% url 'select_contact_ao_lot' projet.pk AO.pk lot.pk AOlot.pk %}">Modifier la liste des contacts consultés</a>
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,74 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/associer_contact_ao_lot_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+
+		<h1> Selection des contacts à consulter pour le lot : {{lot.decris_toi|upper}}</h1>
+
+
+
+		<form id="form_contact" enctype="multipart/form-data" method="post"  action="{% url 'select_contact_ao_lot' projet.pk AO.pk lot.pk AOlot.pk %}">
+
+			{% csrf_token %}
+			<div id="wrap-form">
+
+				<div class="filtre-wrapper">
+					<h2>Filtrage des contacts</h2>
+					{{formFiltreAgence}}
+					<input type="submit" name="Bfiltrer" id="id_Bfiltrer" value="Filtrer"/>
+				</div>
+				
+				
+				<div class="set-wrapper">
+					<div class="list-wrapper">
+						<h2> Agences à consulter</h2>
+						{{formAOlot.AO_agences}}
+					</div>
+
+					<div class="list-wrapper">
+						<h2> Personnes à consulter</h2>
+						{{formAOlot.AO_personnes}}
+					</div>
+				</div>
+
+			</div>
+
+			<input type="submit" name="Bselect" value="Selectionner les contacts" id="id_Bselect" />
+
+
+
+		</form>
+
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

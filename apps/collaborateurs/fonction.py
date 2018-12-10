@@ -1,7 +1,6 @@
 from django.db.models import Q
 
 
-
 #permet de rechercher un élément d'un groupe à partir de la chaine dans nom ou numero_teamber et ordonne par filtre
 def chercherProjet(self,groupe,filtre,chaine):
 
@@ -69,3 +68,61 @@ def chercherContact(entreprise,agence,personne,filtre,chaine):
 			contacts_personne=groupe_personne.filter(Q(nom__contains=chaine)|Q(prenom__contains=chaine))
 		
 	return contacts_ent,contacts_agence,contacts_personne
+
+
+def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
+	#création de la condition de filtrage sur les agences
+	if len(competences)>0:
+		#requete associée au filtrage
+		q1=Q()
+		for competence in competences:
+			q1|=Q(competences_agence__competence__contains=competence)
+		q1&=Q(nom__contains=filtre)
+		#requete associé à la selection
+		q2=Q()
+		if len(selected_agences)>0:
+			for sel in selected_agences:
+				q2|=Q(pk=sel)
+	
+		agences=groupe_agence.filter(q1|q2).distinct()
+	else:
+		if len(selected_agences)>0:
+			q=Q()
+			for sel in selected_agences:
+				q|=Q(pk=sel)
+			q|=Q(nom__contains=filtre)
+			agences=groupe_agence.filter(q)
+		else:
+			agences=groupe_agence.filter(nom__contains=filtre)
+
+	return agences
+
+
+
+def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne):
+	if len(competences)>0:
+		#requete de filtrage
+		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)
+		q2=Q()
+		for competence in competences:
+			q2|=Q(agence__competences_agence__competence__contains=competence)
+		q3=q1&q2
+
+		#requete de selection
+		q4=Q()
+		if len(selected_personnes)>0:
+			for sel in selected_personnes:
+				q4|=Q(pk=sel)
+		personnes=groupe_personne.filter(q3|q4).distinct()
+	else:
+		#requete de filtrage
+		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)
+
+		#requete de selection
+		q2=Q()
+		if len(selected_personnes)>0:
+			for sel in selected_personnes:
+				q2|=Q(pk=sel)
+		personnes=groupe_personne.filter(q1|q2)
+
+	return personnes

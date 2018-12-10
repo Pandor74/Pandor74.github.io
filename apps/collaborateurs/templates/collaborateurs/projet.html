@@ -59,16 +59,16 @@
 				<li><strong>{{projet.agence}}</strong></li>
 
 				<li>Type de client :</li>
-				<li><strong>{% if projet.proprietes.secteur != None %}{{projet.proprietes.secteur}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.secteur != None %}{{proprietes.secteur}}{% endif %}</strong></li>
 
 				<li>Catégorie de travaux :</li>
-				<li><strong>{% if projet.proprietes.travaux != None %}{{projet.proprietes.travaux}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.travaux != None %}{{proprietes.travaux}}{% endif %}</strong></li>
 
 				<li>Type de consultation :</li>
-				<li><strong>{% if projet.proprietes.consultation != None %}{{projet.proprietes.consultation}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.consultation != None %}{{proprietes.consultation}}{% endif %}</strong></li>
 
 				<li>Echéance de rendu de la consultation :</li>
-				<li><strong>{% if projet.proprietes.date_fin != None %}{{projet.proprietes.date_fin}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.date_fin != None %}{{proprietes.date_fin}}{% endif %}</strong></li>
 			</ul>
 
 		</div>
@@ -79,19 +79,19 @@
 			<h2>Informations sur le bâtiment</h2>
 			<ul class="liste_prop">
 				<li>Type architecture du bâtiment :</li>
-				<li><strong>{% if projet.proprietes.architecture != None %}{{projet.projet.proprietes.architecture}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.architecture != None %}{{proprietes.architecture}}{% endif %}</strong></li>
 
 				<li>Nombre d'étage du bâtiment :</li>
-				<li><strong>{% if projet.propriete.nb_etages > 0 %}{{projet.propriete.nb_etages}}{% endif %}</strong></li>
+				<li><strong>{% if projet.propriete.nb_etages > 0 %}{{proprietes.nb_etages}}{% endif %}</strong></li>
 
 				<li>Nombre de lots du bâtiment :</li>
-				<li><strong>{% if projet.propriete.nb_logements > 0 %}{{projet.propriete.nb_logements}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.nb_logements > 0 %}{{proprietes.nb_logements}}{% endif %}</strong></li>
 
 				<li>Surface au sol du bâtiment :</li>
-				<li><strong>{% if projet.propriete.surf_sol > 0 %}{{projet.propriete.surf_sol}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.surf_sol > 0 %}{{proprietes.surf_sol}}{% endif %}</strong></li>
 
 				<li>Surface Hors Oeuvre Nette  :</li>
-				<li><strong>{% if projet.propriete.surf_shon > 0 %}{{projet.propriete.surf_shon}}{% endif %}</strong></li>
+				<li><strong>{% if proprietes.surf_shon > 0 %}{{proprietes.surf_shon}}{% endif %}</strong></li>
 			</ul>
 
 		</div>

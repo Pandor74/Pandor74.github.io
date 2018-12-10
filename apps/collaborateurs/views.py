@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
 from collaborateurs.forms import ProjetForm,FiltreFormProjet,AdresseForm,ProprietesForm,LotForm,DocumentLotForm,FichiersForm,AgenceForm,EntrepriseForm
 from collaborateurs.forms import CompetenceForm,FiltreFormContact,SiretForm,PersonneForm
 from collaborateurs.forms import AppelOffreForm,AppelOffreLotForm,AppelOffreGlobalForm,EcheanceForm
+from collaborateurs.forms import FiltreFormAgenceAO,FiltreFormPersonneAO
 from collaborateurs.models import Projet,Adresse,Propriete,Lot,DocumentLot,DomaineCompetence,Entreprise,Agence,Personne
 from collaborateurs.models import LISTE_ACTIVITES
 from collaborateurs.models import AppelOffre,AppelOffreLot,AppelOffreGlobal,Echeance
@@ -11,7 +12,8 @@ from django.views.generic.edit import FormMixin
 from django.http import Http404,FileResponse
 from django.utils.translation import ugettext as _
 from django.urls import reverse_lazy,reverse
-from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence,chercherContact
+from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence,chercherContact,chercherAgencePourAO,chercherPersonnePourAO
+from django.db.models import Q
 
 #copié depuis un site pour l'utilsaition de PyPDF
 
@@ -72,6 +74,7 @@ def Modifier_Projet(request,pk):
 	oui=False
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
 
 
 	if request.method == 'POST':
@@ -97,7 +100,7 @@ def Modifier_Projet(request,pk):
 			
 
 
-				return render(request,'collaborateurs/projet.html',locals())
+				return redirect('voir_projet',pk=projet.pk)
 
 
 		return render(request,'collaborateurs/modifier_projet.html',locals())
@@ -163,7 +166,9 @@ class ListeProjets(FormListView):
 
 def Afficher_Projet(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
+	proprietes=projet.propriete
 	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
 
 	return render(request,'collaborateurs/projet.html',locals())
 		
@@ -176,6 +181,7 @@ def New_Lot(request,pk):
 	print('début de création d\'un lot')
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
 
 	if request.method=='POST':
 		lot=Lot()
@@ -185,7 +191,7 @@ def New_Lot(request,pk):
 
 		docDPGF=DocumentLot()
 		docCCTP=DocumentLot()
-		docAUTRE=DocumentLot()
+
 		if formCompetence.is_valid():
 			print('competence validées')
 
@@ -238,66 +244,75 @@ def New_Lot(request,pk):
 
 				if "f1" in request.FILES:
 					print('fichier annexe 1 associé')
-					docCCTP.fichier=request.FILES['f1']
-					docCCTP.categorie=formFichiers.cleaned_data['c1']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn1=DocumentLot()
+					docAn1.fichier=request.FILES['f1']
+					docAn1.categorie=formFichiers.cleaned_data['c1']
+					docAn1.lot=lot
+					docAn1.save()
 
 				if "f2" in request.FILES:
 					print('fichier annexe 2 associé')
-					docCCTP.fichier=request.FILES['f2']
-					docCCTP.categorie=formFichiers.cleaned_data['c2']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn2=DocumentLot()
+					docAn2.fichier=request.FILES['f2']
+					docAn2.categorie=formFichiers.cleaned_data['c2']
+					docAn2.lot=lot
+					docAn2.save()
 
 				if "f3" in request.FILES:
 					print('fichier annexe 3 associé')
-					docCCTP.fichier=request.FILES['f3']
-					docCCTP.categorie=formFichiers.cleaned_data['c3']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn3=DocumentLot()
+					docAn3.fichier=request.FILES['f3']
+					docAn3.categorie=formFichiers.cleaned_data['c3']
+					docAn3.lot=lot
+					docAn3.save()
 
 				if "f4" in request.FILES:
 					print('fichier annexe 4 associé')
-					docCCTP.fichier=request.FILES['f4']
-					docCCTP.categorie=formFichiers.cleaned_data['c4']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn4=DocumentLot()
+					docAn4.fichier=request.FILES['f4']
+					docAn4.categorie=formFichiers.cleaned_data['c4']
+					docAn4.lot=lot
+					docAn4.save()
 
 				if "f5" in request.FILES:
 					print('fichier annexe 5 associé')
-					docCCTP.fichier=request.FILES['f5']
-					docCCTP.categorie=formFichiers.cleaned_data['c5']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn5=DocumentLot()
+					docAn5.fichier=request.FILES['f5']
+					docAn5.categorie=formFichiers.cleaned_data['c5']
+					docAn5.lot=lot
+					docAn5.save()
 
 				if "f6" in request.FILES:
 					print('fichier annexe 6 associé')
-					docCCTP.fichier=request.FILES['f6']
-					docCCTP.categorie=formFichiers.cleaned_data['c6']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn6=DocumentLot()
+					docAn6.fichier=request.FILES['f6']
+					docAn6.categorie=formFichiers.cleaned_data['c6']
+					docAn6.lot=lot
+					docAn6.save()
 
 				if "f7" in request.FILES:
 					print('fichier annexe 7 associé')
-					docCCTP.fichier=request.FILES['f7']
-					docCCTP.categorie=formFichiers.cleaned_data['c7']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn7=DocumentLot()
+					docAn7.fichier=request.FILES['f7']
+					docAn7.categorie=formFichiers.cleaned_data['c7']
+					docAn7.lot=lot
+					docAn7.save()
 
 				if "f8" in request.FILES:
 					print('fichier annexe 8 associé')
-					docCCTP.fichier=request.FILES['f8']
-					docCCTP.categorie=formFichiers.cleaned_data['c8']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn8=DocumentLot()
+					docAn8.fichier=request.FILES['f8']
+					docAn8.categorie=formFichiers.cleaned_data['c8']
+					docAn8.lot=lot
+					docAn8.save()
 
 				if "f9" in request.FILES:
 					print('fichier annexe 9 associé')
-					docCCTP.fichier=request.FILES['f9']
-					docCCTP.categorie=formFichiers.cleaned_data['c9']
-					docCCTP.lot=lot
-					docCCTP.save()
+					docAn9=DocumentLot()
+					docAn9.fichier=request.FILES['f9']
+					docAn9.categorie=formFichiers.cleaned_data['c9']
+					docAn9.lot=lot
+					docAn9.save()
 
 			return redirect('voir_lot',pk=projet.pk,id=lot.pk)
 
@@ -312,6 +327,7 @@ def New_Lot(request,pk):
 
 def Liste_Lot(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
+	appels=projet.appeloffre_set.all()
 
 	lots=Lot.objects.filter(projet=projet)
 
@@ -326,6 +342,9 @@ def Afficher_Lot(request,pk,id):
 	lots=Lot.objects.filter(projet=projet)
 	lot=get_object_or_404(Lot,pk=id)
 	competences=get_list_or_404(DomaineCompetence)
+	appels=projet.appeloffre_set.all()
+
+	appels_lot=AppelOffreLot.objects.filter(lot=lot)
 
 	return render(request,'collaborateurs/lot.html',locals())
 
@@ -922,22 +941,94 @@ def New_AO(request,pk):
 
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
 
 	if request.method=='POST':
 		print(request.POST)
-		formAO=AppelOffreForm(request.POST or None,)
-		formEcheance=EcheanceForm(request.POST or None,)
+		
 
 		AO=AppelOffre(projet=projet)
+		formAO=AppelOffreForm(projet,request.POST or None)
+		formEcheance=EcheanceForm(request.POST or None,)
+
 
 		liste_lots=request.POST.getlist('lots')
+
+		if formAO.is_valid():
+			print('AO validé')
+
+		if formEcheance.is_valid():
+			print('Echeance valide')
 
 		if formAO.is_valid() and formEcheance.is_valid():
 			print('ok')
 			echeance=formEcheance.save()
 
-			AO.echeance=echeance
+			AO=formAO.save(commit=False)
+			AO.projet=projet
 			AO.save()
+
+			
+			echeance.appel=AO
+			echeance.save()
+			
+			
+
+			#boucle pour ajouter les lots qui ont été séléctionnée dans le formulaire
+			for num_lot in liste_lots:
+				lotvalid=Lot.objects.get(pk=num_lot)
+				AO.lots.add(lotvalid)
+
+
+			return redirect('voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
+		else:
+			print('non valide')
+			
+
+			return render(request,'collaborateurs/nouveau_ao.html',locals())
+
+
+
+	else:
+		echeance=Echeance()
+		formEcheance=EcheanceForm()
+
+		try:
+			der_appel=projet.appeloffre_set.last()
+		except:
+			der_appel=None
+
+		if der_appel:
+			AO=AppelOffre(projet=projet,numero=projet.appeloffre_set.last().numero+1)
+		else:
+			AO=AppelOffre(projet=projet,numero=1)
+
+		formAO=AppelOffreForm(instance=AO,projet=projet)
+		
+
+		return render(request,'collaborateurs/nouveau_ao.html',locals())
+
+
+
+def Modifier_AO(request,pkprojet,pkAO):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	AO=get_object_or_404(AppelOffre,pk=pkAO)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	if request.method=='POST':
+		print(request.POST)
+		formAO=AppelOffreForm(projet,request.POST or None,instance=AO)
+		formEcheance=EcheanceForm(request.POST or None,instance=AO.echeance)
+
+
+		liste_lots=request.POST.getlist('lots')
+
+		if formAO.is_valid() and formEcheance.is_valid():
+			print('ok')
+			AO.echeance=formEcheance.save()
+
+			AO=formAO.save()
 
 			#boucle pour ajouter les lots qui ont été séléctionnée dans le formulaire
 			for num_lot in liste_lots:
@@ -950,19 +1041,17 @@ def New_AO(request,pk):
 
 			
 
-			return render(request,'collaborateurs/nouveau_ao.html',locals())
+			return render(request,'collaborateurs/modifier_ao.html',locals())
 
 
 
 	else:
-		echeance=Echeance()
-		formEcheance=EcheanceForm()
-		AO=AppelOffre(projet=projet)
-		formAO=AppelOffreForm(instance=AO)
 		
+		formEcheance=EcheanceForm(instance=AO.echeance)
+		formAO=AppelOffreForm(projet,instance=AO)
 
-		return render(request,'collaborateurs/nouveau_ao.html',locals())
 
+		return render(request,'collaborateurs/modifier_ao.html',locals())
 
 
 def Afficher_AO(request,pkprojet,pkAO):
@@ -975,3 +1064,267 @@ def Afficher_AO(request,pkprojet,pkAO):
 	lots_AO=AO.lots.all()
 
 	return render(request,'collaborateurs/AO.html',locals())
+
+
+def New_AO_Lot(request,pkprojet,pkAO,pklot):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	AO=get_object_or_404(AppelOffre,pk=pkAO)
+	lot=get_object_or_404(Lot,pk=pklot)
+
+	if request.method=='POST':
+		print(request.POST)
+		
+		AOlot=AppelOffreLot()
+		AOlot.lot=lot
+		AOlot.AO=AO
+		AOlot.projet=projet
+		
+		formAOlot=AppelOffreLotForm(request.POST or None, instance=AOlot)
+		formEcheance=EcheanceForm(request.POST or None,)
+
+
+		liste_agences=request.POST.getlist('AO_agences')
+		liste_personnes=request.POST.getlist('AO_personnes')
+
+		if formAOlot.is_valid():
+			print('AOlot validé')
+
+		if formEcheance.is_valid():
+			print('Echeance valide')
+
+		if formAOlot.is_valid() and formEcheance.is_valid():
+			print('ok')
+			echeance=formEcheance.save()
+
+			AOlot=formAOlot.save(commit=False)
+			
+			AOlot.save()
+
+			
+			echeance.appelLot=AOlot
+			echeance.save()
+			
+			
+
+			#boucle pour ajouter les agences qui ont été séléctionnées dans le formulaire
+			for num_agence in liste_agences:
+				agencevalid=Agence.objects.get(pk=num_agence)
+				AOlot.AO_agences.add(agencevalid)
+
+			#boucle pour ajouter les personnes qui ont été séléctionnées dans le formulaire
+			for num_personne in liste_personnes:
+				personnevalid=Personne.objects.get(pk=num_personne)
+				AOlot.AO_personnes.add(personnevalid)
+
+
+
+			return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+		else:
+			print('non valide')
+			
+
+			return render(request,'collaborateurs/nouveau_ao_lot.html',locals())
+
+
+
+	else:
+		echeance=Echeance()
+		formEcheance=EcheanceForm()
+
+		AOlot=AppelOffreLot()
+		formAOlot=AppelOffreLotForm()
+		
+
+		return render(request,'collaborateurs/nouveau_ao_lot.html',locals())
+
+
+
+def Afficher_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
+	projet=Projet.objects.get(pk=pkprojet)
+	lots=projet.lot_set.all()
+	appels=projet.appeloffre_set.all()
+
+	lot=Lot.objects.get(pk=pklot)
+
+
+	AO=AppelOffre.objects.get(pk=pkAO)
+	AOlot=AppelOffreLot.objects.get(pk=pkAOlot)
+
+	agences=AOlot.AO_agences.all()
+	personnes=AOlot.AO_personnes.all()
+
+	return render(request,'collaborateurs/AO_lot.html',locals())
+
+def Gerer_AO_Lot(request,pkprojet,pkAO,pklot):
+	projet=Projet.objects.get(pk=pkprojet)
+	lots=projet.lot_set.all()
+	appels=projet.appeloffre_set.all()
+
+	lot=Lot.objects.get(pk=pklot)
+
+
+	AO=AppelOffre.objects.get(pk=pkAO)
+	lots_AO=AO.lots.all()
+
+	try:
+		AOlot=AppelOffreLot.objects.get(AO=AO,lot=lot)
+	except:
+		AOlot=None
+
+	if AOlot:
+		return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+	else:
+		return redirect('nouveau_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk)
+
+
+
+def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
+
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	
+	#requetes pour la navigation a gauche
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+
+	AO=get_object_or_404(AppelOffre,pk=pkAO)
+	lot=get_object_or_404(Lot,pk=pklot)
+	AOlot=get_object_or_404(AppelOffreLot,pk=pkAOlot)
+
+	if request.method=='POST':
+
+		#on vérifie si la personne a appuyé sur le bouton filtrer
+		try:
+			filtrage=request.POST.get('Bfiltrer')
+		except:
+			filtrage=None
+
+		#On vérifie si la personne a appuyé sur le bouton selectionner
+		try:
+			selection=request.POST.get('Bselect')
+		except:
+			selection=None
+
+		#si il n'y a pas filtrage mais selection alors on enregistre le tout
+		if not filtrage and selection:
+			print('données de post')
+			print(request.POST)
+
+
+			#gestion du fitrage
+
+			formFiltreAgence=FiltreFormAgenceAO(request.POST or None,)
+			
+			filtre=request.POST.get('search')
+			competences=request.POST.getlist('competences')
+			selected_agences=request.POST.getlist('AO_agences')
+			selected_personnes=request.POST.getlist('AO_personnes')
+			print('filtre :',filtre)
+			print('competences :',competences)
+			print('selected agences :',selected_agences)
+			print('selected personnes :',selected_agences)
+			print('POST :',request.POST)
+			
+			#création de la condition de filtrage sur les agences
+			
+			agences=chercherAgencePourAO(filtre,competences,selected_agences,Agence.objects.all())
+			
+			print(agences)
+			#création de la condition de filtrage sur les personnes
+			personnes=chercherPersonnePourAO(filtre,competences,selected_personnes,Personne.objects.all())
+			
+			
+			formAOlot=AppelOffreLotForm(agences,personnes,request.POST or None, instance=AOlot)
+			
+
+			liste_agences=request.POST.getlist('AO_agences')
+			liste_personnes=request.POST.getlist('AO_personnes')
+			
+
+			if formAOlot.is_valid():
+				print('AOlot validé')
+
+				AOlot=formAOlot.save()
+
+				#boucle pour ajouter les agences qui ont été séléctionnées dans le formulaire
+				for num_agence in liste_agences:
+					agencevalid=Agence.objects.get(pk=num_agence)
+					AOlot.AO_agences.add(agencevalid)
+
+				#récupère la liste des personnes déjà enregistrées
+				personnes=AOlot.AO_personnes.all()
+
+
+				#boucle pour ajouter les personnes qui ont été séléctionnées dans le formulaire
+				for num_personne in liste_personnes:
+					personnevalid=Personne.objects.get(pk=num_personne)
+					AOlot.AO_personnes.add(personnevalid)
+
+
+				return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+			else:
+				print('non valide')
+				
+
+				return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
+
+		else:
+			#On a appuyé sur le bouton de filtrage et pas sur le bouton selection
+			
+			
+
+			formFiltreAgence=FiltreFormAgenceAO(request.POST or None,)
+
+			if formFiltreAgence.is_valid():
+
+				#gestion du fitrage
+				filtre=request.POST.get('search')
+				competences=request.POST.getlist('competences')
+				selected_agences=request.POST.getlist('AO_agences')
+				selected_personnes=request.POST.getlist('AO_personnes')
+				print('filtre :',filtre)
+				print('competences :',competences)
+				print('selected agences :',selected_agences)
+				print('selected personnes :',selected_agences)
+				print('POST :',request.POST)
+				
+				#création de la condition de filtrage sur les agences
+				agences=chercherAgencePourAO(filtre,competences,selected_agences,Agence.objects.all())
+
+				print(agences)
+					
+				#création de la condition de filtrage sur les personnes
+				personnes=chercherPersonnePourAO(filtre,competences,selected_personnes,Personne.objects.all())
+				
+
+				
+				formAOlot=AppelOffreLotForm(agences,personnes,request.POST or None, instance=AOlot)
+				
+				return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
+			
+			else:
+				agences=Agence.objects.all()
+				personnes=Personne.objects.all()
+		
+				formAOlot=AppelOffreLotForm(agences,personnes,instance=AOlot)
+				formFiltreAgence=FiltreFormAgenceAO()
+
+				return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
+	else:
+		#à filtrer en fonction du type client/entreprise
+		agences=Agence.objects.all()
+		personnes=Personne.objects.all()
+		
+		formAOlot=AppelOffreLotForm(agences,personnes,instance=AOlot)
+
+		formFiltreAgence=FiltreFormAgenceAO()
+		
+
+		return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
+
+
+
+
