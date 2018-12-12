@@ -16,7 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from entreprises import views
+from django.conf.urls import url
 
 urlpatterns = [
-	path('',views.home,name='accueil_ent')
+	path('',views.home,name='ent_accueil'),
+	path('deconnexion',views.Deconnexion,name='ent_deconnexion'),
+
+	#projets
+    url(r'^projets$',views.ListeProjets.as_view(),name="ent_lister_projets"),
+    url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="ent_voir_projet"),
+    url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="ent_lister_lot"),
+    url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})$',views.Afficher_Lot,name="ent_voir_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/lot/(?P<pklot>\d{1,3})/telecharger-tout$',views.Get_Zipped_Files,name="ent_download_archive"),
+    url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="ent_voir_fichier"),
+
 ]

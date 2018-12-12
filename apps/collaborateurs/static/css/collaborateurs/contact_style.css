@@ -73,6 +73,12 @@
 	color:white;
 }
 
+
+.err_on_save {
+	color:cyan;
+	font-weight: bold;
+}
+
 /*
 .boutonMod {
 	display: inline-flex;

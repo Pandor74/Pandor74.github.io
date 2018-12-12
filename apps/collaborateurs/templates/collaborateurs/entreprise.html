@@ -1,8 +1,8 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/contact_style.css" />
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/navigation_contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/navigation_contact_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -25,10 +25,10 @@
 
 	<div class="left_nav">
 
-		<div class="bouton" id="Baccueil"><a href='{% url "voir_entreprise" entreprise.pk entreprise.nom_ent %}'>Accueil {{entreprise.nom_ent}}</a></div>
-		<div class="bouton" id="Bmodifier"><a href="{% url 'modifier_entreprise' entreprise.pk entreprise.nom_ent %}">Modifier l'entreprise</a></div>
-		<div class="bouton" id="BcreerAgence"><a href="{% url 'ajouter_agence' entreprise.pk entreprise.nom_ent %}">Ajouter une Agence</a></div>
-		<div class="bouton" id="BcreerPersonne"><a href="{% url 'ajouter_personne' entreprise.pk entreprise.nom_ent %}">Ajouter un Employé</a></div>
+		<div class="bouton" id="Baccueil"><a href='{% url "col_voir_entreprise" entreprise.pk entreprise.nom_ent %}'>Accueil {{entreprise.nom_ent}}</a></div>
+		<div class="bouton" id="Bmodifier"><a href="{% url 'col_modifier_entreprise' entreprise.pk entreprise.nom_ent %}">Modifier l'entreprise</a></div>
+		<div class="bouton" id="BcreerAgence"><a href="{% url 'col_ajouter_agence' entreprise.pk entreprise.nom_ent %}">Ajouter une Agence</a></div>
+		<div class="bouton" id="BcreerPersonne"><a href="{% url 'col_ajouter_personne' entreprise.pk entreprise.nom_ent %}">Ajouter un Employé</a></div>
 
 		<div class="list_wrapper" id="lots_wrapper">
 
@@ -40,7 +40,7 @@
 	</div>
 
 
-
+ 
 
 
 
@@ -52,9 +52,9 @@
 			<ul class="liste_prop">
 				<li>
 					{% if entreprise.logo_ent %}
-					<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px"/>
 					{% else %}
-					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100"/>
+					<img src="{{BASE_DIR}}/media/images/logo.jpg" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px""/>
 					{% endif %}
 				</li>
 				<li><h3>Nom de l'entreprise :</h></li>
@@ -71,7 +71,7 @@
 			<h2>Liste des agences</h2>
 			<ul class="liste_prop">
 				{% for agence in agences %}
-					<li><a href="{% url 'voir_agence' agence.pk agence.nom %}">{{agence.categorie}} : {{agence.nom}} - {{agence.adresse.code_postal}} {{agence.adresse.ville}}</a></li>
+					<li><a href="{% url 'col_voir_agence' agence.pk agence.nom %}">{{agence.categorie}} : {{agence.nom}} - {{agence.adresse.code_postal}} {{agence.adresse.ville}}</a></li>
 				{% empty %}
 					<li>Aucune agence n'a été enregistrée a ce jour dans cette entreprise !</li>
 				{% endfor %}
@@ -85,7 +85,7 @@
 			<h2>Liste des employés</h2>
 			<ul class="liste_prop">
 				{% for personne in personnes %}
-					<li><a href="{% url 'voir_personne' personne.pk personne.nom personne.prenom %}">{{personne.nom}} {{personne.prenom}} - {{personne.agence.nom}}</a></li>
+					<li><a href="{% url 'col_voir_personne' personne.pk personne.nom personne.prenom %}">{{personne.nom}} {{personne.prenom}} - {{personne.agence.nom}}</a></li>
 				{% empty %}
 					<li>Aucune personne n'a été enregistrée a ce jour dans cette entreprise !</li>
 				{% endfor %}

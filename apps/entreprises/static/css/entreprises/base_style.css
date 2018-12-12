@@ -1,0 +1,158 @@
+html {
+width:1300px;
+margin:auto;
+padding: 0px;
+display: flex;
+flex-direction:column;
+box-sizing: border-box;
+justify-content: flex-start;
+/*border:solid red 2px;*/
+background-color: green;
+min-height: 100%;
+
+
+}
+
+
+
+body {
+	margin: 0;
+	box-sizing: border-box;
+	display:flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width:1300px;
+	min-width: 800px;
+	flex-grow:1;
+}
+
+
+header {
+	display: flex;
+	flex-direction:column;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	border:solid white 2px;
+	/*position: sticky;
+	top:0;*/
+	border-collapse: collapse;
+}
+
+
+@media all and (min-height:300px) {
+	header {
+		position:sticky;
+		top:0;
+	}
+}
+
+
+
+.bandeau_sup {
+	display:flex;
+	font-size:22px;
+	width:100%;
+	/*box-sizing: border-box;*/
+	background-color:#3e6a87;
+	/*height:35px;*/
+
+}
+
+
+.list_nav_sup {
+	list-style-type:none;
+	width: 100%;
+	/*box-sizing: border-box;*/
+	display:flex;
+
+	height:100%;
+
+}
+
+
+#LNS1 {
+	justify-content: flex-end;
+	margin:0;
+	padding:0;
+	border-bottom:solid white 2px;
+	height:35px;
+
+}
+
+
+#LNS1 li {
+	border-left: solid white 1px;
+}
+
+#LNS2 {
+	justify-content: flex-start;
+	height:35px;
+	margin:0;
+	padding:0;
+
+}
+
+#LNS2 li {
+	border-right: solid white 1px;
+}
+
+
+.list_nav_sup li {
+	display: flex;
+	min-width:180px;
+	justify-content:center;
+	box-sizing: border-box;
+	
+	height:100%;
+
+}
+
+header a {
+	display: flex;
+	text-decoration:none;
+	height:100%;
+	width: 100%;
+	justify-content: center;
+	box-sizing: border-box;
+	color:white;
+	/*font-weight: bold;*/
+	align-items: center;
+
+
+}
+
+header a:hover {
+	background-color:#ff6624;
+	cursor:pointer;
+}
+
+
+
+#content {
+	width:100%;
+	flex-grow:1;
+	box-sizing: border-box;
+	background-color: #1d394e;
+	color:white;
+	font-size: 16px;
+	padding-top:50px;
+	padding-left:100px;
+	padding-right:100px;
+	text-align: justify;
+	word-wrap: break-word;
+	border:solid white 2px;
+	border-top:0;
+	border-bottom: 0;
+
+
+}
+
+#content strong {
+	color:#ff6624;
+	font-weight: bold;
+	font-size: 18px
+
+
+}

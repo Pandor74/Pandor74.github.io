@@ -1,6 +1,74 @@
-<h1>salut je suis une entreprise</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+   <meta charset="utf-8"/>
+  
+   <link rel="stylesheet" href="{{STATIC_URL}}/static/css/entreprises/base_style.css" />
+   <link rel="icon" href="{{BASE_DIR}}/media/images/favicon.png" />
+   {% block stylepers %}
+   {% endblock %}
 
-<a href ="{% url 'accueil_vis' %}"> go to visiteur</a>
-<a href ="{% url 'accueil_ent' %}"> go to entreprise</a>
+   {% comment %} 
+   		c'est ici que l'on appelle la source jquery 
+   {% endcomment %}
+   
+   
+   {% comment %} 
+   		c'est ici que l'on écrit les scripts qui correspondent à la base 
+   {% endcomment %}
+ 
 
-<a href ="{% url 'redirection_vide' %}"> go to vide</a>
+
+   {% comment %}
+   		c'est ici que l'on écrira les scripts qui correspondent au contenu dynamique
+   {% endcomment %}
+ 
+   {% block scriptpers %}
+   {% endblock %}
+   
+
+
+
+   <title>{% block title %}Plateforme Appel d'offres{% endblock %}</title>
+</head>
+
+
+
+<body>
+<header>
+    <nav class="bandeau_sup" id="BS1">
+
+       <ul class="list_nav_sup" id="LNS1">
+            <li><a href="">Mon compte</a></li>
+            <li><a href='{% url "ent_deconnexion" %}' id="bdeco">Déconnexion</a></li>
+       </ul>
+
+   </nav>
+
+   <nav class="bandeau_sup" id="BS2">
+
+       <ul class="list_nav_sup" id="LNS2">
+       		<li><a href='{% url "ent_accueil" %}'>Accueil</a></li>
+            <li><a href='{% url "ent_lister_projets" %}'>Tous les projets</a></li>
+            <li><a href="">Mes projets</a></li>
+       </ul>
+ 
+   </nav>
+
+ </header>
+
+
+
+   <section id="content">
+       {% block content %}
+   
+
+       {% endblock %}
+   </section>
+
+
+<footer></footer>
+
+
+</body>
+</html>

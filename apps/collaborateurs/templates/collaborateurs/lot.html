@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/projet_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -29,7 +29,7 @@
 
 		<div class="content_wrapper" id="infos_gene">
 			<h2>Informations générales</h2>
-			<a href="{% url 'modifier_lot' projet.pk lot.pk %}">Modifier le lot</a>
+			<a href="{% url 'col_modifier_lot' projet.pk lot.pk %}">Modifier le lot</a>
 			<ul class="liste_prop">
 				<li>Numéro du lot :</li>
 				<li><strong>{{lot.numero}}</strong></li>
@@ -47,18 +47,18 @@
 			</ul>
 
 			<h2>Fichiers associés</h2>
-			<a href="{% url 'modifier_fichiers_lot' projet.pk lot.pk %}">Modifier les fichiers</a>
+			<a href="{% url 'col_modifier_fichiers_lot' projet.pk lot.pk %}">Modifier les fichiers</a>
 			<ul class="liste_prop">
 
 				{% for doc in lot.documents.all %}
-				<li>{{doc.categorie}} : <a href="{% url 'voir_fichier' projet.pk lot.pk doc.pk doc.nom %}" target="_blank">{{doc.nom}} - {{doc.taille}}</a></li>
+				<li>{{doc.categorie}} : <a href="{% url 'col_voir_fichier' projet.pk lot.pk doc.pk doc.nom %}" target="_blank">{{doc.nom}} - {{doc.taille}}</a></li>
 				<li>{% empty %}Aucun fichier n'a été associé pour le lot !{% endfor %}</li>
 			</ul>
 
 			<h2>Les appels d'offres associés</h2>
 			<ul class="liste_prop">
 				{% for appel_lot in appels_lot %}
-				<li>Appel offre : <a href="{% url 'voir_ao_lot' projet.pk appel_lot.AO.pk lot.pk appel_lot.pk %}">{{appel_lot.AO.numero}}</a></li>
+				<li>Appel offre : <a href="{% url 'col_voir_ao_lot' projet.pk appel_lot.AO.pk lot.pk appel_lot.pk %}">{{appel_lot.AO.numero}}</a></li>
 				<li>{% empty %}Aucun appel d'offres pour le lot !{% endfor %}</li>
 			</ul>
 

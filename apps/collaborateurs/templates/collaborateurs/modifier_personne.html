@@ -1,8 +1,8 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/contact_style.css" />
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/navigation_contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/navigation_contact_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -21,11 +21,11 @@
 	<div class="left_nav">
 
 		<div class="bouton" id="Baccueil">
-			<a href='{% url "voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
+			<a href='{% url "col_voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
 		</div>
 
 		<div class="bouton" id="Bmodifier">
-			<a href="{% url 'modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
+			<a href="{% url 'col_modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
 		</div>
 
 		<div class="list_wrapper" id="lots_wrapper">
@@ -37,7 +37,7 @@
 
 	<div class="contenu_contact">
 
-		<form enctype="multipart/form-data" method="post"  action="{% url 'modifier_personne' pk nom prenom %}">
+		<form enctype="multipart/form-data" method="post"  action="{% url 'col_modifier_personne' pk nom prenom %}">
 
 			{% csrf_token %}
 			<div id="wrap-form">

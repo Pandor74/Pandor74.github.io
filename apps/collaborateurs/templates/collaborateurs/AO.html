@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/projet_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/projet_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -31,14 +31,14 @@
 			<h2>Les lots de l'appel d'offres N°{{AO.numero}}</h2>
 				{% for lot in lots_AO %}
 					<li>AO du lot : {{lot.decris_toi|upper}}</li>
-					<li> <a href="{% url 'gerer_ao_lot' projet.pk AO.pk lot.pk %}">Gérer l'appel d'offres du lot</a></li>
+					<li> <a href="{% url 'col_gerer_ao_lot' projet.pk AO.pk lot.pk %}">Gérer l'appel d'offres du lot</a></li>
 				{% empty %}
 					<li>Aucun lot n'a été associé à ce jour !</li>
 				{% endfor %}
 
 				<p>La date de fin de l'appel d'offres est le : {{AO.echeance.date}}</p>
 
-				<a href="{% url 'modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
+				<a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
 		</div>
 
 	</div>

@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouveau_ao_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouveau_ao_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -29,7 +29,7 @@
 
 
 			
-		<form enctype="multipart/form-data" method="post"  action="{% url 'modifier_ao' projet.pk AO.pk %}">
+		<form enctype="multipart/form-data" method="post"  action="{% url 'col_modifier_ao' projet.pk AO.pk %}">
 
 			{% csrf_token %}
 			<div id="wrap-form">

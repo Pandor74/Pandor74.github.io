@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouveau_ao_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouveau_ao_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -29,7 +29,7 @@
 
 
 			
-		<form enctype="multipart/form-data" method="post"  action="{% url 'nouveau_ao_lot' projet.pk AO.pk lot.pk %}">
+		<form enctype="multipart/form-data" method="post"  action="{% url 'col_nouveau_ao_lot' projet.pk AO.pk lot.pk %}">
 
 			{% csrf_token %}
 			<div id="wrap-form">
@@ -38,15 +38,25 @@
 
 					
 					<h2> Veuillez sélectionner les paramètres de l'appel d'offres</h2>
-					{{formEcheance}}
-					<h2> Veuillez sélectionner les entreprises à consulter</h2>
-					{{formAOlot}}
+					<ul>
+						<li class="form_label">{{formAOlot.date_lancement.label}} :</li>
+						{{formAOlot.date_lancement.errors}}
+						<li class="form_input">{{formAOlot.date_lancement}}</li>
+						
+						<li class="form_label">{{formEcheance.date.label}} :</li>
+						{{formEcheance.date.errors}}
+						<li class="form_input">{{formEcheance.date}}</li>
+
+						<li class="form_label">{{formAOlot.relance.label}} :</li>
+						{{formAOlot.relance.errors}}
+						<li class="form_input">{{formAOlot.relance}}</li>
+					</ul>
 				</div>
 
 
 			</div>
 
-			<input type="submit" value="Créer l'appel d'offres" id="BcreateAO" />
+			<input type="submit" value="Générer l'appel d'offres" id="BcreateAO" />
 
 
 

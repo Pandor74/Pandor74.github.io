@@ -1,1 +1,14 @@
 <h1>salut je suis un client</h1>
+
+<a href ="{% url 'accueil_vis' %}"> go to visiteur</a><br/>
+<a href ="{% url 'accueil_ent' %}"> go to entreprise</a><br/>
+<a href ="{% url 'accueil_col' %}"> go to collaborateurs</a><br/>
+<a href ="{% url 'accueil_client' %}"> go to clients</a><br/>
+
+
+
+{% for projet in projets %}
+	{{projet.nom}}
+{% empty %}
+Pas de projets !
+{% endfor %}

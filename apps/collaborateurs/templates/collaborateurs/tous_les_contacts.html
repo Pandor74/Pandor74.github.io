@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/tous_les_contacts_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/tous_les_contacts_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -24,12 +24,12 @@
 
 		<div class="top_nav">
 			<div class="top_left_nav">
-				<a href="{% url 'nouvelle_entreprise' %}" title="Démarrer la création d'une nouvelle entreprise">Créer Entreprise</a>
-				<a href="{% url 'nouvelle_personne' %}" title="Démarrer la création d'un nouveau contact">Créer Contact</a>
+				<a href="{% url 'col_nouvelle_entreprise' %}" title="Démarrer la création d'une nouvelle entreprise">Créer Entreprise</a>
+				<a href="{% url 'col_nouvelle_personne' %}" title="Démarrer la création d'un nouveau contact">Créer Contact</a>
 			</div>
 			
 			<div class="top_right_nav">
-				<form method="post" action="{% url 'contacts_liste' %}" >
+				<form method="post" action="{% url 'col_contacts_liste' %}" >
 					{% csrf_token %}
 					{{formFiltre}}
 					<input type="submit" value="Filtrer" id="Bfiltrer" />
@@ -47,7 +47,7 @@
 					<div class="contact_titre">
 						
 						<span class="nom_contact">
-							<a href="{% url 'voir_entreprise' entreprise.pk entreprise.nom_ent %}" title="Accéder à la page de {{entreprise.nom_ent|upper}}" >
+							<a href="{% url 'col_voir_entreprise' entreprise.pk entreprise.nom_ent %}" title="Accéder à la page de {{entreprise.nom_ent|upper}}" >
 								{{entreprise.nom_ent|upper}}
 							</a>
 						</span>
@@ -55,7 +55,7 @@
 					</div>
 				
 					<div class="contact_prop">
-							<a href="{% url 'voir_entreprise' entreprise.pk entreprise.nom_ent %}" class="lien_image" >
+							<a href="{% url 'col_voir_entreprise' entreprise.pk entreprise.nom_ent %}" class="lien_image" >
 								{% if entreprise.logo_ent %}
 									<img src="{{entreprise.logo_ent.url}}" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px"/>
 								
@@ -88,7 +88,7 @@
 					<div class="contact_titre">
 						
 							<span class="nom_contact">
-								<a href="{% url 'voir_agence' agence.pk agence.nom %}" title="Accéder à la page de {{agence.nom|capfirst}} de l'entreprise {{agence.entreprise.nom_ent|upper}}" >
+								<a href="{% url 'col_voir_agence' agence.pk agence.nom %}" title="Accéder à la page de {{agence.nom|capfirst}} de l'entreprise {{agence.entreprise.nom_ent|upper}}" >
 									{{agence.nom|capfirst}}
 								</a>
 							</span>
@@ -97,7 +97,7 @@
 					</div>
 				
 					<div class="contact_prop">
-							<a href="{% url 'voir_agence' agence.pk agence.nom %}" class="lien_image">
+							<a href="{% url 'col_voir_agence' agence.pk agence.nom %}" class="lien_image">
 								{% if agence.logo_agence %}
 									<img src="{{agence.logo_agence.url}}" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px"/>
 								
@@ -128,7 +128,7 @@
 				
 					<div class="contact_titre">
 						<span class="nom_contact">
-							<a href="{% url 'voir_personne' personne.pk personne.nom personne.prenom %}" title="Accéder à la page de {{personne.nom|upper}} {{personne.prenom|capfirst}} de l'agence {{personne.agence.nom|upper}} de l'entreprise {{personne.agence.entreprise.nom_ent|upper}}" >
+							<a href="{% url 'col_voir_personne' personne.pk personne.nom personne.prenom %}" title="Accéder à la page de {{personne.nom|upper}} {{personne.prenom|capfirst}} de l'agence {{personne.agence.nom|upper}} de l'entreprise {{personne.agence.entreprise.nom_ent|upper}}" >
 								{{personne.nom|upper}} {{personne.prenom|capfirst}}
 							</a>
 						</span>
@@ -136,7 +136,7 @@
 					</div>
 				
 					<div class="contact_prop">
-							<a href="{% url 'voir_personne' personne.pk personne.nom personne.prenom %}" class="lien_image">
+							<a href="{% url 'col_voir_personne' personne.pk personne.nom personne.prenom %}" class="lien_image">
 								{% if personne.agence.logo_agence %}
 									<img src="{{personne.agence.logo_agence.url}}" alt="Il n'y a pas de photo actuellement" style="max-height:100px; max-width:150px"/>
 								

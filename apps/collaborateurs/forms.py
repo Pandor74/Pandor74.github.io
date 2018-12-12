@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core.validators import RegexValidator,FileExtensionValidator
 import os
 from django.core.exceptions import ValidationError
+from os import path
 
 from collaborateurs.fonction import right
 
@@ -238,7 +239,7 @@ class FichiersForm(forms.Form):
 				self.fields['f9'].initial=docs[8].fichier
 				self.fields['c9'].initial=docs[8].categorie
 				
-		
+
 		
 
 
@@ -257,6 +258,12 @@ class AgenceForm(forms.ModelForm):
 			'date_creation_agence' : SelectDateWidget(years=range(timezone.now().year,1900,-1)),
 			'competences_agence': forms.CheckboxSelectMultiple(),
 		}
+
+
+
+
+
+
 
 
 
@@ -314,16 +321,24 @@ class AppelOffreForm(forms.ModelForm):
 class AppelOffreLotForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffreLot
-		exclude=['projet','AO','lot','date_lancement']
+		exclude=['projet','AO','lot','date_de_creation']
 		widgets ={
 			'AO_agences':forms.CheckboxSelectMultiple(),
 			'AO_personnes':forms.CheckboxSelectMultiple(),
+			'date_lancement':SelectDateWidget(years=range(timezone.now().year,2100,+1))
 		}
 
 	def __init__(self,agences,personnes,*args,**kwargs):
 		super(AppelOffreLotForm,self).__init__(*args,**kwargs)
 		self.fields['AO_agences'].queryset=agences
 		self.fields['AO_personnes'].queryset=personnes
+
+	def clean_date_lancement(self):
+		date = self.cleaned_data['date_lancement']
+		if date:
+			if date < datetime.date.today():
+				raise forms.ValidationError("La date ne peut pas être dans le passé !")
+			return date
 
 
 class AppelOffreGlobalForm(forms.ModelForm):

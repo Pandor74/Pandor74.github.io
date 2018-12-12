@@ -1,0 +1,78 @@
+{% extends 'entreprises/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/entreprises/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "entreprises/navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Informations générales</h2>
+			<a href="">Déposer une offre</a>
+			<ul class="liste_prop">
+				<li>Numéro du lot :</li>
+				<li><strong>{{lot.numero}}</strong></li>
+				<li>Nom du lot :</li>
+				<li><strong>{{lot.nom}}</strong></li>
+				<li>Abréviation du lot :</li>
+				<li><strong>{{lot.short_name}}</strong></li>
+			</ul>
+
+			<h2>Activités connexes</h2>
+			<ul class="liste_prop">
+				{% for activite in lot.activites.all %}
+				<li>{{activite.competence}}</li>
+				<li>{% empty %}Aucunne activité relative n'a été choisie pour le lot !{% endfor %}</li>
+			</ul>
+
+			<h2>Fichiers associés</h2>
+			
+			<ul class="liste_prop">
+
+				{% for doc in lot.documents.all %}
+				<li>{{doc.categorie}} : {{doc.nom}} - {{doc.taille}} <a href="{% url 'ent_voir_fichier' projet.pk lot.pk doc.pk doc.nom %}" target="_blank">Afficher</a> <a href="{{doc.fichier.url}}" download target="_blank">Télécharger fichier</a></li>
+				{% empty %}<li>Aucun fichier n'a été associé pour le lot !</li>{% endfor %}
+				{% if lot.documents.all %}
+					<a href="{% url 'ent_download_archive' projet.pk lot.pk %}">Télécharger tous les fichiers (.zip)</a>
+				{% endif %}
+			</ul>
+
+			<h2>Les appels d'offres en cours</h2>
+			<ul class="liste_prop">
+				{% for appel in appels_lot %}
+				<li>Appel d'offre N°{{appel.AO.numero}}</li>
+				<li>Fin de consultation le : {{appel.echeance.date}}</li>
+				<li>Statut de votre offre : {{offre.statut}}
+				<li>{% empty %}Aucun appel d'offre en cours pour le lot !{% endfor %}</li>
+			</ul>
+			
+
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+
+

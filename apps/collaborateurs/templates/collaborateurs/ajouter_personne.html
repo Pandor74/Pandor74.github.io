@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouvelle_personne_style.css" />
+<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouvelle_personne_style.css" />
 {% endblock %}
 
 
@@ -18,7 +18,7 @@
 {% if envoi %} Votre message a bien été envoyé ! {% endif %}
 
 
-<form enctype="multipart/form-data" method="post"  action="{% url 'ajouter_personne' pk nom %}">
+<form enctype="multipart/form-data" method="post"  action="{% url 'col_ajouter_personne' pk nom %}">
 
 	{% csrf_token %}
 	<div id="wrap-form">

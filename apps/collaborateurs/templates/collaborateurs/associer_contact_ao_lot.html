@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/associer_contact_ao_lot_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/associer_contact_ao_lot_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -32,7 +32,7 @@
 
 
 
-		<form id="form_contact" enctype="multipart/form-data" method="post"  action="{% url 'select_contact_ao_lot' projet.pk AO.pk lot.pk AOlot.pk %}">
+		<form id="form_contact" enctype="multipart/form-data" method="post"  action="{% url 'col_select_contact_ao_lot' projet.pk AO.pk lot.pk AOlot.pk %}">
 
 			{% csrf_token %}
 			<div id="wrap-form">

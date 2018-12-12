@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouveau_lot_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouveau_lot_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -23,7 +23,7 @@
 
 
 
-	<form enctype="multipart/form-data" method="post" action='{% url "modifier_lot" projet.pk lot.pk %}'>
+	<form enctype="multipart/form-data" method="post" action='{% url "col_modifier_lot" projet.pk lot.pk %}'>
 		{% csrf_token %}
 
 		<div class="contenu_projet">

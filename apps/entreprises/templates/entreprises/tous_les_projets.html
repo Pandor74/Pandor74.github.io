@@ -1,0 +1,81 @@
+{% extends 'entreprises/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/entreprises/tous_les_projets_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/tous_les_projets.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+	<form method="post" action="{% url 'ent_lister_projets' %}" >
+		{% csrf_token %}
+		{{form}}
+	<input type="submit" value="Filtrer" id="Bfiltrer" />
+	</form>
+
+
+
+
+
+	<div id="filtres_wrapper">
+		<div class="filtres" id="photo_projet">Photo</div>
+		<div class="filtres" id="num_projet">N° projet</div>
+		<div class="filtres" id="nom_projet">Nom projet</div>
+		<div class="filtres" id="loc_projet">Localisation</div>
+		<div class="filtres" id="date_projet">Date retour AO</div>
+		<div class="filtres" id="avancement_projet">Avancement</div>
+	</div>
+
+
+
+	{% for projet in projets %}
+	<div class="line_wrapper">
+		<div class="projet_prop"><a href="{% url 'ent_voir_projet' projet.pk %}" >
+			{% if projet.photo %}
+				<img src="{{projet.photo.url}}" alt="{{projet.photo.name}}" width="150" height="100" />
+			{% else %}
+				<img src="{{MEDIA_URL}}images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100" />
+			{% endif %}
+		</a></div>
+		<div class="projet_prop"><a href="{% url 'ent_voir_projet' projet.pk %}" >{{projet.numero_teamber}}</a></div>
+		<div class="projet_prop"><a href="{% url 'ent_voir_projet' projet.pk %}" >{{projet.nom}}</a></div>
+		<div class="projet_prop">
+			<a href="{% url 'ent_voir_projet' projet.pk %}" >
+				<ul>
+					{% if projet.adresse.adresse1 %}<li title="{{projet.adresse.adresse1}}">{{projet.adresse.adresse1}}</li>{% endif %}
+					{% if projet.adresse.adresse2 %}<li>{{projet.adresse.adresse2}}</li>{% endif %}
+					{% if projet.adresse.code_postal %}<li>{{projet.adresse.code_postal}}</li>{% endif %}
+					{% if projet.adresse.ville %}<li>{{projet.adresse.ville|upper}}</li>{% endif %}
+				</ul>
+			</a></div> 
+		<div class="projet_prop">projet.date retour AO</div>
+		<div class="projet_prop">projet.avancement</div>
+	</div>
+	{% empty %}
+		<p>Il n'y a pas de projets actuellement ! </p>
+	{% endfor %}
+
+
+	{# Mise en forme de la pagination ici #}
+	{% if is_paginated %}
+	    <div class="pagination">
+	           {% if page_obj.has_previous %}
+	               <a href="?page={{ page_obj.previous_page_number }}">Précédente</a> —
+	           {% endif %}
+	           Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }} 
+	           {% if page_obj.has_next %}
+	              — <a href="?page={{ page_obj.next_page_number }}">Suivante</a>
+	           {% endif %}
+	    </div>
+	{% endif %}
+
+
+
+{% endblock %}
+
+

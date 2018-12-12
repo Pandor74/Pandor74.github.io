@@ -1,0 +1,58 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>Les appels d'offres du projet sont</h2>
+				{% for AO in liste_AO %}
+					<h3><a href="{% url 'col_voir_ao' projet.pk AO.pk %}">Appel offre N°{{AO.numero}}</a></h3>
+					<p>La fin de l'appel d'offres est prévu pour le : {{AO.echeance.date}}</p>
+					<ul>
+					{% for lot in AO.lots.all %}
+						<li>{{lot.decris_toi|upper}}</li>
+					{% empty %}
+						<li>Aucun lot n'a été associé à ce jour !</li>
+					{% endfor %}
+						<li><a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a></li>
+					</ul>
+					
+					
+				{% empty %}
+					<li>Aucun appel d'offre n'a été créé à ce jour !</li>
+				{% endfor %}
+
+				
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

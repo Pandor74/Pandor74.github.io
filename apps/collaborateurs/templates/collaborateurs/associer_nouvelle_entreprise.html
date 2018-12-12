@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouvelle_entreprise_style.css" />
+<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouvelle_entreprise_style.css" />
 {% endblock %}
 
 
@@ -22,7 +22,7 @@
 
 
 
-<form enctype="multipart/form-data" method="post"  action="{% url 'associer_nouvelle_entreprise_et_agence' siret=siret pk=pk %}">
+<form enctype="multipart/form-data" method="post"  action="{% url 'col_associer_nouvelle_entreprise_et_agence' siret=siret pk=pk %}">
 
 	{% csrf_token %}
 	<div id="wrap-form">
@@ -43,10 +43,6 @@
 			{{formAdresse.as_p}}
 		</div>
 
-		<div class="set-wrapper">
-			<h1> Veuillez saisir les compétences techniques de l'agence </h1>
-			{{formCompetence.as_p}}
-		</div>
 
 	</div>
 	<input type="submit" value="Créer l'entreprise" id="BcreateEntreprise" />

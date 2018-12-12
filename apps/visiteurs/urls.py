@@ -18,5 +18,5 @@ from django.urls import path,include
 from visiteurs import views
 
 urlpatterns = [
-	path('',views.home,name='accueil_vis'),
+	path('',views.home,name='vis_accueil'),
 ]

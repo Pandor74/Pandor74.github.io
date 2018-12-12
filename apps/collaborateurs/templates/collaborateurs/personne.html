@@ -1,8 +1,8 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/contact_style.css" />
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/navigation_contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/contact_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/navigation_contact_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -21,11 +21,11 @@
 	<div class="left_nav">
 
 		<div class="bouton" id="Baccueil">
-			<a href='{% url "voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
+			<a href='{% url "col_voir_personne" personne.pk personne.nom personne.prenom %}'>Accueil {{personne.nom|upper}} {{personne.prenom|capfirst}}</a>
 		</div>
 
 		<div class="bouton" id="Bmodifier">
-			<a href="{% url 'modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
+			<a href="{% url 'col_modifier_personne' personne.pk personne.nom personne.prenom %}">Modifier le Contact</a>
 		</div>
 
 		<div class="list_wrapper" id="lots_wrapper">
@@ -43,7 +43,7 @@
 	<div class="contenu_contact">
 
 		<div class="content_wrapper" id="infos_personne">
-			<h2>Informations personelles</h2>
+			<h2>Informations personnelles</h2>
 			<ul class="liste_prop">
 				<li><span class="prop">{{personne.nom|upper}} {{personne.prenom|capfirst}}</span></li>
 				<li><h3>Ligne directe :</h3><span class="prop">{{personne.ligne_directe}}</span></li>
@@ -59,9 +59,10 @@
 
 		<div class="content_wrapper" id="infos_agence">
 			<h2>Coordonnées de l'agence</h2>
+			{% if agence %}
 			<ul class="liste_prop">
 				<li><h3>Nom :</h3></li>
-				<li><span class="prop"><a href="{% url 'voir_agence' agence.pk agence.nom %}">{{agence.nom|capfirst}}</a></span></li>
+				<li><span class="prop"><a href="{% url 'col_voir_agence' agence.pk agence.nom %}">{{agence.nom|capfirst}}</a></span></li>
 
 				<li><h3>Adresse :</h3></li>
 				{% if adresse.adresse1 != None %}
@@ -107,15 +108,25 @@
 				{% else %}
 					<li><span class="prop">Non renseigné</span></li>
 				{% endif %}
+
+				<li><h3>Numéro SIRET</h3></li>
+				<li><span class="prop">{{agence.num_SIRET}}</span></li>
+
 				
 
 
 			</ul>
+			{% else %}
+				<span class="err_on_save">Le contact n'a pas été enregistré correctement puisqu'il n'a été relié a aucune Agence !</span>
+				<a href="{% url 'col_corriger_erreur_personne' personne.pk %}">Corriger le contact</a>
+
+			{% endif %}
 
 		</div>
 
 		<div class="content_wrapper" id="infos_ent">
 			<h2>Informations sur l'entreprise</h2>
+			{% if entreprise %}
 			<ul class="liste_prop">
 				<li>
 					{% if entreprise.logo_ent %}
@@ -125,12 +136,14 @@
 					{% endif %}
 				</li>
 				<li><h3>Nom de l'entreprise :</h3></li>
-				<li><span class="prop"><a href="{% url 'voir_entreprise' entreprise.pk entreprise.nom_ent %}">{{entreprise.nom_ent}}</a></span></li>
+				<li><span class="prop"><a href="{% url 'col_voir_entreprise' entreprise.pk entreprise.nom_ent %}">{{entreprise.nom_ent}}</a></span></li>
 				
 				<li><h3>Numéro SIREN :</h3></li>
 				<li><span class="prop">{{entreprise.num_SIREN}}</span></li>
 			</ul>
-
+			{% else %}
+				<span class="err_on_save">Le contact n'a pas été enregistré correctement puisqu'il n'a été relié a aucune Entreprise !</span>
+			{% endif %}
 		</div>
 
 
@@ -139,7 +152,7 @@
 			<h3>Les appels d'offre de la personne</h3>
 			<ul class="liste_prop">
 				{% for appel in appels %}
-					<li><a href="{% url 'voir_ao_lot' appel.projet.pk appel.AO.pk appel.lot.pk appel.pk  %}"> {{appel.lot.nom}}</a></li>
+					<li><a href="{% url 'col_voir_ao_lot' appel.projet.pk appel.AO.pk appel.lot.pk appel.pk  %}"> {{appel.lot.nom}}</a></li>
 				{% empty %}
 					<li>Aucun appel d'offre en cours !</li>
 				{% endfor %}
@@ -147,7 +160,7 @@
 			<h3>Les appels d'offres de son agence</h3>
 			<ul class="liste_prop">
 				{% for appel_agence in appels_agence %}
-					<li><a href="{% url 'voir_ao_lot' appel_agence.projet.pk appel_agence.AO.pk appel_agence.lot.pk appel_agence.pk  %}"> {{appel_agence.lot.nom}}</a></li>
+					<li><a href="{% url 'col_voir_ao_lot' appel_agence.projet.pk appel_agence.AO.pk appel_agence.lot.pk appel_agence.pk  %}"> {{appel_agence.lot.nom}}</a></li>
 				{% empty %}
 					<li>Aucun appel d'offre en cours !</li>
 				{% endfor %}

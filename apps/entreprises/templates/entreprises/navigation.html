@@ -1,0 +1,44 @@
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/entreprises/navigation_style.css" />
+
+
+
+
+	<div class="left_nav_projet">
+
+		<div class="bouton" id="Baccueil"><a href='{% url "ent_voir_projet" projet.pk %}'>Accueil projet</a></div>
+
+		<div class="list_wrapper" id="ao_wrapper">
+
+			<a href=""><h1>Appels d'offres :</h1></a>
+
+			<ol class="liste" id="liste_ao">
+				{% for appel in appels %}
+					<li><a href="">{{appel}}</a></li>
+				{% empty %}
+					<li>Aucun appel d'offres !</li>
+				{% endfor %}
+			</ol>
+
+
+		</div>
+
+		<div class="list_wrapper" id="lots_wrapper">
+
+			<a href=''><h1>Lots :</h1></a>
+
+			<ul class="liste" id="liste_lots">
+				{% for lot in lots %}
+					<li><a href="{% url 'ent_voir_lot' projet.pk lot.pk %}" >{{lot}}</a></li>
+				{% empty %}
+					<li>Aucun lot !</li>
+				{% endfor %}
+			</ul>
+
+
+
+		</div>
+
+	</div>
+
+
+

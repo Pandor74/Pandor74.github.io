@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/tous_les_projets_style.css" />
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/tous_les_projets_style.css" />
 {% endblock %}
 
 {% block scriptpers %}
@@ -12,7 +12,7 @@
 
 
 {% block content %}
-	<form method="post" action="{% url 'projets_liste' %}" >
+	<form method="post" action="{% url 'col_lister_projets' %}" >
 		{% csrf_token %}
 		{{form}}
 	<input type="submit" value="Filtrer" id="Bfiltrer" />
@@ -35,17 +35,17 @@
 
 	{% for projet in projets %}
 	<div class="line_wrapper">
-		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >
+		<div class="projet_prop"><a href="{% url 'col_voir_projet' projet.pk %}" >
 			{% if projet.photo %}
 				<img src="{{projet.photo.url}}" alt="{{projet.photo.name}}" width="150" height="100" />
 			{% else %}
 				<img src="{{MEDIA_URL}}images/logo.jpg" alt="Il n'y a pas de photo actuellement" width="150" height="100" />
 			{% endif %}
 		</a></div>
-		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.numero_teamber}}</a></div>
-		<div class="projet_prop"><a href="{% url 'voir_projet' projet.pk %}" >{{projet.nom}}</a></div>
+		<div class="projet_prop"><a href="{% url 'col_voir_projet' projet.pk %}" >{{projet.numero_teamber}}</a></div>
+		<div class="projet_prop"><a href="{% url 'col_voir_projet' projet.pk %}" >{{projet.nom}}</a></div>
 		<div class="projet_prop">
-			<a href="{% url 'voir_projet' projet.pk %}" >
+			<a href="{% url 'col_voir_projet' projet.pk %}" >
 				<ul>
 					{% if projet.adresse.adresse1 %}<li title="{{projet.adresse.adresse1}}">{{projet.adresse.adresse1}}</li>{% endif %}
 					{% if projet.adresse.adresse2 %}<li>{{projet.adresse.adresse2}}</li>{% endif %}

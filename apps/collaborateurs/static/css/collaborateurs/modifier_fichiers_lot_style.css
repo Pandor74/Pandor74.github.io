@@ -1,0 +1,165 @@
+#content {
+	display:flex;
+	flex-direction: column;
+
+	padding:0;
+	flex-grow: 1;
+}
+
+
+
+form {
+	width:80%;
+	display: flex;
+	
+}
+
+form a {
+	color:green;
+}
+
+form li {
+	margin-bottom: 5px;
+}
+
+form input {
+	
+	margin-bottom: 0px;
+	cursor:pointer;
+
+}
+
+select {
+	height:21px;
+	cursor:pointer;
+}
+
+form ul {
+	padding-left: 20px;
+}
+
+form ol {
+	padding-left:0px;
+
+}
+
+form ol li {
+	padding-left:0px;
+
+
+	margin-bottom: 5px;
+
+}
+
+textarea {
+	width: 100%;
+	max-width: 100%;
+}
+
+form #id_competences {
+	height: auto;
+	width:auto;
+}
+
+
+.plus {
+	display:inline-flex;
+	box-sizing: border-box;
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color:#3e6a87;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	font-family: 'arial';
+	border:outset white 2px;
+	border-radius:12px;
+	margin-left: 30px;
+
+	
+}
+
+.plus:hover {
+	background-color: #e00025;
+	cursor:pointer;
+}
+
+
+
+
+.fich_line {
+	line-height: 2;
+}
+
+
+#Beditlot {
+	background-color:#3e6a87 ;
+	color:white;
+	font-size: 20px;
+	padding:5px 10px 5px 10px;
+
+	border-radius:20px;
+}
+
+#Beditlot:hover {
+	background-color: #e00025;
+}
+
+
+
+
+.contenu_projet {
+	
+	
+	/*padding:25px;*/
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: flex-start;
+
+}
+
+
+
+.contenu_projet h2 {
+	color:#ff6624;
+	font-size: 22px;
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.content_wrapper {
+	/*margin-left:25px;*/
+	/*border:solid white;*/
+	box-sizing: border-box;
+	width: 100%;
+	height: auto;
+	padding-left: 25px;
+	padding-right: 50px;
+	
+
+}
+
+.content_wrapper ul {
+	list-style-type: none;
+	margin-left: 20px;
+}
+
+.content_wrapper img {
+	box-sizing: border-box;
+	border: solid white 2px;
+	height:100px;
+	width: 150px;
+}
+
+
+
+.titre_form {
+	margin-top: 15px;
+	margin-left: -20px;
+}
+
+
+

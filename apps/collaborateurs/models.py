@@ -5,7 +5,7 @@ from django import forms
 from storage import OverwriteStorage
 import os
 from django.conf import settings
-from django.core.validators import RegexValidator,MaxValueValidator
+from django.core.validators import RegexValidator,MaxValueValidator,MinValueValidator
 from collaborateurs.fonction import right,right_path
 
 from django.dispatch import receiver
@@ -222,7 +222,7 @@ class DocumentLot(models.Model):
 
 
 	def __str__(self):
-		return self.fichier.name
+		return os.path.basename(self.fichier.name)
 
 
 #delete file on delete call from DocumentLot
@@ -267,9 +267,16 @@ def fichier_entreprise_path(instance,filename):
 	return os.path.join(path, filename)
 
 
+LISTE_TYPE_CONTACT=(
+	('client','Client'),
+	('executant','Executant'),
+	)
+
 #définit le modèle de l'entreprise principale
 class Entreprise(models.Model):
 	nom_ent=models.CharField(max_length=255,blank=True,null=True,verbose_name="Nom de l'entreprise ",unique=True)
+	type_contact=models.CharField(default='executant',max_length=255,choices=LISTE_TYPE_CONTACT)
+
 	date_inscription_ent=models.DateTimeField(default=datetime.date.today,blank=True,verbose_name="Date d'inscription ")
 	date_creation_ent=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'entreprise")
 	logo_ent=models.ImageField(upload_to=fichier_entreprise_path,blank=True,null=True,verbose_name="Logo de l'entreprise (facultatif) ",storage=OverwriteStorage())
@@ -349,6 +356,8 @@ LISTE_CAT_AGENCE=(
 	)
 
 
+
+
 #définit le modèle de l'agence
 class Agence(models.Model):
 	nom=models.CharField(max_length=255,verbose_name="Dénomination de l'agence ")
@@ -417,7 +426,10 @@ class Personne(models.Model):
 	agence=models.ForeignKey(Agence,on_delete=models.CASCADE,null=True,blank=True)
 
 	def __str__(self):
-		return self.nom + ' ' + self.prenom + ' (' + self.agence.nom +')'
+		if self.agence:
+			return self.nom + ' ' + self.prenom + ' (' + self.agence.nom +')'
+		else:
+			return self.nom + ' ' + self.prenom + ' (sans agence)'
 
 
 
@@ -450,10 +462,10 @@ class Adresse(models.Model):
 
 
 class AppelOffre(models.Model):
-
+	numero=models.IntegerField(default=0)
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
 	lots=models.ManyToManyField(Lot,blank=True)
-	numero=models.IntegerField(default=0)
+	
 
 	#createur
 
@@ -465,8 +477,9 @@ class AppelOffre(models.Model):
 class AppelOffreLot(models.Model):
 
 
-	date_lancement=models.DateField(default=datetime.date.today,verbose_name="Date de démarrage de la consultation")
-	relance=models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(99)],verbose_name="Intervalle de relance (jours calendaires)")
+	date_lancement=models.DateField(default=datetime.date.today,verbose_name="Date de démarrage de la consultation",blank=True)
+	date_de_creation=models.DateField(default=datetime.date.today,verbose_name="Date de création")
+	relance=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0),MaxValueValidator(99)],verbose_name="Intervalle de relance (jours calendaires)")
 
 	AO_agences=models.ManyToManyField(Agence,blank=True)
 	AO_personnes=models.ManyToManyField(Personne,blank=True)
@@ -478,15 +491,6 @@ class AppelOffreLot(models.Model):
 	def __str__(self):
 		return 'AO' + str(self.projet.numero_teamber) + self.projet.nom + ' _ ' + self.lot.short_name 
 
-
-class Offre(models.Model):
-
-	AO=models.ForeignKey(AppelOffre,on_delete=models.PROTECT,blank=True)
-	agence=models.ForeignKey(Agence,on_delete=models.PROTECT,blank=True)
-	personne=models.ForeignKey(Personne,on_delete=models.PROTECT,blank=True)
-
-	def __str__(self):
-		return 'Offre de' + personne.nom + ' ' + personne.prenom + 'sur lot ' + AO.lot.numero + ' du projet ' + AO.projet.nom
 
 
 
@@ -500,7 +504,7 @@ class AppelOffreGlobal(models.Model):
 
 
 class Echeance(models.Model):
-	date=models.DateField(verbose_name="Date de fin de la consultation")
+	date=models.DateField(default=datetime.date.today,verbose_name="Date de fin de la consultation")
 
 	appel=models.OneToOneField(AppelOffre,on_delete=models.CASCADE,null=True)
 	appelLot=models.OneToOneField(AppelOffreLot,on_delete=models.CASCADE,null=True)

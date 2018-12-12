@@ -1,7 +1,7 @@
 {% extends 'collaborateurs/base.html' %}
 
 {% block stylepers %}
-<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/nouvelle_entreprise_style.css" />
+<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/nouvelle_entreprise_style.css" />
 {% endblock %}
 
 
@@ -19,7 +19,7 @@
 
 
 
-<form enctype="multipart/form-data" method="post"  action="{% url 'ajouter_agence' entreprise.pk entreprise.nom_ent %}">
+<form enctype="multipart/form-data" method="post"  action="{% url 'col_ajouter_agence' entreprise.pk entreprise.nom_ent %}">
 
 	{% csrf_token %}
 	<div id="wrap-form">

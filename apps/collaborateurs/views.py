@@ -29,11 +29,20 @@ def Home(request):
 	
 	return render(request,'collaborateurs/accueil_col.html')
 
+
 def Deconnexion(request):
 	deco=True
 
 	return render(request,'visiteurs/base.html',locals())
 
+
+
+
+
+
+
+
+#///////////////////////////-------PROJET-------///////////////////////////////////////////////
 def New_Projet(request):
 	envoi=False
 	
@@ -60,7 +69,7 @@ def New_Projet(request):
 			
 			
 
-			return redirect('Afficher_Projet',pk=projet.pk)
+			return redirect('col_voir_projet',pk=projet.pk)
 
 		return render(request,'collaborateurs/nouveau_projet.html',locals())
 	else:
@@ -68,6 +77,7 @@ def New_Projet(request):
 		formAdresse=AdresseForm()
 
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
+
 
 def Modifier_Projet(request,pk):
 	modif=False
@@ -100,7 +110,7 @@ def Modifier_Projet(request,pk):
 			
 
 
-				return redirect('voir_projet',pk=projet.pk)
+				return redirect('col_voir_projet',pk=projet.pk)
 
 
 		return render(request,'collaborateurs/modifier_projet.html',locals())
@@ -112,6 +122,7 @@ def Modifier_Projet(request,pk):
 	formadresse=AdresseForm(instance=projet.adresse)
 
 	return render(request,'collaborateurs/modifier_projet.html',locals())
+
 
 #sert a préparer le terrain pour LIsteprojets
 class FormListView(ListView,FormMixin):
@@ -132,6 +143,7 @@ class FormListView(ListView,FormMixin):
 
 	def post(self, request, *args, **kwargs):
 		return self.get(request, *args, **kwargs)
+
 
 class ListeProjets(FormListView):
 	form_class=FiltreFormProjet
@@ -164,6 +176,7 @@ class ListeProjets(FormListView):
 		
 		return context
 
+
 def Afficher_Projet(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	proprietes=projet.propriete
@@ -171,6 +184,7 @@ def Afficher_Projet(request,pk):
 	appels=projet.appeloffre_set.all()
 
 	return render(request,'collaborateurs/projet.html',locals())
+
 		
 def New_Lot(request,pk):
 
@@ -203,7 +217,7 @@ def New_Lot(request,pk):
 			
 
 
-			return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
+			return redirect('col_voir_lot',pk=projet.pk,pklot=lot.pk)
 
 		else:
 			return render(request,'collaborateurs/nouveau_lot.html',locals())
@@ -240,7 +254,7 @@ def Modifier_Lot(request,pk,pklot):
 			lot=formLot.save()
 			
 
-			return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
+			return redirect('col_voir_lot',pk=projet.pk,pklot=lot.pk)
 
 		return render(request,'collaborateurs/modifier_parametres_lot.html',locals())
 	else:
@@ -248,7 +262,6 @@ def Modifier_Lot(request,pk,pklot):
 		
 
 	return render(request,'collaborateurs/modifier_parametres_lot.html',locals())
-
 
 
 def Modifier_Fichiers_Lot(request,pk,pklot):
@@ -440,7 +453,7 @@ def Modifier_Fichiers_Lot(request,pk,pklot):
 				if docAn9:
 					docAn9.delete()
 
-		return redirect('voir_lot',pk=projet.pk,pklot=lot.pk)
+		return redirect('col_voir_lot',pk=projet.pk,pklot=lot.pk)
 
 		return render(request,'collaborateurs/modifier_fichiers_lot.html',locals())
 	else:
@@ -453,10 +466,6 @@ def Modifier_Fichiers_Lot(request,pk,pklot):
 		formFichiers=FichiersForm(liste_doc_lot)
 
 
-
-
-	
-
 	return render(request,'collaborateurs/modifier_fichiers_lot.html',locals())
 
 
@@ -467,9 +476,6 @@ def Liste_Lot(request,pk):
 	lots=Lot.objects.filter(projet=projet)
 
 	return render(request,'collaborateurs/tous_les_lots.html',locals())
-
-	
-
 
 
 def Afficher_Lot(request,pk,pklot):
@@ -482,7 +488,6 @@ def Afficher_Lot(request,pk,pklot):
 	appels_lot=AppelOffreLot.objects.filter(lot=lot)
 
 	return render(request,'collaborateurs/lot.html',locals())
-
 
 
 #fonction qui permet d'ouvrir un fichier PDF dans le browser... Il faut intégrer le MIMETYPE pour les autres formats de documents qui seront au final téléchargé
@@ -515,6 +520,20 @@ def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 		return response
 	else:
 		return Http404()
+
+
+
+
+
+
+
+
+#///////////////////////////----------CONTACTS--------//////////////////////////////////////////////////
+
+
+
+
+
 
 
 
@@ -562,7 +581,7 @@ def New_Entreprise_Et_Agence(request):
 			
 			
 			
-			return redirect('voir_entreprise', pk=entreprise.pk,nom=entreprise.nom_ent)
+			return redirect('col_voir_entreprise', pk=entreprise.pk,nom=entreprise.nom_ent)
 
 		return render(request,'collaborateurs/nouvelle_entreprise.html',locals())
 	else:
@@ -589,6 +608,7 @@ def Afficher_Entreprise(request,pk,nom):
 
 	return render(request,'collaborateurs/entreprise.html',locals())
 
+
 def Modifier_Entreprise(request,pk,nom):
 	entreprise=get_object_or_404(Entreprise,pk=pk)
 
@@ -603,7 +623,7 @@ def Modifier_Entreprise(request,pk,nom):
 			entreprise=formEntreprise.save()
 
 
-			return redirect('voir_entreprise',pk=entreprise.pk,nom=entreprise.nom_ent)
+			return redirect('col_voir_entreprise',pk=entreprise.pk,nom=entreprise.nom_ent)
 
 		return render(request,'collaborateurs/modifier_entreprise.html',locals())
 
@@ -611,7 +631,6 @@ def Modifier_Entreprise(request,pk,nom):
 
 
 	return render(request,'collaborateurs/modifier_entreprise.html',locals())
-
 
 
 #permet de crééer une agence si l'entreprise existe déjà a partir du pk de l'entreprise et de son nom
@@ -631,25 +650,16 @@ def Add_Agence(request,pk,nom):
 		formAgence=AgenceForm(request.POST, request.FILES)
 		formAgence.num_SIRET=entreprise.num_SIREN
 
+		liste=request.POST.getlist('competences_agence')
+		print(liste)
 
-		formCompetence=CompetenceForm(request.POST or None,)
 
-		if formAgence.is_valid() and formAdresse.is_valid() and formCompetence.is_valid():
+		
+
+		if formAgence.is_valid() and formAdresse.is_valid():
 
 			envoi=True
 
-
-			competences_form=formCompetence.cleaned_data['competences']
-
-			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
-			liste_competences=DomaineCompetence.objects.all()
-			for competence in competences_form:
-				if ExistOrNotCompetence(liste_competences,competence):
-					print('domaine de compétence éxiste déjà on passe')
-				else:
-					DomaineCompetence.objects.create(competence=competence)
-			
-					print('création du domaine de compétence inexistant')
 			
 			adresse=formAdresse.save(commit=False)
 			agence=formAgence.save(commit=False)
@@ -661,14 +671,13 @@ def Add_Agence(request,pk,nom):
 			adresse.save()
 
 			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
-			for competence in competences_form:
-				compvalid=liste_competences.filter(competence=competence).get()
+			for num_comp in liste:
+				compvalid=DomaineCompetence.objects.get(pk=num_comp)
 				agence.competences_agence.add(compvalid)
 
 			
 			
-			
-			return redirect('voir_agence', pk=agence.pk,nom=agence.nom)
+			return redirect('col_voir_agence', pk=agence.pk,nom=agence.nom)
 
 		return render(request,'collaborateurs/nouvelle_agence.html',locals())
 	else:
@@ -711,7 +720,7 @@ def Add_Personne(request,pk,nom):
 				contact.agence=agence
 				contact.save()
 
-				return redirect('voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 
 			elif entreprise:
 				print('création de personne depuis entreprise')
@@ -722,7 +731,7 @@ def Add_Personne(request,pk,nom):
 				contact.agence=agence
 				contact.save()
 
-				return redirect('voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 				
 
 		else:
@@ -799,7 +808,7 @@ def Modifier_Agence(request,pk,nom):
 					agence.competences_agence.add(compvalid)
 
 
-			return redirect('voir_agence',pk=agence.pk,nom=agence.nom)
+			return redirect('col_voir_agence',pk=agence.pk,nom=agence.nom)
 
 		return render(request,'collaborateurs/modifier_agence.html',locals())
 
@@ -839,7 +848,7 @@ def New_Personne(request):
 				existance=True
 				contact.agence=agence
 				contact.save()
-				return redirect('voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 			else:
 				siren=siret[:9]
 				try:
@@ -852,12 +861,12 @@ def New_Personne(request):
 				if entreprise:
 					print("l'entreprise existe mais l'agence n'existe pas")
 
-					return redirect('associer_nouvelle_agence',siret=siret,pk=contact.pk)
+					return redirect('col_associer_nouvelle_agence',siret=siret,pk=contact.pk)
 
 				else:
 					print("ni l'agence ni l'entreprise n'existe il faut les créer")
 					
-					return redirect('associer_nouvelle_entreprise_et_agence',siret=siret,pk=contact.pk)
+					return redirect('col_associer_nouvelle_entreprise_et_agence',siret=siret,pk=contact.pk)
 		else:
 			print('test passage')
 			return render(request,'collaborateurs/nouvelle_personne.html',locals())
@@ -866,6 +875,63 @@ def New_Personne(request):
 		formSiret=SiretForm()
 
 		return render(request,'collaborateurs/nouvelle_personne.html',locals())
+
+
+def Corriger_Erreur_Personne(request,pk):
+
+	if request.method=='POST':
+
+		contact=get_object_or_404(Personne,pk=pk)
+		formPersonne=PersonneForm(request.POST or None,instance=contact)
+		formSiret=SiretForm(request.POST or None,)
+
+		if formPersonne.is_valid() and formSiret.is_valid():
+			print('formulaire création de personne validé')
+			contact=formPersonne.save()
+
+			siret=formSiret.cleaned_data['num_SIRET']
+
+			try:
+				agence=Agence.objects.get(num_SIRET=siret)
+				print(agence)
+			except:
+				print("pas d'agence il faut la créer")
+				agence=None
+
+			if agence:
+				#l'agence existe on la relie à l'utilisateur
+				print("l'agence et l'entreprise existe")
+				existance=True
+				contact.agence=agence
+				contact.save()
+				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+			else:
+				siren=siret[:9]
+				try:
+					entreprise=Entreprise.objects.get(num_SIREN=siren)
+					print(entreprise)
+				except:
+					print("lentreprise n'existe pas il faut la créer")
+					entreprise=None
+
+				if entreprise:
+					print("l'entreprise existe mais l'agence n'existe pas")
+
+					return redirect('col_associer_nouvelle_agence',siret=siret,pk=contact.pk)
+
+				else:
+					print("ni l'agence ni l'entreprise n'existe il faut les créer")
+					
+					return redirect('col_associer_nouvelle_entreprise_et_agence',siret=siret,pk=contact.pk)
+		else:
+			print('test passage')
+			return render(request,'collaborateurs/corriger_erreur_personne.html',locals())
+	else:
+		contact=get_object_or_404(Personne,pk=pk)
+		formPersonne=PersonneForm(instance=contact)
+		formSiret=SiretForm()
+
+		return render(request,'collaborateurs/corriger_erreur_personne.html',locals())
 
 
 def Associer_New_Agence(request,siret,pk):
@@ -880,29 +946,20 @@ def Associer_New_Agence(request,siret,pk):
 		formAgence=AgenceForm(request.POST, request.FILES)
 		formAgence.num_SIRET=siret
 
+
+		liste=request.POST.getlist('competences_agence')
+		print(liste)
+
 		siren=siret[:9]
 		
 		entreprise=Entreprise.objects.get(num_SIREN=siren)
 		
 
-		formCompetence=CompetenceForm(request.POST or None,)
 
-		if formAgence.is_valid() and formAdresse.is_valid() and formCompetence.is_valid():
+
+		if formAgence.is_valid() and formAdresse.is_valid():
 
 			envoi=True
-
-
-			competences_form=formCompetence.cleaned_data['competences']
-
-			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
-			liste_competences=DomaineCompetence.objects.all()
-			for competence in competences_form:
-				if ExistOrNotCompetence(liste_competences,competence):
-					print('domaine de compétence éxiste déjà on passe')
-				else:
-					DomaineCompetence.objects.create(competence=competence)
-			
-					print('création du domaine de compétence inexistant')
 			
 			adresse=formAdresse.save(commit=False)
 			agence=formAgence.save(commit=False)
@@ -918,23 +975,22 @@ def Associer_New_Agence(request,siret,pk):
 			adresse.save()
 
 			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
-			for competence in competences_form:
-				compvalid=liste_competences.filter(competence=competence).get()
+			for num_comp in liste:
+				compvalid=DomaineCompetence.objects.get(pk=num_comp)
 				agence.competences_agence.add(compvalid)
 
 			
 			
 			
-			return redirect('voir_personne', pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+			return redirect('col_voir_personne', pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 
 		return render(request,'collaborateurs/associer_nouvelle_agence.html',locals())
 	else:
 		formAgence=AgenceForm(initial={'num_SIRET':siret})
 		formAdresse=AdresseForm()
-		formCompetence=CompetenceForm()
+
 
 	return render(request,'collaborateurs/associer_nouvelle_agence.html',locals())
-
 
 
 def Associer_New_Entreprise_Et_Agence(request,siret,pk):
@@ -950,29 +1006,19 @@ def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 		formAgence=AgenceForm(request.POST, request.FILES)
 		formAgence.num_SIRET=siret
 
+		liste=request.POST.getlist('competences_agence')
+		print(liste)
+
 		entreprise=Entreprise()
 		formEntreprise=EntrepriseForm(request.POST,request.FILES)
 
 
-		formCompetence=CompetenceForm(request.POST or None,)
 
-		if formAgence.is_valid() and formAdresse.is_valid() and formEntreprise.is_valid() and formCompetence.is_valid():
+		if formAgence.is_valid() and formAdresse.is_valid() and formEntreprise.is_valid():
 
 			envoi=True
 
 
-			competences_form=formCompetence.cleaned_data['competences']
-
-			#permet de vérifier l'existance ou non de la compétence et si jamais on l'a créé au besoin
-			liste_competences=DomaineCompetence.objects.all()
-			for competence in competences_form:
-				if ExistOrNotCompetence(liste_competences,competence):
-					print('domaine de compétence éxiste déjà on passe')
-				else:
-					DomaineCompetence.objects.create(competence=competence)
-			
-					print('création du domaine de compétence inexistant')
-			
 			adresse=formAdresse.save(commit=False)
 			agence=formAgence.save(commit=False)
 			entreprise=formEntreprise.save()
@@ -987,15 +1033,17 @@ def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 			
 			adresse.save()
 
+
 			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
-			for competence in competences_form:
-				compvalid=liste_competences.filter(competence=competence).get()
+			for num_comp in liste:
+				compvalid=DomaineCompetence.objects.get(pk=num_comp)
 				agence.competences_agence.add(compvalid)
+
 
 			
 			
 			
-			return redirect('voir_personne', pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
+			return redirect('col_voir_personne', pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 
 		return render(request,'collaborateurs/associer_nouvelle_entreprise.html',locals())
 
@@ -1003,22 +1051,29 @@ def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 		formAgence=AgenceForm(initial={'num_SIRET':siret})
 		formAdresse=AdresseForm()
 		formEntreprise=EntrepriseForm(initial={'num_SIREN':siret[:9]})
-		formCompetence=CompetenceForm()
 
 	return render(request,'collaborateurs/associer_nouvelle_entreprise.html',locals())
 
 
 def Afficher_Personne(request,pk,nom,prenom):
 	personne=get_object_or_404(Personne,pk=pk)
-	agence=personne.agence
-	entreprise=agence.entreprise
-	adresse=agence.adresse
+	if personne.agence:
+		agence=personne.agence
+		entreprise=agence.entreprise
+		adresse=agence.adresse
+		appels_agence=agence.appeloffrelot_set.all()
+	else:
+		agence=Agence.objects.none()
+		entreprise=Entreprise.objects.none()
+		adresse=Adresse.objects.none()
+		appels_agence=Agence.objects.none()
+
+
 	appels_personne=personne.appeloffrelot_set.all()
-	appels_agence=agence.appeloffrelot_set.all()
+	
 
 	
 	return render(request,'collaborateurs/personne.html',locals())
-
 
 
 def Modifier_Personne(request,pk,nom,prenom):
@@ -1051,7 +1106,7 @@ def Modifier_Personne(request,pk,nom,prenom):
 				personne=formPersonne.save()
 
 
-			return redirect('voir_personne',pk=personne.pk,nom=personne.nom,prenom=personne.prenom)
+			return redirect('col_voir_personne',pk=personne.pk,nom=personne.nom,prenom=personne.prenom)
 
 		return render(request,'collaborateurs/modifier_personne.html',locals())
 
@@ -1094,6 +1149,22 @@ def Liste_Contact(request):
 	#si il n'y a pas de requete de filtrage alors on affiche tout
 	return render(request,'collaborateurs/tous_les_contacts.html',locals())
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#///////////////////////////----------APPEL D'OFFRES--------//////////////////////////////////////////////////
 
 #démarre la création d'un appel d'offres du projet a partir de son pk
 def New_AO(request,pk):
@@ -1139,7 +1210,7 @@ def New_AO(request,pk):
 				AO.lots.add(lotvalid)
 
 
-			return redirect('voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
+			return redirect('col_voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
 		else:
 			print('non valide')
 			
@@ -1168,7 +1239,6 @@ def New_AO(request,pk):
 		return render(request,'collaborateurs/nouveau_ao.html',locals())
 
 
-
 def Modifier_AO(request,pkprojet,pkAO):
 	projet=get_object_or_404(Projet,pk=pkprojet)
 	AO=get_object_or_404(AppelOffre,pk=pkAO)
@@ -1195,7 +1265,7 @@ def Modifier_AO(request,pkprojet,pkAO):
 				AO.lots.add(lotvalid)
 
 
-			return redirect('voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
+			return redirect('col_voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
 		else:
 
 			
@@ -1225,7 +1295,19 @@ def Afficher_AO(request,pkprojet,pkAO):
 	return render(request,'collaborateurs/AO.html',locals())
 
 
+def Lister_AO(request,pkprojet):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	liste_AO=projet.appeloffre_set.all()
+
+
+	return render(request,'collaborateurs/lister_AO.html',locals())
+
+
 def New_AO_Lot(request,pkprojet,pkAO,pklot):
+	#requetes pour navigation
 	projet=get_object_or_404(Projet,pk=pkprojet)
 	lots=Lot.objects.filter(projet=projet)
 	appels=projet.appeloffre_set.all()
@@ -1240,13 +1322,12 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 		AOlot.lot=lot
 		AOlot.AO=AO
 		AOlot.projet=projet
+		agences=Agence.objects.none()
+		personnes=Personne.objects.none()
 		
-		formAOlot=AppelOffreLotForm(request.POST or None, instance=AOlot)
+		formAOlot=AppelOffreLotForm(agences,personnes,request.POST or None, instance=AOlot)
 		formEcheance=EcheanceForm(request.POST or None,)
 
-
-		liste_agences=request.POST.getlist('AO_agences')
-		liste_personnes=request.POST.getlist('AO_personnes')
 
 		if formAOlot.is_valid():
 			print('AOlot validé')
@@ -1265,22 +1346,8 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 			
 			echeance.appelLot=AOlot
 			echeance.save()
-			
-			
 
-			#boucle pour ajouter les agences qui ont été séléctionnées dans le formulaire
-			for num_agence in liste_agences:
-				agencevalid=Agence.objects.get(pk=num_agence)
-				AOlot.AO_agences.add(agencevalid)
-
-			#boucle pour ajouter les personnes qui ont été séléctionnées dans le formulaire
-			for num_personne in liste_personnes:
-				personnevalid=Personne.objects.get(pk=num_personne)
-				AOlot.AO_personnes.add(personnevalid)
-
-
-
-			return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+			return redirect('col_voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
 		else:
 			print('non valide')
 			
@@ -1302,7 +1369,6 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 		return render(request,'collaborateurs/nouveau_ao_lot.html',locals())
 
 
-
 def Afficher_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 	projet=Projet.objects.get(pk=pkprojet)
 	lots=projet.lot_set.all()
@@ -1318,6 +1384,63 @@ def Afficher_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 	personnes=AOlot.AO_personnes.all()
 
 	return render(request,'collaborateurs/AO_lot.html',locals())
+
+
+def Modifier_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	AO=get_object_or_404(AppelOffre,pk=pkAO)
+	lot=get_object_or_404(Lot,pk=pklot)
+	AOlot=get_object_or_404(AppelOffreLot,pk=pkAOlot)
+	echeance=AOlot.echeance
+
+	if request.method=='POST':
+		print(request.POST)
+		
+
+		agences=Agence.objects.none()
+		personnes=Personne.objects.none()
+		
+		formAOlot=AppelOffreLotForm(agences,personnes,request.POST or None, instance=AOlot)
+		formEcheance=EcheanceForm(request.POST or None,instance=echeance)
+
+
+		if formAOlot.is_valid():
+			print('AOlot validé')
+
+		if formEcheance.is_valid():
+			print('Echeance valide')
+
+		if formAOlot.is_valid() and formEcheance.is_valid():
+			print('ok')
+			formEcheance.save()
+
+			formAOlot.save(commit=False)
+
+
+			return redirect('col_voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+		else:
+			print('non valide')
+			
+
+			return render(request,'collaborateurs/modifier_ao_lot.html',locals())
+
+
+
+	else:
+
+		formEcheance=EcheanceForm(instance=echeance)
+
+
+		agences=Agence.objects.none()
+		personnes=Personne.objects.none()
+		formAOlot=AppelOffreLotForm(agences,personnes,instance=AOlot)
+		
+
+		return render(request,'collaborateurs/modifier_ao_lot.html',locals())
+
 
 def Gerer_AO_Lot(request,pkprojet,pkAO,pklot):
 	projet=Projet.objects.get(pk=pkprojet)
@@ -1336,10 +1459,9 @@ def Gerer_AO_Lot(request,pkprojet,pkAO,pklot):
 		AOlot=None
 
 	if AOlot:
-		return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+		return redirect('col_voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
 	else:
-		return redirect('nouveau_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk)
-
+		return redirect('col_nouveau_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk)
 
 
 def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
@@ -1425,7 +1547,7 @@ def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 					AOlot.AO_personnes.add(personnevalid)
 
 
-				return redirect('voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
+				return redirect('col_voir_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk,pkAOlot=AOlot.pk)
 			else:
 				print('non valide')
 				
