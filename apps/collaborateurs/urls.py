@@ -21,11 +21,11 @@ from .models import Projet
 from django.conf.urls import url
 
 urlpatterns = [
-	path('',views.Home,name='col_accueil'),
-	path('deconnexion',views.Deconnexion,name='col_deconnexion'),
+	url(r'^accueil$',views.Home,name='col_accueil'),
+    url(r'^accueil/initDB$',views.InitDataBase,name='col_initDB'),
 	
     #projets
-    url(r'^projets$',views.ListeProjets.as_view(),name="col_lister_projets"),
+    url(r'^projets$',views.Liste_Projet,name="col_lister_projets"),
     url(r'^projets/nouveau-projet$',views.New_Projet,name="col_nouveau_projet"),
     url(r'^projet/modifier/(?P<pk>.+)$',views.Modifier_Projet,name="col_modifier_projet"),
     url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="col_voir_projet"),

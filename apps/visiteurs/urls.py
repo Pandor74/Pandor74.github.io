@@ -16,7 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from visiteurs import views
+from django.conf.urls import url
+
 
 urlpatterns = [
-	path('',views.home,name='vis_accueil'),
+	url(r'^accueil$',views.home,name='vis_accueil'),
+	url(r'^connexion$',views.Connexion,name='connexion'),
+	url(r'^deconnexion$',views.Deconnexion,name='deconnexion'),
+	url(r'^acces-refusé$',views.Refuser_Acces,name="refus"),
 ]

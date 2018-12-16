@@ -40,8 +40,8 @@
 
        <ul class="list_nav_sup" id="LNS1">
             <li><a href="{% url 'col_contacts_liste' %}">Liste des contacts</a></li>
-            <li><a href="">Mon compte</a></li>
-            <li><a href='{% url "col_deconnexion" %}' id="bdeco">Déconnexion</a></li>
+            <li><a href="">Mon compte ({{user}})</a></li>
+            <li><a href='{% url "deconnexion" %}' id="bdeco">Déconnexion</a></li>
        </ul>
 
    </nav>

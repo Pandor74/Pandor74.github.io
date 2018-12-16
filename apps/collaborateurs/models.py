@@ -8,8 +8,14 @@ from django.conf import settings
 from django.core.validators import RegexValidator,MaxValueValidator,MinValueValidator
 from collaborateurs.fonction import right,right_path
 
+from django.contrib.auth.models import User
+
 from django.dispatch import receiver
 import shutil
+
+from django import template
+
+register=template.Library()
 
 
 
@@ -270,6 +276,7 @@ def fichier_entreprise_path(instance,filename):
 LISTE_TYPE_CONTACT=(
 	('client','Client'),
 	('executant','Executant'),
+	('interne','Interne'),
 	)
 
 #définit le modèle de l'entreprise principale
@@ -415,6 +422,7 @@ class DocumentAgence(models.Model):
 
 
 class Personne(models.Model):
+	user=models.OneToOneField(User,on_delete=models.PROTECT)
 	prenom=models.CharField(max_length=255,verbose_name="Prénom ")
 	nom=models.CharField(max_length=255,verbose_name="Nom ")
 	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir exactement 10 chiffres et commencer par 0")
@@ -425,13 +433,24 @@ class Personne(models.Model):
 
 	agence=models.ForeignKey(Agence,on_delete=models.CASCADE,null=True,blank=True)
 
+
+
 	def __str__(self):
 		if self.agence:
 			return self.nom + ' ' + self.prenom + ' (' + self.agence.nom +')'
 		else:
-			return self.nom + ' ' + self.prenom + ' (sans agence)'
+			return self.nom + ' ' + self.prenom + ' (sans agence !)'
 
 
+#test de vérification pour le modèle user attaché au profil personne
+def is_col(user):
+	return user.groups.filter(name="collaborateurs").exists()
+
+def is_ent(user):
+	return user.groups.filter(name="entreprises").exists()
+
+def is_client(user):
+	return user.groups.filter(name="clients").exists()
 
 # définit le modèle Adresse
 class Adresse(models.Model):
@@ -462,6 +481,9 @@ class Adresse(models.Model):
 
 
 class AppelOffre(models.Model):
+	class Meta:
+		ordering=['numero']
+
 	numero=models.IntegerField(default=0)
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
 	lots=models.ManyToManyField(Lot,blank=True)
@@ -474,8 +496,19 @@ class AppelOffre(models.Model):
 
 
 
+
+LISTE_STATUT_AO_LOT =(
+		('En création','En création'),
+		('Validé','Validé'),
+		('Envoyé','Envoyé'),
+	)
+
+
+
 class AppelOffreLot(models.Model):
 
+	class Meta:
+		ordering=['lot']
 
 	date_lancement=models.DateField(default=datetime.date.today,verbose_name="Date de démarrage de la consultation",blank=True)
 	date_de_creation=models.DateField(default=datetime.date.today,verbose_name="Date de création")
@@ -488,10 +521,13 @@ class AppelOffreLot(models.Model):
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
 	lot=models.ForeignKey(Lot,on_delete=models.CASCADE,blank=True)
 
+	statut=models.CharField(default="En création",max_length=255,choices=LISTE_STATUT_AO_LOT,blank=True)
+
 	def __str__(self):
-		return 'AO' + str(self.projet.numero_teamber) + self.projet.nom + ' _ ' + self.lot.short_name 
+		return 'AO : ' + str(self.projet.numero_teamber) + ' ' + self.projet.nom + ' - ' + self.lot.short_name 
 
-
+	def decris_lot(self):
+		return 'Lot ' + str(self.lot.numero)
 
 
 

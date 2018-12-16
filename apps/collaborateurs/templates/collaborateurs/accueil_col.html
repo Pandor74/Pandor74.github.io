@@ -2,9 +2,11 @@
 
 
 {% block content %}
-salut toi tu es sur l'<strong>accueil</strong>
-<br />
-<img src="{{MEDIA_URL}}images/logo.jpg" alt="ne fonctionne pas" />
 
-{%if envoi %}Le projet a bien été créé{% endif %}
+<p>Bienvenue <strong>{{user}}</strong>!</p>
+
+
+<a href="{% url 'col_initDB' %}">Initiation DB</a>
+
+
 {% endblock %}

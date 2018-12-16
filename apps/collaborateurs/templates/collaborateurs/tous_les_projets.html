@@ -14,7 +14,7 @@
 {% block content %}
 	<form method="post" action="{% url 'col_lister_projets' %}" >
 		{% csrf_token %}
-		{{form}}
+		{{formFiltre}}
 	<input type="submit" value="Filtrer" id="Bfiltrer" />
 	</form>
 

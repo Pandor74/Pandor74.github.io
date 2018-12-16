@@ -321,7 +321,7 @@ class AppelOffreForm(forms.ModelForm):
 class AppelOffreLotForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffreLot
-		exclude=['projet','AO','lot','date_de_creation']
+		exclude=['projet','AO','lot','date_de_creation','statut']
 		widgets ={
 			'AO_agences':forms.CheckboxSelectMultiple(),
 			'AO_personnes':forms.CheckboxSelectMultiple(),
@@ -351,6 +351,7 @@ class AppelOffreGlobalForm(forms.ModelForm):
 class FiltreFormAgenceAO(forms.Form):
 	competences=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'title':'Selectionner les activités recherchées'}),choices=LISTE_ACTIVITES,required=False)
 	search=forms.CharField(max_length=255,required=False,label="Recherche ")
+
 
 
 class FiltreFormPersonneAO(forms.Form):

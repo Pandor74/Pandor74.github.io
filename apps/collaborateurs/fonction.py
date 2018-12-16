@@ -1,8 +1,11 @@
 from django.db.models import Q
+import random
+import string
+
 
 
 #permet de rechercher un élément d'un groupe à partir de la chaine dans nom ou numero_teamber et ordonne par filtre
-def chercherProjet(self,groupe,filtre,chaine):
+def chercherProjet(groupe,filtre,chaine):
 
 	projets=groupe.filter(Q(nom__contains=chaine)|Q(numero_teamber__contains=chaine)).order_by(filtre)
 		
@@ -36,7 +39,7 @@ def right_path(name,char):
 
 
 
-#critère de recherche actuel dans les nom uniquement il faudra agrandir sur les agences, personnes et extensions ..
+#critère de recherche actuel dans les nom sur les agences, personnes et extensions ..
 def chercherContact(entreprise,agence,personne,filtre,chaine):
 
 	#initialisation des queryset à vide
@@ -71,6 +74,7 @@ def chercherContact(entreprise,agence,personne,filtre,chaine):
 	return contacts_ent,contacts_agence,contacts_personne
 
 
+
 def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
 	#création de la condition de filtrage sur les agences
 	if len(competences)>0:
@@ -79,22 +83,26 @@ def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
 		for competence in competences:
 			q1|=Q(competences_agence__competence__contains=competence)
 		q1&=Q(nom__contains=filtre)
+
 		#requete associé à la selection
 		q2=Q()
 		if len(selected_agences)>0:
 			for sel in selected_agences:
 				q2|=Q(pk=sel)
-	
-		agences=groupe_agence.filter(q1|q2).distinct()
+		q3=Q(entreprise__type_contact__contains="executant")
+		agences=groupe_agence.filter((q1|q2)&q3).distinct()
 	else:
 		if len(selected_agences)>0:
 			q=Q()
 			for sel in selected_agences:
 				q|=Q(pk=sel)
 			q|=Q(nom__contains=filtre)
-			agences=groupe_agence.filter(q)
+			q1=Q(entreprise__type_contact__contains="executant")
+			agences=groupe_agence.filter(q&q1)
 		else:
-			agences=groupe_agence.filter(nom__contains=filtre)
+			q1=Q(nom__contains=filtre)
+			q2=Q(entreprise__type_contact__contains="executant")
+			agences=groupe_agence.filter(q1&q2)
 
 	return agences
 
@@ -114,7 +122,8 @@ def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne
 		if len(selected_personnes)>0:
 			for sel in selected_personnes:
 				q4|=Q(pk=sel)
-		personnes=groupe_personne.filter(q3|q4).distinct()
+		q5=Q(agence__entreprise__type_contact__contains="executant")
+		personnes=groupe_personne.filter((q3|q4)&q5).distinct()
 	else:
 		#requete de filtrage
 		q1=Q(nom__contains=filtre)|Q(prenom__contains=filtre)|Q(agence__nom__contains=filtre)
@@ -124,6 +133,16 @@ def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne
 		if len(selected_personnes)>0:
 			for sel in selected_personnes:
 				q2|=Q(pk=sel)
-		personnes=groupe_personne.filter(q1|q2)
+		q3=Q(agence__entreprise__type_contact__contains="executant")
+		personnes=groupe_personne.filter((q1|q2)&q3)
 
 	return personnes
+
+
+
+def mdp_gen():
+	chaine=''
+	N=10
+	chaine=''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+	
+	return chaine

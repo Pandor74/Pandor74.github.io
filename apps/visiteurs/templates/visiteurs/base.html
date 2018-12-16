@@ -1,9 +1,29 @@
 <h1>salut je suis un visisteur</h1>
+
+{% if deco %}
+	<p>vous avez été déconnecté</p>
+{% endif %}
+
 <a href ="{% url 'vis_accueil' %}"> go to visiteur</a><br/>
 <a href ="{% url 'ent_accueil' %}"> go to entreprise</a><br/>
 <a href ="{% url 'col_accueil' %}"> go to collaborateurs</a><br/>
 <a href ="{% url 'cli_accueil' %}"> go to clients</a><br/>
 
-{% if deco %}
-	vous avez été déconnecté
+<a href ="{% url 'connexion' %}">Connexion</a><br/>
+
+<a href ="{% url 'deconnexion' %}">Déconnexion</a>
+
+
+
+{% if user.is_authenticated %}
+	<p>Vous êtes connecté en tant que {{user}}</p>
+{% else %}
+	<p>Vous n'êtes pas connecté</p>
+{% endif %}
+
+
+
+{% if refus %}
+	<p><strong>Vous avez tenté d'accéder à une page interdite pour votre compte! <br/>
+		Par conséquent vous avez été déconnecté </strong></p>
 {% endif %}

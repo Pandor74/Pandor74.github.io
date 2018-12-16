@@ -14,6 +14,9 @@ from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
 
 from django.http import Http404,FileResponse,HttpResponse
+from collaborateurs.models import is_col,is_ent,is_client
+from django.contrib.auth.decorators import login_required,user_passes_test
+
 
 import os
 import zipfile
@@ -21,71 +24,43 @@ import io
 
 
 # Create your views here. ENTREPRISE
-
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def home(request):
 	projets=Projet.objects.all()
 	return render(request,'entreprises/base.html',locals())
 
 
-def Deconnexion(request):
-	deco=True
-
-	return render(request,'visiteurs/base.html',locals())
 
 
-#sert a préparer le terrain pour LIsteprojets
-class FormListView(ListView,FormMixin):
-	def get(self, request, *args, **kwargs):
-	    # From ProcessFormMixin
-	    form_class = self.get_form_class()
-	    self.form = self.get_form(form_class)
 
-	    # From BaseListView
-	    self.object_list = self.get_queryset()
-	    allow_empty = self.get_allow_empty()
-	    if not allow_empty and len(self.object_list) == 0:
-	        raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")
-	                      % {'class_name': self.__class__.__name__})
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
+def Liste_Projet(request):
 
-	    context = self.get_context_data(object_list=self.object_list, form=self.form)
-	    return self.render_to_response(context)
+	#on initialise les groupes de contacts qui seront soumis aux filtres
+	projets=Projet.objects.all()
 
-	def post(self, request, *args, **kwargs):
-		return self.get(request, *args, **kwargs)
+	#initilisation du formulaire de filtre des contacts
+	formFiltre=FiltreFormProjet(request.POST or None,)
+
+	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
+	if formFiltre.is_valid():
+		filtre=formFiltre.cleaned_data['filtre']
+		recherche=formFiltre.cleaned_data['search']
+
+		projets=chercherProjet(projets,filtre,recherche)
 
 
-class ListeProjets(FormListView):
-	form_class=FiltreFormProjet
-	model=Projet
-	context_object_name="projets"
-	template_name="entreprises/tous_les_projets.html"
-	paginate_by=10
-	
-
-	def post(self,request,*args,**kwargs):
-		self.form=FiltreFormProjet(self.request.POST or None,initial={'choice':'nom'},)
-
-		return super(ListeProjets,self).post(request,*args,**kwargs)
-
-	def get_queryset(self,**kwargs):
-
-		form=self.form
-		
-		if form.is_valid():
-			filtre=form.cleaned_data['filtre']
-			recherche=form.cleaned_data['search']
-			projets=Projet.objects.all()
-			projets=chercherProjet(self,projets,filtre,recherche)
-		else :
-			projets=Projet.objects.all()
-		return projets
-
-	def get_context_data(self,**kwargs):
-		context=super(ListeProjets,self).get_context_data(**kwargs)
-		
-		return context
+	#si il n'y a pas de requete de filtrage alors on affiche tout
+	return render(request,'entreprises/tous_les_projets.html',locals())
 
 
+
+
+
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Afficher_Projet(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	proprietes=projet.propriete
@@ -94,7 +69,8 @@ def Afficher_Projet(request,pk):
 
 	return render(request,'entreprises/projet.html',locals())
 
-
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Liste_Lot(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	appels=projet.appeloffre_set.all()
@@ -103,7 +79,8 @@ def Liste_Lot(request,pk):
 
 	return render(request,'entreprises/tous_les_lots.html',locals())
 
-
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Afficher_Lot(request,pk,pklot):
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
@@ -135,6 +112,8 @@ def Afficher_Lot(request,pk,pklot):
 
 
 #fonction qui permet d'ouvrir un fichier PDF dans le browser... Il faut intégrer le MIMETYPE pour les autres formats de documents qui seront au final téléchargé
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 
 	doc=get_object_or_404(DocumentLot,pk=iddoc)
@@ -165,7 +144,8 @@ def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 	else:
 		return Http404()
 
-
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Get_Zipped_Files(request,pkprojet,pklot):
 	lot=get_object_or_404(Lot,pk=pklot)
 	documents=lot.documents.all()
@@ -201,7 +181,8 @@ def Get_Zipped_Files(request,pkprojet,pklot):
 
 
 
-
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
 def Deposer_Fichiers_Offre(request,pkprojet,pklot,pkAO,pkAOlot):
 
 

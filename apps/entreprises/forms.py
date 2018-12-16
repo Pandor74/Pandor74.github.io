@@ -15,7 +15,7 @@ from collaborateurs.fonction import right
 
 
 from collaborateurs.models import LISTE_ACTIVITES,LISTE_CATEGORIE_FICHIER_LOT
-froml entreprises.models import LISTE_CATEGORIE_FICHIER_OFFRE
+from entreprises.models import LISTE_CATEGORIE_FICHIER_OFFRE
 
 
 

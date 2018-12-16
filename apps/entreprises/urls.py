@@ -20,10 +20,9 @@ from django.conf.urls import url
 
 urlpatterns = [
 	path('',views.home,name='ent_accueil'),
-	path('deconnexion',views.Deconnexion,name='ent_deconnexion'),
 
 	#projets
-    url(r'^projets$',views.ListeProjets.as_view(),name="ent_lister_projets"),
+    url(r'^projets$',views.Liste_Projet,name="ent_lister_projets"),
     url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="ent_voir_projet"),
     url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="ent_lister_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})$',views.Afficher_Lot,name="ent_voir_lot"),

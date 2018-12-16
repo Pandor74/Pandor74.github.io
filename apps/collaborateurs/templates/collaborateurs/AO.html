@@ -29,14 +29,20 @@
 
 		<div class="content_wrapper" id="infos_gene">
 			<h2>Les lots de l'appel d'offres N°{{AO.numero}}</h2>
-				{% for lot in lots_AO %}
-					<li>AO du lot : {{lot.decris_toi|upper}}</li>
-					<li> <a href="{% url 'col_gerer_ao_lot' projet.pk AO.pk lot.pk %}">Gérer l'appel d'offres du lot</a></li>
+				{% for AO_lot in AO_lots %}
+					<li>{{AO_lot.decris_lot}} 
+						<ul>
+							<li>Statut : {{AO_lot.statut}}</li>
+							<li> <a href="{% url 'col_gerer_ao_lot' projet.pk AO.pk AO_lot.lot.pk %}">Gérer l'appel d'offres du lot</a></li>
+						</ul>
+
+					</li>
+					
 				{% empty %}
 					<li>Aucun lot n'a été associé à ce jour !</li>
 				{% endfor %}
 
-				<p>La date de fin de l'appel d'offres est le : {{AO.echeance.date}}</p>
+				<p>La date de fin de l'appel d'offres est prévue pour le : {{AO.echeance.date}}</p>
 
 				<a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
 		</div>

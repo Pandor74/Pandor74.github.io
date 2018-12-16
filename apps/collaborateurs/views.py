@@ -12,30 +12,48 @@ from django.views.generic.edit import FormMixin
 from django.http import Http404,FileResponse
 from django.utils.translation import ugettext as _
 from django.urls import reverse_lazy,reverse
-from collaborateurs.fonction import chercherProjet,ExistOrNotCompetence,chercherContact,chercherAgencePourAO,chercherPersonnePourAO,right
+from collaborateurs.fonction import mdp_gen,chercherProjet,ExistOrNotCompetence,chercherContact,chercherAgencePourAO,chercherPersonnePourAO,right
 from django.db.models import Q
+from collaborateurs.models import is_col,is_ent,is_client
+from django.contrib.auth.decorators import login_required,user_passes_test
+
 
 #copié depuis un site pour l'utilsaition de PyPDF
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 from django.http import HttpResponse
+import random
+import string
 
 
 
 # Create your views here.
-
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Home(request):
-	
-	return render(request,'collaborateurs/accueil_col.html')
+
+	return render(request,'collaborateurs/accueil_col.html',locals())
 
 
-def Deconnexion(request):
-	deco=True
-
-	return render(request,'visiteurs/base.html',locals())
 
 
+
+#permet d'initaliser la base de données des competences
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
+def InitDataBase(request):
+
+	for comp in LISTE_ACTIVITES:
+		comp_test=DomaineCompetence.objects.filter(competence=comp[0])
+		if not comp_test:
+			DomaineCompetence.objects.create(competence=comp[0])
+
+	print(DomaineCompetence.objects.all())	
+
+
+
+	return redirect('col_accueil')
 
 
 
@@ -43,6 +61,8 @@ def Deconnexion(request):
 
 
 #///////////////////////////-------PROJET-------///////////////////////////////////////////////
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_Projet(request):
 	envoi=False
 	
@@ -79,6 +99,8 @@ def New_Projet(request):
 	return render(request,'collaborateurs/nouveau_projet.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Projet(request,pk):
 	modif=False
 	oui=False
@@ -124,59 +146,35 @@ def Modifier_Projet(request,pk):
 	return render(request,'collaborateurs/modifier_projet.html',locals())
 
 
-#sert a préparer le terrain pour LIsteprojets
-class FormListView(ListView,FormMixin):
-	def get(self, request, *args, **kwargs):
-	    # From ProcessFormMixin
-	    form_class = self.get_form_class()
-	    self.form = self.get_form(form_class)
-
-	    # From BaseListView
-	    self.object_list = self.get_queryset()
-	    allow_empty = self.get_allow_empty()
-	    if not allow_empty and len(self.object_list) == 0:
-	        raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")
-	                      % {'class_name': self.__class__.__name__})
-
-	    context = self.get_context_data(object_list=self.object_list, form=self.form)
-	    return self.render_to_response(context)
-
-	def post(self, request, *args, **kwargs):
-		return self.get(request, *args, **kwargs)
 
 
-class ListeProjets(FormListView):
-	form_class=FiltreFormProjet
-	model=Projet
-	context_object_name="projets"
-	template_name="collaborateurs/tous_les_projets.html"
-	paginate_by=10
-	
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
+def Liste_Projet(request):
 
-	def post(self,request,*args,**kwargs):
-		self.form=FiltreFormProjet(self.request.POST or None,initial={'choice':'nom'},)
+	#on initialise les groupes de contacts qui seront soumis aux filtres
+	projets=Projet.objects.all()
 
-		return super(ListeProjets,self).post(request,*args,**kwargs)
+	#initilisation du formulaire de filtre des contacts
+	formFiltre=FiltreFormProjet(request.POST or None,)
 
-	def get_queryset(self,**kwargs):
+	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
+	if formFiltre.is_valid():
+		filtre=formFiltre.cleaned_data['filtre']
+		recherche=formFiltre.cleaned_data['search']
 
-		form=self.form
-		
-		if form.is_valid():
-			filtre=form.cleaned_data['filtre']
-			recherche=form.cleaned_data['search']
-			projets=Projet.objects.all()
-			projets=chercherProjet(self,projets,filtre,recherche)
-		else :
-			projets=Projet.objects.all()
-		return projets
-
-	def get_context_data(self,**kwargs):
-		context=super(ListeProjets,self).get_context_data(**kwargs)
-		
-		return context
+		projets=chercherProjet(projets,filtre,recherche)
 
 
+	#si il n'y a pas de requete de filtrage alors on affiche tout
+	return render(request,'collaborateurs/tous_les_projets.html',locals())
+
+
+
+
+
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_Projet(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	proprietes=projet.propriete
@@ -185,7 +183,9 @@ def Afficher_Projet(request,pk):
 
 	return render(request,'collaborateurs/projet.html',locals())
 
-		
+
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_Lot(request,pk):
 
 
@@ -229,6 +229,8 @@ def New_Lot(request,pk):
 	return render(request,'collaborateurs/nouveau_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Lot(request,pk,pklot):
 
 
@@ -264,6 +266,8 @@ def Modifier_Lot(request,pk,pklot):
 	return render(request,'collaborateurs/modifier_parametres_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Fichiers_Lot(request,pk,pklot):
 
 
@@ -469,6 +473,8 @@ def Modifier_Fichiers_Lot(request,pk,pklot):
 	return render(request,'collaborateurs/modifier_fichiers_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Liste_Lot(request,pk):
 	projet=get_object_or_404(Projet,pk=pk)
 	appels=projet.appeloffre_set.all()
@@ -478,19 +484,24 @@ def Liste_Lot(request,pk):
 	return render(request,'collaborateurs/tous_les_lots.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_Lot(request,pk,pklot):
 	projet=get_object_or_404(Projet,pk=pk)
 	lots=Lot.objects.filter(projet=projet)
 	lot=get_object_or_404(Lot,pk=pklot)
-	competences=get_list_or_404(DomaineCompetence)
+	competences=DomaineCompetence.objects.all()
 	appels=projet.appeloffre_set.all()
 
 	appels_lot=AppelOffreLot.objects.filter(lot=lot)
+	AOs=AppelOffre.objects.filter(lots=lot)
 
 	return render(request,'collaborateurs/lot.html',locals())
 
 
 #fonction qui permet d'ouvrir un fichier PDF dans le browser... Il faut intégrer le MIMETYPE pour les autres formats de documents qui seront au final téléchargé
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 
 	doc=get_object_or_404(DocumentLot,pk=iddoc)
@@ -539,6 +550,8 @@ def Voir_Fichier_PDF_Lot(request,pk,pklot,iddoc,nom):
 
 
 #permet la création d'une entreprise et de son agence principale sans lier de personne dedans
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_Entreprise_Et_Agence(request):
 	envoi=False
 
@@ -593,6 +606,8 @@ def New_Entreprise_Et_Agence(request):
 
 
 #permet d'afficher une entreprise et ses éléments
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_Entreprise(request,pk,nom):
 	print('afficher entreprise')
 	entreprise=get_object_or_404(Entreprise,pk=pk)
@@ -609,6 +624,8 @@ def Afficher_Entreprise(request,pk,nom):
 	return render(request,'collaborateurs/entreprise.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Entreprise(request,pk,nom):
 	entreprise=get_object_or_404(Entreprise,pk=pk)
 
@@ -634,6 +651,8 @@ def Modifier_Entreprise(request,pk,nom):
 
 
 #permet de crééer une agence si l'entreprise existe déjà a partir du pk de l'entreprise et de son nom
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Add_Agence(request,pk,nom):
 
 	entreprise=Entreprise.objects.get(pk=pk)
@@ -689,6 +708,8 @@ def Add_Agence(request,pk,nom):
 
 
 #Permet de créer une personne depuis l'interface entreprise ou agence a partir du pk de l'entreprise ou de l'agence et de son nom
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Add_Personne(request,pk,nom):
 
 	#on test les deux pour prendre le bon sinon l'autre renvoi None
@@ -755,6 +776,8 @@ def Add_Personne(request,pk,nom):
 		return render(request,'collaborateurs/ajouter_personne.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_Agence(request,pk,nom):
 	agence=get_object_or_404(Agence,nom=nom)
 	entreprise=agence.entreprise
@@ -765,6 +788,8 @@ def Afficher_Agence(request,pk,nom):
 	return render(request,'collaborateurs/agence.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Agence(request,pk,nom):
 	agence=get_object_or_404(Agence,pk=pk,nom=nom)
 	ag_competences=agence.competences_agence.all()
@@ -821,6 +846,8 @@ def Modifier_Agence(request,pk,nom):
 
 
 #permet de créér un nouveau et renvoi sur la création d'une agence, d'une entreprise ou les deux en fonction du besoin
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_Personne(request):
 
 	if request.method=='POST':
@@ -877,6 +904,8 @@ def New_Personne(request):
 		return render(request,'collaborateurs/nouvelle_personne.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Corriger_Erreur_Personne(request,pk):
 
 	if request.method=='POST':
@@ -934,6 +963,8 @@ def Corriger_Erreur_Personne(request,pk):
 		return render(request,'collaborateurs/corriger_erreur_personne.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Associer_New_Agence(request,siret,pk):
 	envoi=False
 
@@ -993,6 +1024,8 @@ def Associer_New_Agence(request,siret,pk):
 	return render(request,'collaborateurs/associer_nouvelle_agence.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 	envoi=False
 	print('début association nouvelle enrteprise et agence')
@@ -1055,6 +1088,8 @@ def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 	return render(request,'collaborateurs/associer_nouvelle_entreprise.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_Personne(request,pk,nom,prenom):
 	personne=get_object_or_404(Personne,pk=pk)
 	if personne.agence:
@@ -1076,6 +1111,8 @@ def Afficher_Personne(request,pk,nom,prenom):
 	return render(request,'collaborateurs/personne.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_Personne(request,pk,nom,prenom):
 	personne=get_object_or_404(Personne,pk=pk)
 	agence=personne.agence
@@ -1124,6 +1161,8 @@ def Modifier_Personne(request,pk,nom,prenom):
 	return render(request,'collaborateurs/modifier_personne.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Liste_Contact(request):
 	#on récupère les valeurs des contacts selon les 3 types définis
 	entreprises=Entreprise.objects.all()
@@ -1259,10 +1298,24 @@ def Modifier_AO(request,pkprojet,pkAO):
 
 			AO=formAO.save()
 
-			#boucle pour ajouter les lots qui ont été séléctionnée dans le formulaire
-			for num_lot in liste_lots:
-				lotvalid=Lot.objects.get(pk=num_lot)
-				AO.lots.add(lotvalid)
+			
+
+			print(AO.appeloffrelot_set.all())
+			print(AO.lots.all())
+
+			#suppression des appels d'offre déselectionné
+			for ao_lot in AO.appeloffrelot_set.all():
+				if not ao_lot.lot in AO.lots.all():
+					ao_lot.delete()
+					print('pas dedans') 
+
+
+			#pré création des appels d'offres sur les lots sélectionné
+			for lot in AO.lots.all():
+				if not lot.appeloffrelot_set.filter(AO=AO):
+					AO.appeloffrelot_set.create(lot=lot,projet=projet)
+
+
 
 
 			return redirect('col_voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
@@ -1290,7 +1343,7 @@ def Afficher_AO(request,pkprojet,pkAO):
 
 
 	AO=AppelOffre.objects.get(pk=pkAO)
-	lots_AO=AO.lots.all()
+	AO_lots=AO.appeloffrelot_set.all()
 
 	return render(request,'collaborateurs/AO.html',locals())
 
@@ -1358,7 +1411,7 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 
 	else:
 		echeance=Echeance()
-		formEcheance=EcheanceForm()
+		formEcheance=EcheanceForm(instance=AO.echeance)
 
 		AOlot=AppelOffreLot()
 		agences=Agence.objects.none()
@@ -1598,12 +1651,27 @@ def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 				return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
 	else:
 		#à filtrer en fonction du type client/entreprise
-		agences=Agence.objects.all()
-		personnes=Personne.objects.all()
+		filtre=''
+		competences=DomaineCompetence.objects.filter(lot=lot)
+		print(competences)
+		selected_agences=Agence.objects.none()
+		selected_personnes=Personne.objects.none()
+
+		agences=chercherAgencePourAO(filtre,competences,selected_agences,Agence.objects.all())
+		personnes=chercherPersonnePourAO(filtre,competences,selected_personnes,Personne.objects.all())
 		
 		formAOlot=AppelOffreLotForm(agences,personnes,instance=AOlot)
 
-		formFiltreAgence=FiltreFormAgenceAO()
+		list_comp=['']*competences.count()
+		i=0
+		for comp in competences:
+			list_comp[i]=comp.competence
+			i+=1
+
+		formFiltreAgence=FiltreFormAgenceAO(initial={'competences':list_comp})
+
+		
+
 		
 
 		return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())

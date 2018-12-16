@@ -58,8 +58,22 @@
 			<h2>Les appels d'offres associés</h2>
 			<ul class="liste_prop">
 				{% for appel_lot in appels_lot %}
-				<li>Appel offre : <a href="{% url 'col_voir_ao_lot' projet.pk appel_lot.AO.pk lot.pk appel_lot.pk %}">{{appel_lot.AO.numero}}</a></li>
-				<li>{% empty %}Aucun appel d'offres pour le lot !{% endfor %}</li>
+					<li>Appel offre N°{{appel_lot.AO.numero}}</li>
+					{% if appel_lot.AO %}
+
+					{% else %}
+						<strong>N'est pas relié à un AO global !</strong>
+					{% endif %}
+
+					<li> <a href="{% url 'col_gerer_ao_lot' projet.pk appel_lot.AO.pk lot.pk %}">Gérer l'appel d'offres du lot</a></li>
+				{% empty %}
+	
+					{% for AO in AOs %}
+						<li> <a href="{% url 'col_gerer_ao_lot' projet.pk AO.pk lot.pk %}">Créer l'appel d'offres du lot</a></li>
+					{% empty %}
+						<li>Aucun appel d'offres pour le lot !</li>
+					{% endfor %}
+				{% endfor %}
 			</ul>
 
 		</div>

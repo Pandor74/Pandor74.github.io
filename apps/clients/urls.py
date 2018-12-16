@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from clients import views
+from django.conf.urls import url
 
 urlpatterns = [
-	path('',views.home,name="cli_accueil"),
+	url(r'^accueil$',views.home,name="cli_accueil"),
 ]
