@@ -16,6 +16,7 @@ from collaborateurs.fonction import mdp_gen,chercherProjet,ExistOrNotCompetence,
 from django.db.models import Q
 from collaborateurs.models import is_col,is_ent,is_client
 from django.contrib.auth.decorators import login_required,user_passes_test
+from django.contrib.auth.models import User,Group
 
 
 #copié depuis un site pour l'utilsaition de PyPDF
@@ -40,8 +41,6 @@ def Home(request):
 
 
 #permet d'initaliser la base de données des competences
-@login_required
-@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def InitDataBase(request):
 
 	for comp in LISTE_ACTIVITES:
@@ -51,12 +50,94 @@ def InitDataBase(request):
 
 	print(DomaineCompetence.objects.all())	
 
+	return redirect('vis_accueil')
+
+#permet de créer la database User de départ avec les 3 comptes
+def InitDataBaseUser(request):
+	#création collaborateur
+	try:
+		user_col=User.objects.create_user(username="testeur_col",password="mdptest09")
+		personne_col=Personne.objects.create(user=user_col,prenom="prenom col",nom="nom col",mail="col@col.fr")
+		try:
+			group_col=Group.objects.create(name="collaborateurs")
+			group_col.user_set.add(user_col)
+		except:
+			group_col=Group.objects.get(name="collaborateurs")
+			group_col.user_set.add(user_col)
+	except:
+		user_col=User.objects.get(username="testeur_col")
+		group_col=Group.objects.get(name="collaborateurs")
+		group_col.user_set.add(user_col)
+		print('déjà créé')
 
 
-	return redirect('col_accueil')
+
+	#création client
+	try:
+		user_cli=User.objects.create_user(username="testeur_cli",password="mdptest09")
+		personne_cli=Personne.objects.create(user=user_cli,prenom="prenom cli",nom="nom cli",mail="client@client.fr")
+		try:
+			group_cli=Group.objects.create(name="clients")
+			group_cli.user_set.add(user_cli)
+		except:
+			group_cli=Group.objects.get(name="clients")
+			group_cli.user_set.add(user_cli)
+	except:
+		user_cli=User.objects.get(username="testeur_cli")
+		group_cli=Group.objects.get(name="clients")
+		group_cli.user_set.add(user_cli)
+		print('déjà créé')
+
+	#création entreprise client
+	try:
+		ent_cli=Entreprise.objects.create(nom_ent="Entreprise CLIENT",type_contact="clients",num_SIREN="111111111")
+	except:
+		print('entreprise client existe déjà')
+
+	#création agence client
+	try:
+		agence_cli=Agence.objects.create(nom="Agence CLIENT",categorie="siege",num_SIRET="11111111111111",mail_contact="client@client.fr",entreprise=ent_cli)
+		user_cli.personne.agence=agence_cli
+		user_cli.personne.save()
+	except:
+		print('agence client existe déjà')
 
 
 
+	#création entreprise
+	try:
+		user_ent=User.objects.create_user(username="testeur_ent",password="mdptest09")
+		personne_ent=Personne.objects.create(user=user_ent,prenom="prenom ent",nom="nom ent",mail="ent@ent.fr")
+		try:
+			group_ent=Group.objects.create(name="entreprises")
+			group_ent.user_set.add(user_ent)
+		except:
+			group_ent=Group.objects.get(name="entreprises")
+			group_ent.user_set.add(user_ent)
+	except:
+		user_ent=User.objects.get(username="testeur_ent")
+		group_ent=Group.objects.get(name="entreprises")
+		group_ent.user_set.add(user_ent)
+		print('déjà créé')
+
+	#création entreprise entreprises
+	try:
+		ent_ent=Entreprise.objects.create(nom_ent="Entreprise ENT",type_contact="entreprises",num_SIREN="222222222")
+	except:
+		print('entreprise entreprises existe déjà')
+
+	#création agence entreprises
+	try:
+		agence_ent=Agence.objects.create(nom="Agence ENT",categorie="siege",num_SIRET="22222222222222",mail_contact="ent@ent.fr",entreprise=ent_ent)
+		user_ent.personne.agence=agence_ent
+		user_ent.personne.save()
+	except:
+		print('agence entreprises existe déjà')
+
+
+	print(User.objects.all())
+
+	return redirect('vis_accueil')
 
 
 
@@ -79,7 +160,9 @@ def New_Projet(request):
 			envoi=True
 			
 			adresse=formAdresse.save()
-			projet=form.save()
+			projet=form.save(commit=False)
+			projet.createur=request.user
+			projet.save()
 			adresse.projet=projet
 			adresse.save()
 
@@ -172,6 +255,30 @@ def Liste_Projet(request):
 
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
+def Liste_Mes_Projets(request):
+
+	#on initialise les groupes de contacts qui seront soumis aux filtres
+	projets=Projet.objects.filter(createur=request.user)
+
+	#initilisation du formulaire de filtre des contacts
+	formFiltre=FiltreFormProjet(request.POST or None,)
+
+	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
+	if formFiltre.is_valid():
+		filtre=formFiltre.cleaned_data['filtre']
+		recherche=formFiltre.cleaned_data['search']
+
+		projets=chercherProjet(projets,filtre,recherche)
+
+
+	#si il n'y a pas de requete de filtrage alors on affiche tout
+	return render(request,'collaborateurs/tous_les_projets.html',locals())
+
+
+
+
 
 @login_required
 @user_passes_test(is_col,login_url='refus',redirect_field_name=None)
@@ -209,7 +316,8 @@ def New_Lot(request,pk):
 
 			envoi=True
 			
-			lot=formLot.save()
+			lot=formLot.save(commit=False)
+			lot.createur=request.user
 			lot.projet=projet
 			lot.save()
 			
@@ -741,6 +849,13 @@ def Add_Personne(request,pk,nom):
 				contact.agence=agence
 				contact.save()
 
+				#création du compte utilisateur associé
+				username=contact.mail
+				user=User.objects.create_user(username=username,password="mdptest09",email=contact.mail,first_name=contact.prenom,last_name=contact.nom)
+				groupe=Group.objects.get(name=agence.entreprise.type_contact)
+				groupe.user_set.add(user)
+
+
 				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 
 			elif entreprise:
@@ -751,6 +866,11 @@ def Add_Personne(request,pk,nom):
 				contact=formPersonne.save()
 				contact.agence=agence
 				contact.save()
+
+				username=contact.mail
+				user=User.objects.create_user(username=username,password="mdptest09",email=contact.mail,first_name=contact.prenom,last_name=contact.nom)
+				groupe=Group.objects.get(name=entreprise.type_contact)
+				groupe.user_set.add(user)
 
 				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 				
@@ -858,7 +978,15 @@ def New_Personne(request):
 
 		if formPersonne.is_valid() and formSiret.is_valid():
 			print('formulaire création de personne validé')
-			contact=formPersonne.save()
+			contact=formPersonne.save(commit=False)
+
+			#création du compte utilisateur associé
+			username=contact.mail
+			user=User.objects.create_user(username=username,password="mdptest09",email=contact.mail,first_name=contact.prenom,last_name=contact.nom)
+
+			contact.user=user
+			contact.save()
+
 
 			siret=formSiret.cleaned_data['num_SIRET']
 
@@ -874,6 +1002,9 @@ def New_Personne(request):
 				print("l'agence et l'entreprise existe")
 				existance=True
 				contact.agence=agence
+				groupe=Group.objects.get(name=agence.entreprise.type_contact)
+				groupe.user_set.add(user)
+
 				contact.save()
 				return redirect('col_voir_personne',pk=contact.pk,nom=contact.nom,prenom=contact.prenom)
 			else:
@@ -887,6 +1018,8 @@ def New_Personne(request):
 
 				if entreprise:
 					print("l'entreprise existe mais l'agence n'existe pas")
+					groupe=Group.objects.get(name=entreprise.type_contact)
+					groupe.user_set.add(user)
 
 					return redirect('col_associer_nouvelle_agence',siret=siret,pk=contact.pk)
 
@@ -1065,7 +1198,13 @@ def Associer_New_Entreprise_Et_Agence(request,siret,pk):
 			contact.save()
 			
 			adresse.save()
-
+			print('début association groupe')
+			user=contact.user
+			print('user:',user)
+			groupe=Group.objects.get(name=entreprise.type_contact)
+			print('group:',groupe)
+			groupe.user_set.add(user)
+			print('group_Qset:',groupe.user_set.all())
 
 			#boucle pour ajouter les compétences qui ont été séléctionnée dans le formulaire
 			for num_comp in liste:
@@ -1180,9 +1319,10 @@ def Liste_Contact(request):
 	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
 	if formFiltre.is_valid():
 		filtre=formFiltre.cleaned_data['filtre']
+		filtre_type=formFiltre.cleaned_data['filtre_type']
 		recherche=formFiltre.cleaned_data['search']
 
-		contacts_ent,contacts_agence,contacts_personne=chercherContact(Entreprise,Agence,Personne,filtre,recherche)
+		contacts_ent,contacts_agence,contacts_personne=chercherContact(Entreprise,Agence,Personne,filtre,filtre_type,recherche)
 
 
 	#si il n'y a pas de requete de filtrage alors on affiche tout
@@ -1206,6 +1346,8 @@ def Liste_Contact(request):
 #///////////////////////////----------APPEL D'OFFRES--------//////////////////////////////////////////////////
 
 #démarre la création d'un appel d'offres du projet a partir de son pk
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_AO(request,pk):
 
 	projet=get_object_or_404(Projet,pk=pk)
@@ -1234,6 +1376,7 @@ def New_AO(request,pk):
 			echeance=formEcheance.save()
 
 			AO=formAO.save(commit=False)
+			AO.createur=request.user
 			AO.projet=projet
 			AO.save()
 
@@ -1247,6 +1390,15 @@ def New_AO(request,pk):
 			for num_lot in liste_lots:
 				lotvalid=Lot.objects.get(pk=num_lot)
 				AO.lots.add(lotvalid)
+
+			#pré création des appels d'offres sur les lots sélectionné
+			for lot in AO.lots.all():
+				if not lot.appeloffrelot_set.filter(AO=AO):
+					echeancelot=Echeance.objects.create(date=AO.echeance.date)
+					AO_lot=AO.appeloffrelot_set.create(lot=lot,projet=projet,createur=request.user)
+					echeancelot.appelLot=AO_lot
+					echeancelot.save()
+
 
 
 			return redirect('col_voir_ao',pkprojet=projet.pk,pkAO=AO.pk)
@@ -1278,6 +1430,8 @@ def New_AO(request,pk):
 		return render(request,'collaborateurs/nouveau_ao.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_AO(request,pkprojet,pkAO):
 	projet=get_object_or_404(Projet,pk=pkprojet)
 	AO=get_object_or_404(AppelOffre,pk=pkAO)
@@ -1313,7 +1467,10 @@ def Modifier_AO(request,pkprojet,pkAO):
 			#pré création des appels d'offres sur les lots sélectionné
 			for lot in AO.lots.all():
 				if not lot.appeloffrelot_set.filter(AO=AO):
-					AO.appeloffrelot_set.create(lot=lot,projet=projet)
+					echeancelot=Echeance.objects.create(date=AO.echeance.date)
+					AO_lot=AO.appeloffrelot_set.create(lot=lot,projet=projet,createur=request.user)
+					echeancelot.appelLot=AO_lot
+					echeancelot.save()
 
 
 
@@ -1336,6 +1493,8 @@ def Modifier_AO(request,pkprojet,pkAO):
 		return render(request,'collaborateurs/modifier_ao.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_AO(request,pkprojet,pkAO):
 	projet=Projet.objects.get(pk=pkprojet)
 	lots=projet.lot_set.all()
@@ -1348,6 +1507,8 @@ def Afficher_AO(request,pkprojet,pkAO):
 	return render(request,'collaborateurs/AO.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Lister_AO(request,pkprojet):
 	projet=get_object_or_404(Projet,pk=pkprojet)
 	lots=Lot.objects.filter(projet=projet)
@@ -1359,6 +1520,8 @@ def Lister_AO(request,pkprojet):
 	return render(request,'collaborateurs/lister_AO.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def New_AO_Lot(request,pkprojet,pkAO,pklot):
 	#requetes pour navigation
 	projet=get_object_or_404(Projet,pk=pkprojet)
@@ -1393,6 +1556,7 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 			echeance=formEcheance.save()
 
 			AOlot=formAOlot.save(commit=False)
+			AOlot.createur=request.user
 			
 			AOlot.save()
 
@@ -1422,6 +1586,8 @@ def New_AO_Lot(request,pkprojet,pkAO,pklot):
 		return render(request,'collaborateurs/nouveau_ao_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Afficher_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 	projet=Projet.objects.get(pk=pkprojet)
 	lots=projet.lot_set.all()
@@ -1439,6 +1605,8 @@ def Afficher_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 	return render(request,'collaborateurs/AO_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Modifier_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 	projet=get_object_or_404(Projet,pk=pkprojet)
 	lots=Lot.objects.filter(projet=projet)
@@ -1495,6 +1663,8 @@ def Modifier_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 		return render(request,'collaborateurs/modifier_ao_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Gerer_AO_Lot(request,pkprojet,pkAO,pklot):
 	projet=Projet.objects.get(pk=pkprojet)
 	lots=projet.lot_set.all()
@@ -1517,6 +1687,8 @@ def Gerer_AO_Lot(request,pkprojet,pkAO,pklot):
 		return redirect('col_nouveau_ao_lot',pkprojet=projet.pk,pkAO=AO.pk,pklot=lot.pk)
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
 def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 
 	projet=get_object_or_404(Projet,pk=pkprojet)
@@ -1677,5 +1849,72 @@ def Selectionner_Contact_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
 		return render(request,'collaborateurs/associer_contact_ao_lot.html',locals())
 
 
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
+def Valider_AO_Lot(request,pkprojet,pkAO,pklot,pkAOlot):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	
+	#requetes pour la navigation a gauche
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
 
 
+	lot=Lot.objects.get(pk=pklot)
+
+
+	AO=AppelOffre.objects.get(pk=pkAO)
+	AOlot=get_object_or_404(AppelOffreLot,pk=pkAOlot)
+
+	agences=AOlot.AO_agences.all()
+	personnes=AOlot.AO_personnes.all()
+
+
+	
+	AOlot.statut='Validé'
+	AOlot.save()
+	validation_lot=True
+
+	return render(request,'collaborateurs/AO_lot.html',locals())
+
+
+
+@login_required
+@user_passes_test(is_col,login_url='refus',redirect_field_name=None)
+def Publier_AO(request,pkprojet,pkAO):
+	projet=get_object_or_404(Projet,pk=pkprojet)
+	
+	#requetes pour la navigation a gauche
+	lots=Lot.objects.filter(projet=projet)
+	appels=projet.appeloffre_set.all()
+
+	AO=get_object_or_404(AppelOffre,pk=pkAO)
+	AO_lots=AO.appeloffrelot_set.all()
+
+	AO_non_valide=False
+
+	for AO_lot in AO_lots:
+		if AO_lot.statut =='En création':
+			AO_non_valide=True
+
+	if not AO_non_valide:
+		#tous les AO sont validé ou déjà envoyé
+		deja_envoye=False
+		for AO_lot in AO_lots:
+			if AO_lot.statut=='Validé':
+				#call function envoyer mail a toutes les agences et personnes
+
+				AO_lot.statut='Envoyé'
+				AO_lot.save()
+				
+			else:
+				#cet ao est déjà envoyé ne rien faire
+				deja_envoye=True
+
+		
+		return render(request,'collaborateurs/publication_AO.html',locals())
+
+
+	else:
+		#un AO n'est pas validé message erreur le signifiant en rouge dans la liste des AO_lot
+
+		return render(request,'collaborateurs/AO.html',locals())

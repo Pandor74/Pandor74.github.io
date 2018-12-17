@@ -19,7 +19,7 @@ from collaborateurs.models import LISTE_ACTIVITES,LISTE_CATEGORIE_FICHIER_LOT
 class ProjetForm(forms.ModelForm):
 	class Meta:
 		model=Projet
-		exclude=['date_creation']
+		exclude=['date_creation','createur']
 		localized_fields=('__all__')
 		widgets= {
 			'nom':TextInput(attrs={'size':40,'placeholder':'Nom du projet'}),
@@ -43,6 +43,14 @@ class FiltreFormProjet(forms.Form):
 
 
 class FiltreFormContact(forms.Form):
+	FILTRES_TYPE_CONTACT=(
+		('tous','Tous'),
+		('clients','Client'),
+		('entreprises','Executant'),
+		('collaborateurs','Interne'),
+	)
+
+
 	FILTRES_CONTACT=(
 		('tous', 'Tous'),
 		('entreprise', 'Entreprises'),
@@ -50,7 +58,9 @@ class FiltreFormContact(forms.Form):
 		('personne', 'Personnes'),
 	)
 	
-	filtre=forms.ChoiceField(choices=FILTRES_CONTACT,initial='tous',label="Afficher ",widget=forms.Select(attrs={'title':'Permet de filtrer par catégorie de contact'}))
+	
+	filtre_type=forms.ChoiceField(choices=FILTRES_TYPE_CONTACT,initial='tous',label="Type ",widget=forms.Select(attrs={'title':'Permet de filtrer par type de contact'}))
+	filtre=forms.ChoiceField(choices=FILTRES_CONTACT,initial='tous',label="Niveau ",widget=forms.Select(attrs={'title':'Permet de filtrer par niveau de contact'}))
 	search=forms.CharField(max_length=255,required=False,label="Recherche ",widget=forms.TextInput(attrs={'title':'Recherche dans le nom, le prénom ou le numéro SIREN/SIRET le cas échéant'}))
 
 
@@ -89,7 +99,7 @@ class ProprietesForm(forms.ModelForm):
 class LotForm(forms.ModelForm):
 	class Meta:
 		model=Lot
-		exclude=['projet','publier']
+		exclude=['projet','publier','createur']
 		widgets= {
 			'nom':TextInput(attrs={'size':40,'placeholder':'Nom complet du lot'}),
 			'short_name':TextInput(attrs={'size':40,'placeholder':'Nom court du lot (max 10 char)'}),
@@ -279,7 +289,9 @@ class EntrepriseForm(forms.ModelForm):
 class PersonneForm(forms.ModelForm):
 	class Meta:
 		model=Personne
-		exclude=['date_inscription_personne','agence']
+		exclude=['date_inscription_personne','agence','user']
+
+
 
 
 class SiretForm(forms.Form):
@@ -298,7 +310,7 @@ class EcheanceForm(forms.ModelForm):
 	def clean_date(self):
 		date = self.cleaned_data['date']
 		if date <= datetime.date.today():
-			raise forms.ValidationError("La date ne peut pas être dans le passé !")
+			raise forms.ValidationError("La date ne peut pas être dans le passé ou aujourd'hui !")
 		return date
 
 
@@ -306,7 +318,7 @@ class EcheanceForm(forms.ModelForm):
 class AppelOffreForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffre
-		exclude=['projet']
+		exclude=['projet','createur','statut']
 		widgets ={
 			'lots':forms.CheckboxSelectMultiple(),
 		}
@@ -321,7 +333,7 @@ class AppelOffreForm(forms.ModelForm):
 class AppelOffreLotForm(forms.ModelForm):
 	class Meta:
 		model=AppelOffreLot
-		exclude=['projet','AO','lot','date_de_creation','statut']
+		exclude=['projet','AO','lot','date_de_creation','statut','createur']
 		widgets ={
 			'AO_agences':forms.CheckboxSelectMultiple(),
 			'AO_personnes':forms.CheckboxSelectMultiple(),

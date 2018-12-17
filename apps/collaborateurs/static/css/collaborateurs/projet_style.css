@@ -92,3 +92,14 @@
 */
 
 
+.erreur_validation  {
+	color:red;
+	font-weight:bold;
+}
+
+.validation {
+	display: block;
+	margin-top:15px;
+	color:green;
+	font-weight:bold;
+}

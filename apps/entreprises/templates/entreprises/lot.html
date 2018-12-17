@@ -59,14 +59,17 @@
 			</ul>
 
 			<h2>Les appels d'offres en cours</h2>
-			<ul class="liste_prop">
-				{% for appel in appels_lot %}
-				<li>Appel d'offre N°{{appel.AO.numero}}</li>
-				<li>Fin de consultation le : {{appel.echeance.date}}</li>
-				<li>Statut de votre offre : {{offre.statut}}
-				<li>{% empty %}Aucun appel d'offre en cours pour le lot !{% endfor %}</li>
-			</ul>
 			
+			{% for appel in appels_lot %}
+				<ul class="liste_prop">
+					<li>Appel d'offre N°{{appel.AO.numero}}</li>
+					<li>Fin de consultation le : {{appel.echeance.date}}</li>
+					<li>Statut de votre offre : {{offre.statut}}
+					<li><a href="">Gérer votre offre</a></li>
+				</ul>
+			{% empty %}
+					<li>Aucun appel d'offre en cours pour le lot !</li>
+			{% endfor %}
 
 		</div>
 	</div>

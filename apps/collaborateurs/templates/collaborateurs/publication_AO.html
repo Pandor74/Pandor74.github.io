@@ -1,0 +1,61 @@
+{% extends 'collaborateurs/base.html' %}
+
+{% block stylepers %}
+	<link rel="stylesheet" href="{{STATICFILES_DIRS}}/static/css/collaborateurs/projet_style.css" />
+{% endblock %}
+
+{% block scriptpers %}
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../../static/js/projet.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="titre_projet"> {{projet.numero_teamber}} : {{projet.nom|upper}} </div>
+
+<div class="contenu_wrapper">
+
+	{% include "././navigation.html" %}
+
+
+
+
+
+
+
+	<div class="contenu_projet">
+
+		<div class="content_wrapper" id="infos_gene">
+			<h2>L'appel d'offres N°{{AO.numero}} a bien été envoyé aux interlocuteurs ci-dessous</h2>
+				{% for AO_lot in AO_lots %}
+					<li>{{AO_lot.decris_lot}} :
+						<ul>
+							{% for agence in AO_lot.AO_agences.all %}
+								<li>{{agence.nom|capfirst}} : {{agence.mail_contact}}</li>
+							{% endfor %}
+
+							{% for personne in AO_lot.AO_personnes.all %}
+								<li>{{personne.nom|upper}} {{personne.prenom|capfirst}} ({{personne.agence.nom|capfirst}}) : {{personne.mail}}</li>
+							{% endfor %}
+						</ul>
+
+					</li>
+					
+				{% empty %}
+					<li>Aucun lot n'a été associé à ce jour !</li>
+				{% endfor %}
+
+				
+
+				<a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+

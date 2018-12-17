@@ -28,11 +28,18 @@
 	<div class="contenu_projet">
 
 		<div class="content_wrapper" id="infos_gene">
+			<h2>Informations</h2>
+				<li>Créé par: {{AO.createur.last_name|upper}} {{AO.createur.first_name|capfirst}}</li>
+				<li>La date de fin de l'appel d'offres est prévue pour le : {{AO.echeance.date}}</li>
 			<h2>Les lots de l'appel d'offres N°{{AO.numero}}</h2>
 				{% for AO_lot in AO_lots %}
-					<li>{{AO_lot.decris_lot}} 
+					<li>{{AO_lot.decris_lot}} créé le {{AO_lot.date_de_creation}}
 						<ul>
-							<li>Statut : {{AO_lot.statut}}</li>
+							<li>Statut : 
+								{% if AO_non_valide %}<span class="erreur_validation">{% endif %}
+								{{AO_lot.statut}}
+								{% if AO_non_valide %}</span>{% endif %}
+							</li>
 							<li> <a href="{% url 'col_gerer_ao_lot' projet.pk AO.pk AO_lot.lot.pk %}">Gérer l'appel d'offres du lot</a></li>
 						</ul>
 
@@ -42,9 +49,11 @@
 					<li>Aucun lot n'a été associé à ce jour !</li>
 				{% endfor %}
 
-				<p>La date de fin de l'appel d'offres est prévue pour le : {{AO.echeance.date}}</p>
+				
 
-				<a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a>
+				<li><a href="{% url 'col_modifier_ao' projet.pk AO.pk %}">Modifier la liste des lots concernés</a></li>
+
+				<li><a href="{% url 'col_publier_ao' projet.pk AO.pk %}">Publier l'appel d'offres sur tous les lots</a></li>
 		</div>
 
 	</div>

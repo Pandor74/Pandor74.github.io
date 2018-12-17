@@ -48,6 +48,7 @@ class Projet(models.Model):
 	
 	date_creation = models.DateField(default=datetime.date.today,verbose_name="Date de création ")
 
+	createur=models.ForeignKey(User,on_delete=models.PROTECT)
 	
 	class Meta:
 		verbose_name="Projet"
@@ -69,7 +70,7 @@ def auto_delete_files_on_delete(sender,instance,**kwargs):
 	if os.path.exists(path):
 		shutil.rmtree(path,ignore_erros=true)
 	else:
-		print('impossible de supprimer le dossier du projet ',str(instance.numero_teamber,str(instance.nom)))
+		print('impossible de supprimer le dossier du projet ',str(instance.numero_teamber),str(instance.nom))
 
 
 
@@ -169,6 +170,8 @@ class Lot(models.Model):
 
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True,null=True)
 	activites=models.ManyToManyField(DomaineCompetence,blank=True)
+
+	createur=models.ForeignKey(User,on_delete=models.PROTECT)
 
 	class Meta:
 		ordering=['numero','suffixe']
@@ -274,15 +277,15 @@ def fichier_entreprise_path(instance,filename):
 
 
 LISTE_TYPE_CONTACT=(
-	('client','Client'),
-	('executant','Executant'),
-	('interne','Interne'),
+	('clients','Client'),
+	('entreprises','Executant'),
+	('collaborateurs','Interne'),
 	)
 
 #définit le modèle de l'entreprise principale
 class Entreprise(models.Model):
 	nom_ent=models.CharField(max_length=255,blank=True,null=True,verbose_name="Nom de l'entreprise ",unique=True)
-	type_contact=models.CharField(default='executant',max_length=255,choices=LISTE_TYPE_CONTACT)
+	type_contact=models.CharField(default='entreprises',max_length=255,choices=LISTE_TYPE_CONTACT)
 
 	date_inscription_ent=models.DateTimeField(default=datetime.date.today,blank=True,verbose_name="Date d'inscription ")
 	date_creation_ent=models.DateTimeField(blank=True,null=True,verbose_name="Date de création de l'entreprise")
@@ -428,7 +431,7 @@ class Personne(models.Model):
 	phone_regex=RegexValidator(regex=r'^0(?P<num>\d{9})$',message="Le numéro de téléphone doit contenir exactement 10 chiffres et commencer par 0")
 	portable=models.CharField(validators=[phone_regex],max_length=10,blank=True)
 	ligne_directe=models.CharField(validators=[phone_regex],max_length=10,blank=True)
-	mail=models.EmailField(max_length=255)
+	mail=models.EmailField(max_length=255,unique=True)
 	date_inscription_personne=models.DateTimeField(default=timezone.now(),verbose_name="Date d'inscription ")
 
 	agence=models.ForeignKey(Agence,on_delete=models.CASCADE,null=True,blank=True)
@@ -477,6 +480,11 @@ class Adresse(models.Model):
 
 
 
+LISTE_STATUT_AO_LOT =(
+		('En création','En création'),
+		('Validé','Validé'),
+		('Envoyé','Envoyé'),
+	)
 
 
 
@@ -487,9 +495,11 @@ class AppelOffre(models.Model):
 	numero=models.IntegerField(default=0)
 	projet=models.ForeignKey(Projet,on_delete=models.CASCADE,blank=True)
 	lots=models.ManyToManyField(Lot,blank=True)
+	statut=models.CharField(default="En création",max_length=255,choices=LISTE_STATUT_AO_LOT,blank=True)
+
+	createur=models.ForeignKey(User,on_delete=models.PROTECT)
 	
 
-	#createur
 
 	def __str__(self):
 		return 'AO par lot du projet ' + self.projet.nom
@@ -497,11 +507,6 @@ class AppelOffre(models.Model):
 
 
 
-LISTE_STATUT_AO_LOT =(
-		('En création','En création'),
-		('Validé','Validé'),
-		('Envoyé','Envoyé'),
-	)
 
 
 
@@ -523,6 +528,7 @@ class AppelOffreLot(models.Model):
 
 	statut=models.CharField(default="En création",max_length=255,choices=LISTE_STATUT_AO_LOT,blank=True)
 
+	createur=models.ForeignKey(User,on_delete=models.PROTECT)
 	def __str__(self):
 		return 'AO : ' + str(self.projet.numero_teamber) + ' ' + self.projet.nom + ' - ' + self.lot.short_name 
 

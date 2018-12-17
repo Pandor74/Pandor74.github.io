@@ -9,6 +9,7 @@ from collaborateurs.forms import FiltreFormAgenceAO,FiltreFormPersonneAO
 
 
 from entreprises.models import Offre
+from entreprises.fonction import ChercherMesProjets,ChercherProjetsAgence
 
 from django.views.generic import ListView,DetailView
 from django.views.generic.edit import FormMixin
@@ -56,7 +57,63 @@ def Liste_Projet(request):
 	return render(request,'entreprises/tous_les_projets.html',locals())
 
 
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
+def Liste_Mes_Projets(request):
 
+	#on initialise les groupes de contacts qui seront soumis aux filtres
+	user=request.user
+	personne=user.personne
+	
+
+	AO_lots=AppelOffreLot.objects.all()
+	tous_projets=Projet.objects.all()
+
+	projets=ChercherMesProjets(tous_projets,personne)
+
+	#initilisation du formulaire de filtre des contacts
+	formFiltre=FiltreFormProjet(request.POST or None,)
+
+	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
+	if formFiltre.is_valid():
+		filtre=formFiltre.cleaned_data['filtre']
+		recherche=formFiltre.cleaned_data['search']
+
+		projets=chercherProjet(projets,filtre,recherche)
+
+
+	#si il n'y a pas de requete de filtrage alors on affiche tout
+	return render(request,'entreprises/tous_les_projets.html',locals())
+
+
+
+@login_required
+@user_passes_test(is_ent,login_url='refus',redirect_field_name=None)
+def Liste_Projets_Mon_Agence(request):
+
+	#on initialise les groupes de contacts qui seront soumis aux filtres
+	user=request.user
+	personne=user.personne
+	
+
+	AO_lots=AppelOffreLot.objects.all()
+	tous_projets=Projet.objects.all()
+
+	projets=ChercherProjetsAgence(tous_projets,personne)
+
+	#initilisation du formulaire de filtre des contacts
+	formFiltre=FiltreFormProjet(request.POST or None,)
+
+	# Si il y a une requete de filtre alors on appelle la fonction qui filtre les groupes de données
+	if formFiltre.is_valid():
+		filtre=formFiltre.cleaned_data['filtre']
+		recherche=formFiltre.cleaned_data['search']
+
+		projets=chercherProjet(projets,filtre,recherche)
+
+
+	#si il n'y a pas de requete de filtrage alors on affiche tout
+	return render(request,'entreprises/tous_les_projets.html',locals())
 
 
 @login_required
@@ -187,3 +244,5 @@ def Deposer_Fichiers_Offre(request,pkprojet,pklot,pkAO,pkAOlot):
 
 
 	return render(request,'entreprises/modifier_fichiers_offre.html',locals())
+
+

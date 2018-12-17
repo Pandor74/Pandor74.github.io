@@ -39,6 +39,8 @@
 				{% if projet.adresse.adresse2 != None %}<li><strong>{{projet.adresse.adresse2}}</strong></li>{% endif %}
 				<li><strong>{% if projet.adresse.code_postal != None %}{{projet.adresse.code_postal}}{% endif %} - {% if projet.adresse.ville != None %}{{projet.adresse.ville}}{% endif %}</strong></li>
 				{% if projet.adresse.pays != None %}<li><strong>{{projet.adresse.pays}}</strong></li>{% endif %}
+				<li>Créé par :</li>
+				<li><strong>{{projet.createur.last_name|upper}} - {{projet.createur.first_name}}</strong></li>
 			</ul>
 
 		</div>

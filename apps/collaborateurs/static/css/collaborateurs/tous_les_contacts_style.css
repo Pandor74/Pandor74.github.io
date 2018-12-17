@@ -21,7 +21,7 @@
 .top_left_nav {
 	width:25%;
 	display:flex;
-	flex-direction: column;
+	flex-direction: column; 
 	justify-content: space-between;
 }
 
@@ -53,11 +53,23 @@
 form {
 	font-size: 25px;
 	display: flex;
+	flex-direction: column;
+	align-items: space-between;
 	justify-content: space-between;
+	max-width: 100%;
+	height: 100%;
 	margin-left:50px;
 	margin-right:25px;
 }
 
+form li {
+	list-style-type: none;
+	display: flex;
+	justify-content: space-around;
+	margin-left: 0px;
+
+
+}
 
 
 

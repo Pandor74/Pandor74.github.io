@@ -31,8 +31,10 @@
 			<div class="top_right_nav">
 				<form method="post" action="{% url 'col_contacts_liste' %}" >
 					{% csrf_token %}
-					{{formFiltre}}
-					<input type="submit" value="Filtrer" id="Bfiltrer" />
+
+					<li>{{formFiltre.filtre_type.label}} : {{formFiltre.filtre_type}} {{formFiltre.filtre.label}} : {{formFiltre.filtre}} </li>
+
+					<li>{{formFiltre.search.label}} : {{formFiltre.search}}<input type="submit" value="Filtrer" id="Bfiltrer" /></li>
 				</form>
 			</div>
 		</div>

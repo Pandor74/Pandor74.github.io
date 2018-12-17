@@ -40,7 +40,7 @@ def right_path(name,char):
 
 
 #critère de recherche actuel dans les nom sur les agences, personnes et extensions ..
-def chercherContact(entreprise,agence,personne,filtre,chaine):
+def chercherContact(entreprise,agence,personne,filtre,filtre_type,chaine):
 
 	#initialisation des queryset à vide
 	contacts_ent=entreprise.objects.none()
@@ -52,24 +52,34 @@ def chercherContact(entreprise,agence,personne,filtre,chaine):
 	groupe_agence=agence.objects.all()
 	groupe_personne=personne.objects.all()
 
+	#requete de filtrage par type  de contact
+	if filtre_type=='tous':
+		q1=Q()
+	else:
+		qper=Q(agence__entreprise__type_contact__contains=filtre_type)
+		qag=Q(entreprise__type_contact__contains=filtre_type)
+		qent=Q(type_contact__contains=filtre_type)
+
+
+
 	if filtre == "entreprise":
 		#si entreprise alors que entreprise filtré les autres sont nulls
 		if groupe_ent:
-			contacts_ent=groupe_ent.filter(Q(nom_ent__contains=chaine)|Q(num_SIREN__contains=chaine))
+			contacts_ent=groupe_ent.filter((Q(nom_ent__contains=chaine)|Q(num_SIREN__contains=chaine))&qent)
 	elif filtre == "agence":
 		if groupe_agence:
-			contacts_agence=groupe_agence.filter(Q(nom__contains=chaine)|Q(num_SIRET__contains=chaine))
+			contacts_agence=groupe_agence.filter((Q(nom__contains=chaine)|Q(num_SIRET__contains=chaine))&qag)
 	elif filtre == "personne":
 		if groupe_personne:
-			contacts_personne=groupe_personne.filter(Q(nom__contains=chaine)|Q(prenom__contains=chaine))
+			contacts_personne=groupe_personne.filter((Q(nom__contains=chaine)|Q(prenom__contains=chaine))&qper)
 	else:
 		#Si tous alors on recherche sur tous
 		if groupe_ent:
-			contacts_ent=groupe_ent.filter(Q(nom_ent__contains=chaine)|Q(num_SIREN__contains=chaine))
+			contacts_ent=groupe_ent.filter((Q(nom_ent__contains=chaine)|Q(num_SIREN__contains=chaine))&qent)
 		if groupe_agence:
-			contacts_agence=groupe_agence.filter(Q(nom__contains=chaine)|Q(num_SIRET__contains=chaine))
+			contacts_agence=groupe_agence.filter((Q(nom__contains=chaine)|Q(num_SIRET__contains=chaine))&qag)
 		if groupe_personne:
-			contacts_personne=groupe_personne.filter(Q(nom__contains=chaine)|Q(prenom__contains=chaine))
+			contacts_personne=groupe_personne.filter((Q(nom__contains=chaine)|Q(prenom__contains=chaine))&qper)
 		
 	return contacts_ent,contacts_agence,contacts_personne
 
@@ -89,7 +99,7 @@ def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
 		if len(selected_agences)>0:
 			for sel in selected_agences:
 				q2|=Q(pk=sel)
-		q3=Q(entreprise__type_contact__contains="executant")
+		q3=Q(entreprise__type_contact__contains="entreprises")
 		agences=groupe_agence.filter((q1|q2)&q3).distinct()
 	else:
 		if len(selected_agences)>0:
@@ -97,11 +107,11 @@ def chercherAgencePourAO(filtre,competences,selected_agences,groupe_agence):
 			for sel in selected_agences:
 				q|=Q(pk=sel)
 			q|=Q(nom__contains=filtre)
-			q1=Q(entreprise__type_contact__contains="executant")
+			q1=Q(entreprise__type_contact__contains="entreprises")
 			agences=groupe_agence.filter(q&q1)
 		else:
 			q1=Q(nom__contains=filtre)
-			q2=Q(entreprise__type_contact__contains="executant")
+			q2=Q(entreprise__type_contact__contains="entreprises")
 			agences=groupe_agence.filter(q1&q2)
 
 	return agences
@@ -122,7 +132,7 @@ def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne
 		if len(selected_personnes)>0:
 			for sel in selected_personnes:
 				q4|=Q(pk=sel)
-		q5=Q(agence__entreprise__type_contact__contains="executant")
+		q5=Q(agence__entreprise__type_contact__contains="entreprises")
 		personnes=groupe_personne.filter((q3|q4)&q5).distinct()
 	else:
 		#requete de filtrage
@@ -133,7 +143,7 @@ def chercherPersonnePourAO(filtre,competences,selected_personnes,groupe_personne
 		if len(selected_personnes)>0:
 			for sel in selected_personnes:
 				q2|=Q(pk=sel)
-		q3=Q(agence__entreprise__type_contact__contains="executant")
+		q3=Q(agence__entreprise__type_contact__contains="entreprises")
 		personnes=groupe_personne.filter((q1|q2)&q3)
 
 	return personnes

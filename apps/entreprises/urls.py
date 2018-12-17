@@ -23,7 +23,9 @@ urlpatterns = [
 
 	#projets
     url(r'^projets$',views.Liste_Projet,name="ent_lister_projets"),
-    url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="ent_voir_projet"),
+    url(r'^mes-projets$',views.Liste_Mes_Projets,name="ent_lister_mes_projets"),
+    url(r'^projets-de-mon-agence$',views.Liste_Projets_Mon_Agence,name="ent_lister_projets_de_mon_agence"),
+    url(r'^projet/(?P<pk>.{1,9})/voir$',views.Afficher_Projet,name="ent_voir_projet"),
     url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="ent_lister_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})$',views.Afficher_Lot,name="ent_voir_lot"),
     url(r'^projet/(?P<pkprojet>.{1,9})/lot/(?P<pklot>\d{1,3})/telecharger-tout$',views.Get_Zipped_Files,name="ent_download_archive"),

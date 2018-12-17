@@ -23,15 +23,17 @@ from django.conf.urls import url
 urlpatterns = [
 	url(r'^accueil$',views.Home,name='col_accueil'),
     url(r'^accueil/initDB$',views.InitDataBase,name='col_initDB'),
+    url(r'^accueil/initDBuser$',views.InitDataBaseUser,name='col_initDB_user'),
 	
     #projets
     url(r'^projets$',views.Liste_Projet,name="col_lister_projets"),
+    url(r'^mes-projets$',views.Liste_Mes_Projets,name="col_lister_mes_projets"),
     url(r'^projets/nouveau-projet$',views.New_Projet,name="col_nouveau_projet"),
     url(r'^projet/modifier/(?P<pk>.+)$',views.Modifier_Projet,name="col_modifier_projet"),
-    url(r'^projet/(?P<pk>.{1,9})$',views.Afficher_Projet,name="col_voir_projet"),
+    url(r'^projet/(?P<pk>.{1,9})/voir$',views.Afficher_Projet,name="col_voir_projet"),
     url(r'^projet/(?P<pk>.{1,9})/nouveau-lot$',views.New_Lot,name="col_nouveau_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lots$',views.Liste_Lot,name="col_lister_lot"),
-    url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})$',views.Afficher_Lot,name="col_voir_lot"),
+    url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})/voir$',views.Afficher_Lot,name="col_voir_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})/modifier-paramètres$',views.Modifier_Lot,name="col_modifier_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})/modifier-fichiers$',views.Modifier_Fichiers_Lot,name="col_modifier_fichiers_lot"),
     url(r'^projet/(?P<pk>.{1,9})/lot/(?P<pklot>\d{1,3})/fichier/(?P<iddoc>\d{1,3})-(?P<nom>.+)$',views.Voir_Fichier_PDF_Lot,name="col_voir_fichier"),
@@ -39,13 +41,15 @@ urlpatterns = [
     #appels d'offres
     url(r'^projet/(?P<pkprojet>.{1,9})/AO$',views.Lister_AO,name="col_lister_ao"),
     url(r'^projet/(?P<pk>.{1,9})/nouveau-ao$',views.New_AO,name="col_nouveau_ao"),
-    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})$',views.Afficher_AO,name="col_voir_ao"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/voir$',views.Afficher_AO,name="col_voir_ao"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/modifier$',views.Modifier_AO,name="col_modifier_ao"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,6})/publier$',views.Publier_AO,name="col_publier_ao"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/gerer$',views.Gerer_AO_Lot,name="col_gerer_ao_lot"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/nouveau-ao-lot$',views.New_AO_Lot,name="col_nouveau_ao_lot"),
-    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})$',views.Afficher_AO_Lot,name="col_voir_ao_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})/voir$',views.Afficher_AO_Lot,name="col_voir_ao_lot"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})/modifier$',views.Modifier_AO_Lot,name="col_modifier_ao_lot"),
     url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})/selectionner-contacts$',views.Selectionner_Contact_AO_Lot,name="col_select_contact_ao_lot"),
+    url(r'^projet/(?P<pkprojet>.{1,9})/ao/(?P<pkAO>.{1,9})/lot/(?P<pklot>.{1,9})/ao-lot-(?P<pkAOlot>.{1,9})/valider$',views.Valider_AO_Lot,name="col_valider_ao_lot"),
 
     #contacts
     url(r'^contacts/$',views.Liste_Contact,name="col_contacts_liste"),

@@ -53,8 +53,29 @@
 					{% if projet.adresse.ville %}<li>{{projet.adresse.ville|upper}}</li>{% endif %}
 				</ul>
 			</a></div> 
-		<div class="projet_prop">projet.date retour AO</div>
-		<div class="projet_prop">projet.avancement</div>
+		<div class="projet_prop">
+			{% with projet.appeloffre_set.all as liste_AO %}
+			<ul>
+				{% for AO in liste_AO %}
+					<li>N°{{AO.numero}} : {{AO.echeance.date}}</li>
+				{% empty %}
+					<li>Pas d'appel d'offre créé</li>
+				{% endfor %}
+			</ul>
+			{% endwith %}
+		</div>
+
+		<div class="projet_prop">
+			{% with projet.appeloffre_set.all as liste_AO %}
+			<ul>
+				{% for AO in liste_AO %}
+					<li>N°{{AO.numero}} : {{AO.statut}}</li>
+				{% empty %}
+					<li>Pas d'appel d'offre créé</li>
+				{% endfor %}
+			</ul>
+			{% endwith %}
+		</div>
 	</div>
 	{% empty %}
 		<p>Il n'y a pas de projets actuellement ! </p>
