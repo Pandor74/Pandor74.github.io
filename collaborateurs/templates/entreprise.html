@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+   <meta charset="utf-8"/>
+  
+   <link rel="stylesheet" href="../css/entreprise_style.css" />
+   <script src="../css/jquery-3.3.1.js" ></script>
+   <script src="../css/entreprise_script.js" ></script>
+
+
+   <title>Plateforme Appel d'offres</title>
+</head>
+
+
+
+<body>
+
+	<header>
+		
+			<div class="navigation_principale">
+				<a href="">Mes projets</a>
+				<a href="liste_projets.html">Tous les projets</a>
+				<a href="liste_contacts.html">Contacts</a>
+			</div>
+
+			<div class="navigation_secondaire">
+				<a href="">Mon compte</a>
+				<a href="">Aide/support</a>
+				<a href="">Déconnexion</a>
+
+			</div>
+	</header>
+
+
+
+  	<section>
+			<div class="titre_entreprise">
+				GROUPE PLENETUDE
+			</div>
+
+			<div class="contenu">
+
+				
+				<div class="entreprise">
+					
+					<div class="liste_ent">
+
+						<div class="ent_wrapper" id="wrapper_infos">
+							<div class="synt_ent">
+								<div class=titre_ent>
+									Informations générales
+								</div>
+
+								<div class="boutons">
+									<div class="modifier">¥</div>
+									<div class="plus">-</div>
+								</div>
+							</div>
+
+							<div class="detail_ent" id="detail_infos">
+								<div class="row_wrap">
+									<div class="p_left"><img src="../media/logo_groupe.png"/></div>
+									<div class="p_center">
+										<div class="prop_ent">
+											<span>GROUPE PLENETUDE</span>
+											<span>SIREN : XXX XXX XXX</span>
+											
+										</div>
+
+										<div class="prop_ent" id="prop_comp">
+											<strong>Compétences</strong>
+											<span>Economiste de la construction</span>
+											<span>Maitrise d'oeuvre</span>
+											<span>Etudes thermiques et fluides</span>
+											<span>Audit énergétique</span>
+											<span>Etudes de structures</span>
+										</div>
+									</div>
+									<div class="p_right">
+										<div class="prop_ent">
+											<span>Mail :&nbsp<a href="mailto:info.lyon@plenetude.fr">info.lyon@plenetude.fr</a></span>
+											<span>Standard : 04 37 43 36 36<br/>
+											Fax : 04 37 43 36 37</span>
+											<span>63 Avenue Roger Salengro<br/>
+											69 100 VILLEURBANNE</span>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+
+
+
+						<div class="ent_wrapper" id="wrapper_agences" >
+							<div class="synt_ent">
+								<div class=titre_ent>
+									Agences
+								</div>
+
+								<div class="boutons">
+									<div class="modifier">¥</div>
+									<div class="plus" id="plus_agences">-</div>
+								</div>
+							</div>
+
+							<div class="detail_ent" id="detail_agences">
+								<div class="siege_ent">
+									<div>SIEGE</div>
+
+									<div class="agence">
+										<div class="p_top">
+											<div class="nom"><a href="agence.html">PLENETUDE LYON</a></div>
+										</div>
+
+										<div class="p_center">
+											<div class="img_container">
+												<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+											</div>
+											<span class="localisation">69 100 VILLEURBANNE</span>
+										</div>
+
+										<div class="p_bot">
+											<div class="bouton">+</div>
+										</div>
+
+										<div class="p_detail">
+											<div class="ags_prop">Mail :&nbsp<a href="mailto:plenetude@plenetude.fr">info.lyon@plenetude.fr</a></div>
+											<div class="ags_prop">Standard : 04 37 43 36 36</div>
+											<div class="ags_prop">Fax : 04 37 43 36 37</div>
+										</div>
+									</div>
+
+								</div>
+							
+
+
+								<div class="antennes_ent">
+									<div>ANTENNES</div>
+									<div class="liste_container" id="liste_container_agences">
+										<div class="liste" id="liste_agences">
+
+
+											<div class="agence">
+												<div class="p_top">
+													<div class="nom"><a href="">PLENETUDE ANNECY</a></div>
+												</div>
+
+												<div class="p_center">
+													<div class="img_container">
+														<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+													</div>
+													<span class="localisation">74 370 METZ-TESSY</span>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="ags_prop">Mail :&nbsp<a href="mailto:plenetude@plenetude.fr">info.annecy@plenetude.fr</a></div>
+													<div class="ags_prop">Standard : 04 50 32 16 39</div>
+													<div class="ags_prop">Fax : 04 34 09 10 04</div>
+												</div>
+
+
+											</div>
+
+
+											<div class="agence">
+												<div class="p_top">
+													<div class="nom"><a href="">PEXIN</a></div>
+												</div>
+
+												<div class="p_center">
+													<div class="img_container">
+														<img src="../media/logo_pexin.jpg" alt="Pas de photo" />
+													</div>
+													<span class="localisation">69 100 VILLEURBANNE</span>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="ags_prop">Mail :&nbsp<a href="mailto:pexin@pexin.fr">pexin@pexin.fr</a></div>
+													<div class="ags_prop">Standard : 04 37 43 34 60</div>
+													<div class="ags_prop">Fax : 08 90 20 60 90</div>
+												</div>
+
+
+											</div>
+
+											<div class="agence">
+												<div class="p_top">
+													<div class="nom"><a href="">PEGIME LYON</a></div>
+												</div>
+
+												<div class="p_center">
+													<div class="img_container">
+														<img src="../media/logo_pegime.jpg" alt="Pas de photo" />
+													</div>
+													<span class="localisation">69 100 VILLEURBANNE</span>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="ags_prop">Mail :&nbsp<a href="mailto:pegime@pegime.fr">pegime@pegime.fr</a></div>
+													<div class="ags_prop">Standard : 04 37 43 35 00</div>
+													<div class="ags_prop">Fax : 08 11 48 28 12</div>
+												</div>
+
+
+											</div>
+
+											<div class="agence">
+												<div class="p_top">
+													<div class="nom"><a href="">PEGIME ANNECY</a></div>
+												</div>
+
+												<div class="p_center">
+													<div class="img_container">
+														<img src="../media/logo_pegime.jpg" alt="Pas de photo" />
+													</div>
+													<span class="localisation">74 370 METZ-TESSY</span>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="ags_prop">Mail :&nbsp<a href="mailto:pegime@pegime.fr">pegime@pegime.fr</a></div>
+													<div class="ags_prop">Standard : 04 50 01 86 14</div>
+													<div class="ags_prop">Fax : 08 11 48 28 12</div>
+												</div>
+
+
+											</div>
+
+										</div>
+
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+
+
+						<div class="ent_wrapper" id="wrapper_personnel">
+							<div class="synt_ent">
+								<div class=titre_ent>
+									Personnel
+								</div>
+
+								<div class="boutons">
+									<div class="modifier">¥</div>
+									<div class="plus" id="plus_personnel">-</div>
+								</div>
+							</div>
+
+							<div class="detail_ent" id="detail_personnel">
+								<div class="personnel_ent">
+									<div class="liste_container" id="liste_container_personnes_1">
+										<div class="liste" id="liste_personnes_1">
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_groupe.png" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">PENICAUD Laurent</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr"> laurent.penicaud@groupe-plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_groupe.png" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">GIRARDET Sylvain</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">sylvain.girardet@groupe-plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="personnel_ent">
+									<div class="liste_container" id="liste_container_personnes_2">
+										<div class="liste" id="liste_personnes_2">
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">COURREGE Raphaël</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr"> raphael.courrege@plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_pexin.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">BARROUCHE Yanisse</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">yanisse.barrouche@pexin.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_pegime.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">TALUT Ludovic</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr"> ludovic.talut@pegime.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="personnel_ent">
+									<div class="liste_container" id="liste_container_personnes_3">
+										<div class="liste" id="liste_personnes_3">
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">DUPUIS Audrey</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">audrey.dupuis@plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">CHARDON Guillaume</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">guillaume.chardon@plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="personnel_ent">
+									<div class="liste_container" id="liste_container_personnes_4">
+										<div class="liste" id="liste_personnes_4">
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_pegime.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">MATHIEU Kevin</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">kevin.mathieu@pegime.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_plenetude.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">HATT Manon</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">manon.hatt@plenetude.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+
+											<div class="personne">
+												<div class="p_top">
+													<div class="p_left">
+														<img src="../media/logo_pexin.jpg" alt="Pas de photo" />
+													</div>
+													<div class="p_center">
+														<div class="nom">RICARDO Mathieu</div>
+													</div>
+												</div>
+
+												<div class="p_bot">
+													<div class="bouton">+</div>
+												</div>
+
+												<div class="p_detail">
+													<div class="pers_prop">Mail :&nbsp<a href="mailto:lilian.durey@batools.fr">mathieu.ricardo@pexin.fr</a></div>
+													<div class="pers_prop">LD : xx xx xx xx xx</div>
+													<div class="pers_prop">Port : xx xx xx xx xx</div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						
+
+
+
+					</div>
+				</div>
+
+
+
+			</div>
+   	</section>
+
+
+	<footer>
+	
+	</footer>
+
+
+</body>
+</html>
+
+
