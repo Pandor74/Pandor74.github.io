@@ -361,8 +361,9 @@ section {
 .personne .p_center {
 	
 	display: flex;
-	justify-content: flex-start;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
 	height: 100%;
 	overflow-wrap: break-word;
 	max-width: 190px;
@@ -375,7 +376,7 @@ section {
 
 .personne .nom {
 
-	height: 100%;
+	
 	width: 100%;
 	display: flex;
 	align-items: center;
