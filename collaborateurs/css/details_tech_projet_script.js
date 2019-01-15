@@ -107,7 +107,9 @@ $(function(){
           click: function() {
             $( this ).dialog( "close" );
             var tranche_a_add = $("#in_add_tranche").val();
-            Ajouter_Tranche(tranche_a_add);
+            if (tranche_a_add.trim()) {
+              Ajouter_Tranche(tranche_a_add);
+            };
           }
      
           // Uncommenting the following line would hide the text,
@@ -137,7 +139,9 @@ $(function(){
         //dupliquer la fonction de la boite de dialog
         $("#dialog_add").dialog( "close" );
         var tranche_a_add = $(this).val();
-        Ajouter_Tranche(tranche_a_add);
+        if (tranche_a_add.trim()) {
+          Ajouter_Tranche(tranche_a_add);
+        };
       };
 
 
@@ -156,7 +160,7 @@ $(function(){
         $("#dialog_del").dialog("open");
       }
       else {
-        alert("Il n'y a que la tranche principale ! Vous ne pouvez pas la supprimer")
+        alert("Il n'y a que la tranche principale ! Vous ne pouvez pas la supprimer...")
       }
 
     });
