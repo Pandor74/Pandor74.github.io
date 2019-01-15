@@ -104,7 +104,7 @@ section {
 	margin-top:3%;
 	margin-left:45px;
 	margin-right:45px;
-	height:250px;
+	height:335px;
 	
 	display:flex;
 	flex-direction: column;
@@ -112,13 +112,14 @@ section {
 }
 
 .p_top {
-	height: 25px;
+	height: 30px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
 	border-bottom: solid black 1px;
 	box-sizing: border-box;
+	padding: 5px;
 }
 
 
@@ -186,12 +187,14 @@ section {
 }
 
 .p_bot {
-	height:25px;
+	height:30px;
 	box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	border-top: solid black 1px;
+	border-bottom: solid black 2px;
+	padding: 5px;
 
 }
 
@@ -202,3 +205,30 @@ section {
 }
 
 
+.p_boutons {
+	display: flex;
+	height:75px;
+	width: 100%;
+}
+
+
+.bouton {
+	box-sizing: border-box;
+	height: 100%;
+	width: 75px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-right: solid black 2px;
+}
+
+.bouton a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.bouton:last-of-type {
+	border:0px;
+}

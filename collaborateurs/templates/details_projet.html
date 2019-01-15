@@ -44,13 +44,19 @@
 
 				<div class="left_nav">
 					<a href="projet.html">Lots</a>
-					<a href="details_projet.html">Détails</a>
-					<a href="chiffrage.html">Chiffrage</a>
+					<a href="details_projet.html">Détails généraux</a>
+					<a href="details_tech_projet.html">Détails techniques</a>
+					<a href="chiffrage.html">Chiffrage (entreprise)</a>
 					<a href="">Analyse</a>
 				</div>
 
 
 				<div class="projet">
+
+					<div class="affichage">
+						<input type="button" id="b1" value="Affichage 1" />
+						<input type="button" id="b2" value="Affichage 2" />
+					</div>
 
 					<div class="projet_container_1">
 						
@@ -62,29 +68,30 @@
 
 						<div class="infos">
 							<div class="set_id_projet">
-								<div class="titre_liste">Agence interne(s)</div>
-									<div class="sous_liste">Plenetude Lyon (couleur mandataire principal)</div>
-									<div class="sous_liste">Pegime Lyon</div>
-									<div class="sous_liste">Pexin</div>
-								<div class="titre_liste">Intervenant(s)</div>
-									<div class="sous_liste">Prénom NOM (couleur créateur)</div>
-									<div class="sous_liste">Prénom NOM (couleur autre - par entité?)</div>
-									<div class="sous_liste">Prénom NOM (couleur autre - par entité?)</div>
+								<div class="titre_liste">Groupement de maitrise d'oeuvre</div>
+									<div class="sous_liste" style="color:red">Bureau d'études : Audrey DUPUY (PLENETUDE ANNECY)</div>
+									<div class="sous_liste">Bureau d'études fluides et thermiques : Kevin MATHIEU (PEGIME ANNECY) </div>
+									<div class="sous_liste">Bureau d'études structure : Clément BORDET (PEXIN)</div>
+									<div class="sous_liste">Architecte : xxxxx XXXX (CABINET XXX)</div>
+									<div class="sous_liste">CONTACT/CATEGORIE : Prénom NOM (ENTREPRISE)</div>
+								
 								<div class="titre_liste">Client(s)</div>
-									<div class="sous_liste">Type de travaux : Rénovation/Sinistre/Neuf</div>
-									<div class="sous_liste">Type de client : Collectif/individuel/tertiaire</div>
+									<div class="sous_liste">Type de travaux : Neuf/Rénovation</div>
+									<div class="sous_liste">Type de bâtiment : Bureau/Industriel/Culturel/Commercial/Equipement/Logement</div>
+									<div class="sous_liste">Type de client : Privé/Public</div>
 									<div class="sous_liste">Client X N°1</div>
 									<div class="sous_liste">Client X N°2</div>
+
+
 								<div class="titre_liste">Localisation</div>
 									<div class="sous_liste">Bâtiment A</div>
 									<div class="sous_liste">63 avenue Roger Salengro</div>
 									<div class="sous_liste">69100 - VILLEURBANNE</div>
 									<div class="sous_liste">FRANCE</div>
-									<div class="sous_liste"><a id="open_map1">Ouvrir map</a>&nbsp/&nbsp<a id="close_map">Fermer map</a></div>
 									<div class="sous_liste"><a href="https://www.google.fr/maps/place/63+roger+salengro,+69100+villeurbanne" target="_blank">Ouvrir map sur nouvel onglet</a></div>
 							</div>
 
-							<div id="map1"></div>
+						
 							
 						</div>
 
@@ -95,55 +102,50 @@
 
 					</div>
 
-				
+
+					<div class="projet_container_2">
+						
+						<div class="logo">
+							<img src="../media/bat 4.jpg" alt="Pas de photo" style="height: 300px" id="logo_projet"/>
+						</div>
+
+						
+
+						<div class="infos">
+							<div class="set_id_projet">
+								<div class="titre_liste">Groupement de maitrise d'oeuvre</div>
+									<div class="sous_liste" style="color:red">Bureau d'études : Audrey DUPUY (PLENETUDE ANNECY)</div>
+									<div class="sous_liste">Bureau d'études fluides et thermiques : Kevin MATHIEU (PEGIME ANNECY) </div>
+									<div class="sous_liste">Bureau d'études structure : Clément BORDET (PEXIN)</div>
+									<div class="sous_liste">Architecte : xxxxx XXXX (CABINET XXX)</div>
+									<div class="sous_liste">CONTACT/CATEGORIE : Prénom NOM (ENTREPRISE)</div>
+								
+								<div class="titre_liste">Client(s)</div>
+									<div class="sous_liste">Type de travaux : Neuf/Rénovation</div>
+									<div class="sous_liste">Type de bâtiment : Bureau/Industriel/Culturel/Commercial/Equipement/Logement</div>
+									<div class="sous_liste">Type de client : Privé/Public</div>
+									<div class="sous_liste">Client X N°1</div>
+									<div class="sous_liste">Client X N°2</div>
 
 
-					
-					
-					
-					<div class="projet_container_3">
-						<div class="set_data_projet" id="Numtranche">
-							<div class="titre_liste">Toutes tranches</div>
-								<div class="sous_liste">Complexité d'architecture : Moyenne</div>
-								<div class="sous_liste">Nombre de lot : 48 lots</div>
-								<div class="sous_liste">Nombre d'étage (max): 4 étages</div>
-								<div class="sous_liste">Emprise au sol : 400 m²</div>
-								<div class="sous_liste">SHON : 1500 m²</div>
+								<div class="titre_liste">Localisation</div>
+									<div class="sous_liste">Bâtiment A</div>
+									<div class="sous_liste">63 avenue Roger Salengro</div>
+									<div class="sous_liste">69100 - VILLEURBANNE</div>
+									<div class="sous_liste">FRANCE</div>
+									<div class="sous_liste"><a href="https://www.google.fr/maps/place/63+roger+salengro,+69100+villeurbanne" target="_blank">Ouvrir map sur nouvel onglet</a></div>
+							</div>
+
+						
+							
 						</div>
-						<div class="set_data_projet" id="Numtranche">
-							<div class="titre_liste">Tranche 1</div>
-								<div class="sous_liste">Complexité d'architecture : Moyenne</div>
-								<div class="sous_liste">Nombre de lot : 24 lots</div>
-								<div class="sous_liste">Nombre d'étage : 4 étages</div>
-								<div class="sous_liste">Emprise au sol : 200 m²</div>
-								<div class="sous_liste">SHON : 750 m²</div>
-						</div>
-						<div class="set_data_projet" id="Numtranche">
-							<div class="titre_liste">Tranche 2</div>
-								<div class="sous_liste">Complexité d'architecture : Moyenne</div>
-								<div class="sous_liste">Nombre de lot : 24 lots</div>
-								<div class="sous_liste">Nombre d'étage : 4 étages</div>
-								<div class="sous_liste">Emprise au sol : 200 m²</div>
-								<div class="sous_liste">SHON : 750 m²</div>
-						</div>
-						<div class="set_data_projet" id="Numtranche">
-							<div class="titre_liste">Tranche 3</div>
-								<div class="sous_liste">Complexité d'architecture : Moyenne</div>
-								<div class="sous_liste">Nombre de lot : 24 lots</div>
-								<div class="sous_liste">Nombre d'étage : 4 étages</div>
-								<div class="sous_liste">Emprise au sol : 200 m²</div>
-								<div class="sous_liste">SHON : 750 m²</div>
-						</div>
-						<div class="set_data_projet" id="Numtranche">
-							<div class="titre_liste">Tranche 4</div>
-								<div class="sous_liste">Complexité d'architecture : Moyenne</div>
-								<div class="sous_liste">Nombre de lot : 24 lots</div>
-								<div class="sous_liste">Nombre d'étage : 4 étages</div>
-								<div class="sous_liste">Emprise au sol : 200 m²</div>
-								<div class="sous_liste">SHON : 750 m²</div>
-						</div>
+
+						
+
+						
+						
+
 					</div>
-
 
 				</div>
 
