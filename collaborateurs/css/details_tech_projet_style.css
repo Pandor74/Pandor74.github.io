@@ -121,6 +121,11 @@ section {
 
 
 
+.boutons {
+	margin-bottom: 25px;
+}
+
+
 
 .ratio_container {
 	display: flex;
@@ -129,6 +134,7 @@ section {
 	margin-bottom: 25px;
 
 }
+
 
 .titre_lot {
 	display: flex;
@@ -160,6 +166,16 @@ section {
 }
 
 
+.liste_tranches {
+	box-sizing: border-box;
+	display: flex;
+	border-left:solid black 2px;
+	border-right: solid black 2px;
+	border-bottom: solid black 1px;
+	height: 27px;
+	width: 100%;
+}
+
 
 
 
@@ -167,11 +183,18 @@ section {
 .tranche {
 	box-sizing: border-box;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items:  center;
+	align-items:  flex-start;
 	border-left:solid black 2px;
+	overflow: hidden;
+	white-space: nowrap;
+	
 
 }
+
+
+
 
 
 .ligne_ratio {
@@ -198,5 +221,47 @@ section {
 .valeurs {
 	display: flex;
 	width:80%;
+	max-width: 80%;
 }
 
+
+.valeurs .tranche input {
+	box-sizing: border-box;
+	display: flex;
+	max-width: 100%;
+	max-height: 100%;
+	width: calc(100%);
+	height: calc(100% - 1px);
+	border: 0px;
+	
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.liste_tranches input {
+	text-align: center;
+}
+
+
+.ligne_ratio input {
+	text-align: right;
+}
+
+
+.valeurs select {
+	box-sizing: border-box;
+	max-width: 100%;
+	max-height: 100%;
+	align-self: center;
+}
+
+
+
+object {
+	height: 100%;
+	width: 100%;
+}
+
+.ui-dialog-content {
+	width: 100%;
+}

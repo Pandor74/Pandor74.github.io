@@ -4,7 +4,11 @@
    <meta charset="utf-8"/>
   
    <link rel="stylesheet" href="../css/details_tech_projet_style.css" />
-   <script src="../css/jquery-3.3.1.js" ></script>
+
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/dark-hive/jquery-ui.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
    <script src="../css/details_tech_projet_script.js" ></script>
 
   
@@ -54,7 +58,21 @@
 				<div class="projet">
 
 
-					
+					<div class="boutons">
+						<input type="button" id="add_tranche" value="Ajouter Tranche"/>
+						<input type="button" id="del_tranche" value="Supprimer Tranche"/>
+
+
+						<div id="dialog_del" Title="Supprimer quelle tranche ?">
+							<select id="in_del_tranche">
+								
+							</select>
+						</div>
+
+						<div id="dialog_add" Title="Comment se nomme la tranche ?">
+							<input type="text" id="in_add_tranche" placeholder="SAISIR NOM TRANCHE"/>
+						</div>
+					</div>
 					
 
 
@@ -64,12 +82,10 @@
 							<div class="plus">+</div>
 						</div>
 
-						<div class="ligne_ratio" id="liste_tranches">
+						<div class="liste_tranches" >
 							<div class="nom_ratio"></div>
 							<div class="valeurs">
-								<div class="tranche">TOUTES TRANCHES</div>
-								<div class="tranche">TRANCHE A</div>
-								<div class="tranche">TRANCHE B</div>
+								<div class="tranche" title="TOUTES TRANCHES"><input type="text" value="TOUTES TRANCHES"/></div>
 							</div>
 						</div>
 
@@ -85,22 +101,6 @@
 										<option value="">Complexe</option>
 									</select>
 								</div>
-								<div class="tranche">
-									<select>
-										<option value="">Selectionner</option>
-										<option value="">Simple</option>
-										<option value="">Moyenne</option>
-										<option value="">Complexe</option>
-									</select>
-								</div>
-								<div class="tranche">
-									<select>
-										<option value="">Selectionner</option>
-										<option value="">Simple</option>
-										<option value="">Moyenne</option>
-										<option value="">Complexe</option>
-									</select>
-								</div>
 							</div>
 						</div>
 
@@ -110,24 +110,12 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 							</div>
 						</div>
 
 						<div class="ligne_ratio">
 							<div class="nom_ratio">Nombre d'étages</div>
 							<div class="valeurs">
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 								<div class="tranche">
 									<input type="number"/>
 								</div>
@@ -140,12 +128,6 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 							</div>
 						</div>
 
@@ -155,17 +137,8 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 							</div>
 						</div>
-
-
-
 					</div>
 
 
@@ -177,12 +150,10 @@
 							<div class="plus">+</div>
 						</div>
 
-						<div class="ligne_ratio" id="liste_tranches">
+						<div class="liste_tranches" >
 							<div class="nom_ratio"></div>
 							<div class="valeurs">
-								<div class="tranche">TOUTES TRANCHES</div>
-								<div class="tranche">TRANCHE A</div>
-								<div class="tranche">TRANCHE B</div>
+								<div class="tranche" title="TOUTES TRANCHES"><input type="text" value="TOUTES TRANCHES"/></div>
 							</div>
 						</div>
 
@@ -192,12 +163,7 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
+
 							</div>
 						</div>
 
@@ -207,12 +173,7 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
+
 							</div>
 						</div>
 					</div>
@@ -227,12 +188,10 @@
 							<div class="plus">+</div>
 						</div>
 
-						<div class="ligne_ratio" id="liste_tranches">
+						<div class="liste_tranches" >
 							<div class="nom_ratio"></div>
 							<div class="valeurs">
-								<div class="tranche">TOUTES TRANCHES</div>
-								<div class="tranche">TRANCHE A</div>
-								<div class="tranche">TRANCHE B</div>
+								<div class="tranche" title="TOUTES TRANCHES"><input type="text" value="TOUTES TRANCHES"/></div>
 							</div>
 						</div>
 
@@ -242,24 +201,12 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 							</div>
 						</div>
 
 						<div class="ligne_ratio">
 							<div class="nom_ratio">Nombre de lots</div>
 							<div class="valeurs">
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 								<div class="tranche">
 									<input type="number"/>
 								</div>
@@ -277,12 +224,10 @@
 							<div class="plus">+</div>
 						</div>
 
-						<div class="ligne_ratio" id="liste_tranches">
+						<div class="liste_tranches" >
 							<div class="nom_ratio"></div>
 							<div class="valeurs">
-								<div class="tranche">TOUTES TRANCHES</div>
-								<div class="tranche">TRANCHE A</div>
-								<div class="tranche">TRANCHE B</div>
+								<div class="tranche" title="TOUTES TRANCHES"><input type="text" value="TOUTES TRANCHES"/></div>
 							</div>
 						</div>
 
@@ -292,15 +237,8 @@
 								<div class="tranche">
 									<input type="number"/>
 								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
-								<div class="tranche">
-									<input type="number"/>
-								</div>
 							</div>
 						</div>
-
 					</div>
 
 				</div>
