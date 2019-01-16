@@ -18,9 +18,11 @@ $(function(){
 
         if (val == "+") {
         	$(this).text("-");
+            $(this).parent().css('border-bottom','solid black 1px');
         }
         else {
         	$(this).text("+");
+            $(this).parent().css('border-bottom','0px');
         };
        
          
@@ -44,7 +46,7 @@ $(function(){
     
 
 
-    });
+});
 
 //Attention ici tu as plusieurs liste donc tu ne peux pas te servir de la classe liste mais plutot des id en fonction de ce qui est caché ou pas
 $(function(){
@@ -53,16 +55,16 @@ $(function(){
     $(".liste").width(lar);
 
 
-    });
+});
 
 
 
-//Resize ok
+//Resize 
 $(function(){
     $(window).resize(function(){
         var largeur=Math.round($(".liste_container").width());
        
-
+    
         lar=Math.trunc(largeur/400)*400;
         $(".liste").width(lar);
     });
