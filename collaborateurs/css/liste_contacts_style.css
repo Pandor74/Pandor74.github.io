@@ -111,68 +111,6 @@ section {
 
 
 
-/*contact de type ENTREPRISE*/
-
-
-.entreprise {
-	
-	width:300px;
-	border:solid black 2px;
-	margin-top:3%;
-	margin-left:45px;
-	margin-right:45px;
-	height:225px;
-	box-sizing: border-box;
-	padding:5px 5px 5px 5px;
-	display:flex;
-	flex-direction: column;
-	align-items: stretch;
-}
-
-
-
-
-.entreprise .p_top {
-	height: 25px;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: center;
-}
-
-
-
-.entreprise .nom {
-	
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-
-}
-
-.entreprise .nom:hover {
-	white-space: normal;
-	overflow: normal;
-	z-index: 1;
-
-}
-
-.entreprise .p_center {
-	
-	display: flex;
-	height: 200px;
-	justify-content: center;
-	align-items: center;
-	position:relative;
-	
-}
-
-.entreprise .p_center img {
-	display:flex;
-	max-height: 100%;
-	max-width: 100%;
-
-}
 
 
 

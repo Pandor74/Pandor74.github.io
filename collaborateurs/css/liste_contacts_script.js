@@ -5,7 +5,6 @@ $(function(){
 
 
     //on init sur la présentation des agences
-    $('#liste_container_entreprises').hide(0);
     $('#liste_container_personnes').hide(0);
 
 
@@ -24,15 +23,8 @@ $(function(){
         	$(this).text("+");
         };
        
-        
+         
     	});
-
-    //Affichage entreprises
-    $('#Fentreprises').click(function(){
-        $('#liste_container_entreprises').show(0);
-        $('#liste_container_agences').hide(0);
-        $('#liste_container_personnes').hide(0);
-    });
 
 
     //Affichage agences
@@ -54,7 +46,7 @@ $(function(){
 
     });
 
-//Attention ici tu as plusieurs liste donc tu ne peux pas te servir de la classe liste mais plutot des id en fonction que qui est caché ou pas
+//Attention ici tu as plusieurs liste donc tu ne peux pas te servir de la classe liste mais plutot des id en fonction de ce qui est caché ou pas
 $(function(){
     var largeur=Math.round($("#liste_container_agences").width());
     lar=Math.trunc(largeur/400)*400;
