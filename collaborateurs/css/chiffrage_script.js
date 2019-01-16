@@ -1,45 +1,109 @@
 
 $(function(){
     
-    $("*.ligne_descro").hide(0);
+    
+    $("#inside_CCTP").hide(0);
 
 
-    //devellopement des lignes de description en click sur le plus de droite
-	$(".plus").click(function(){
-        
-        $(this).parent().next(".ligne_descro").toggle();
+    //Affichage du block pdf CCTP par le bouton en haut
+    $("#CCTP_new_onglet").on('click',function(){
+        window.open("../media/test.pdf")
 
-        var val = $(this).text();
-       
-        if (this.id != "plus_global" ) {
-            if (val == "+") {
-            	$(this).text("-");
-                $(this).parent().next(".ligne_descro").css('border-bottom','solid black 2px');
-                $(this).parent().css("border-bottom","solid black 1px");
-            }
-            else {
-            	$(this).text("+");
-                $(this).parent().next(".ligne_descro").css('border-bottom','0px');
-                $(this).parent().css("border-bottom","solid black 2px");
-            };
-        }
-        else {
-            
-            if (val == "+") {
-                $(this).text("-");
-                $("*.ligne").show(0);
-                
-            }
-            else {
-                $(this).text("+");
-                $("*.ligne").not("#ligne_titre").hide(0);
-                $("*.ligne_descro").hide(0);
-            };
-
-        };
-
-        
     });
+
+
+
+    //Affichage du block pdf CCTP par le bouton en haut
+    $("#CCTP_inside").on('click',function(){
+        $("#inside_CCTP").toggle(0);
+
+    });
+
+    //fermeture du block pdf CCTP par le bouton fermer
+    $("#Bfermer").on('click',function(){
+        $("#inside_CCTP").hide(0);
+
+    });
+
+    //empêche le drag si début de click sur le bouton
+    $("#Bfermer").on('mousedown',function(e){
+        e.stopPropagation();
+    });
+
+    //Augmentation de la hauteur du block PDF
+    $("#Bplus").on('click',function(){
+        var hauteur = $("#inside_CCTP").height();
+        var ratio = hauteur / $(window).height();
+        
+        ratio = (ratio + 0.05)*100;
+        var new_hauteur = ratio + 'vh';
+        $("#inside_CCTP").css('height',new_hauteur);
+
+    });
+
+    //empêche le drag si début de click sur le bouton
+    $("#Bplus").on('mousedown',function(e){
+        e.stopPropagation();
+    });
+
+    //Diminution de la hauteur du block PDF
+    $("#Bmoins").on('click',function(){
+        var hauteur = $("#inside_CCTP").height();
+        var ratio = hauteur / $(window).height();
+        
+        ratio = (ratio - 0.05)*100;
+        var new_hauteur = ratio + 'vh';
+        $("#inside_CCTP").css('height',new_hauteur);
+
+    });
+
+    //empêche le drag si début de click sur le bouton
+    $("#Bmoins").on('mousedown',function(e){
+        e.stopPropagation();
+    });
+
+
+    //essai de drag and drop width
+    var isDragging=false;
+    var iniY = 0;
+    var finalY = 0;
+    $(".CCTP_supp")
+    .mousedown(function(event) {
+
+        isDragging = true;
+        iniY=event.clientY;
+    });
+
+    $(document).mousemove(function(event) {
+        finalY=event.clientY;
+        delta=finalY-iniY;
+        if (((delta > 10 ) | (delta < - 10)) & (isDragging)){
+            var hauteur = $("#inside_CCTP").height();
+            var ratio = (hauteur - delta ) / $(window).height();
+            
+            ratio = ratio * 100;
+            var new_hauteur = ratio + 'vh';
+            $("#inside_CCTP").css('height',new_hauteur);
+            iniY = event.clientY;
+         };
+    });
+
+
+
+    $(document).mouseup(function(){
+        isDragging = false;
+        iniY=0;
+    });
+        
+
+
+    
+
+
+
+
+
+
 
 
     //mise a jour du prix total de la ligne quand on tape des valeurs dans le input du prix unitaire
@@ -147,7 +211,7 @@ $(function (){
     $(".poste_quantite").innerWidth(lar_quantite);
     $(".poste_PU").innerWidth(lar_PU);
     $(".ligne .poste_montant_HT").innerWidth(lar_montant_HT);
-    $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT + 32);
+    $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT);
 
     $(window).resize(function(){
         var lar_num = $("#num").innerWidth();
@@ -163,7 +227,7 @@ $(function (){
         $(".poste_quantite").innerWidth(lar_quantite);
         $(".poste_PU").innerWidth(lar_PU);
         $(".ligne .poste_montant_HT").innerWidth(lar_montant_HT);
-        $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT + 32);
+        $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT);
 
         //on recommence si il n'a pas eu el temps de faire les modifs correctement
         if ($(".poste_num").innerWidth().toFixed(2) != lar_num.toFixed(2)) {
@@ -180,7 +244,7 @@ $(function (){
             $(".poste_quantite").innerWidth(lar_quantite);
             $(".poste_PU").innerWidth(lar_PU);
             $(".ligne .poste_montant_HT").innerWidth(lar_montant_HT);
-            $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT + 32);
+            $(".ligne_ST .poste_montant_HT").innerWidth(lar_montant_HT);
         };
     });
 });

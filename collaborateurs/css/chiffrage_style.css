@@ -4,7 +4,7 @@ html {
 	height: 100%;
 	
 
-}
+} 
 
 body{
 	box-sizing: border-box;
@@ -113,6 +113,7 @@ section {
 	/*border:solid orange 2px;*/
 	min-height:100%;
 	display: flex;
+	flex-direction: column;
 	width:89%;
 	flex-grow: 1;
 }
@@ -126,6 +127,10 @@ section {
 	justify-content: flex-start;
 	align-items: center;
 
+}
+
+.boutons {
+	margin-top: 20px;
 }
 
 .grid_lot {
@@ -177,15 +182,6 @@ section {
 }
 
 
-
-.plus {
-	display: flex;
-	justify-content: center;
-	align-items:  center;
-	width:30px;
-	border-left:solid black 2px;
-
-}
 
 .ligne .poste_num {
 	box-sizing: border-box;
@@ -263,11 +259,7 @@ section {
 	border-left:solid black 2px;
 }
 
-.ligne_descro {
-	text-align: justify;
 
-	
-}
 
 
 
@@ -294,4 +286,49 @@ section {
 	justify-content: flex-end;
 	padding: 5px;
 
+}
+
+
+#inside_CCTP {
+
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width:100%;
+	height: 40vh;
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+
+}
+
+
+
+
+
+
+
+#inside_CCTP .CCTP_supp {
+	width: 100%;
+	box-sizing: border-box;
+	
+	border-bottom: solid black 1px;
+	padding: 5px 5px 5px 10px;
+	background-color: black;
+	display: flex;
+	justify-content: flex-end;
+	min-height: 32px;
+	user-select: none;
+}
+
+#inside_CCTP object {
+	
+	width: 100%;
+	height: 100%;
+}
+
+#inside_CCTP input {
+	margin-left: 10px;
 }
