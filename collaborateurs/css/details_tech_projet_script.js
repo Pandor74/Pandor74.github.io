@@ -84,63 +84,43 @@ $(function(){
 
 
     //AJOUT DE TRANCHE
+    $("#all_dialog_add").hide(0);
 
-    //gestion de l'ajout de tranche
-
-    $("#add_tranche").on('click',function (){
-      $("#dialog_add").dialog("open");
+    $("#add_tranche").on('click',function open_dialog(){
+      $("#all_dialog_add").show(0);
+      $("#in_add_tranche").focus();
+      $("#in_add_tranche").select();
+      $('html, body').css({overflow: 'hidden'});
 
     });
 
+    $("#Bcreer").on('click',function (){
+      var tranche_a_add = $("#in_add_tranche").val();
+      if (tranche_a_add.trim()) {
+        Ajouter_Tranche(tranche_a_add);
+        $("#all_dialog_add").hide(0);
+        $('html, body').css({overflow: 'auto'});
 
-    //définition de la boite de dialog de suppression avec jquery UI
-    $("#dialog_add").dialog({
-      autoOpen : false,
-      draggable:true,
-      height:200,
-      width:400,
-      modal:true,
-      buttons: [
-        {
-          text: "Ajouter",
-          icon: "ui-icon-disk",
-          click: function() {
-            $( this ).dialog( "close" );
-            var tranche_a_add = $("#in_add_tranche").val();
-            if (tranche_a_add.trim()) {
-              Ajouter_Tranche(tranche_a_add);
-            };
-          }
-     
-          // Uncommenting the following line would hide the text,
-          // resulting in the label being used as a tooltip
-          //showText: false
-        },
-        {
-          text: "Annuler",
-          icon: "ui-icon-arrowreturnthick-1-w",
-          click: function() {
-            $( this ).dialog( "close" );
-          }
-     
-          // Uncommenting the following line would hide the text,
-          // resulting in the label being used as a tooltip
-          //showText: false
-        },
-      ]
+      }
+      else {
+        alert("Le nom de la tranche n'est pas correct");
+      };
     });
-
 
     //gestion de l'appui sur entrer dans la boite de dialog d'ajout
-    $("#dialog_add #in_add_tranche").on('keyup',function(e){
+    $("#in_add_tranche").on('keyup',function(e){
       var key=e.which;
 
       if (key == 13) {
-        //dupliquer la fonction de la boite de dialog
-        $("#dialog_add").dialog( "close" );
-        var tranche_a_add = $(this).val();
+        var tranche_a_add = $("#in_add_tranche").val();
         if (tranche_a_add.trim()) {
           Ajouter_Tranche(tranche_a_add);
+          $("#all_dialog_add").hide(0);
+          $('html, body').css({overflow: 'auto'});
+
+        }
+        else {
+          alert("Le nom de la tranche n'est pas correct");
         };
       };
 
@@ -148,16 +128,44 @@ $(function(){
     });
 
 
+    //gestion de l'appui sur echap pour fermer les boites
+    $(".wrapp_all_to_lock").on('keyup',function(e){
+      var key=e.which;
+
+      if (key == 27) {
+        
+        $(this).hide(0);
+        $('html, body').css({overflow: 'auto'});
+
+      };
+
+
+    });
+
+
+
+    //Bouton annuler pour les deux boites de dialog  !
+    $(".Bannuler").on('click', function close_dialog(){
+      $(this).parent().parent().parent().hide(0);
+      $('html, body').css({overflow: 'auto'});
+    });
+
+    
+
+
 
 
     //SUPPRESSION DE TRANCHE
+    $("#all_dialog_supp").hide(0);
 
     //gestion de la suppresion de tranche
     $("#del_tranche").on('click',function (){
       var nb_tranche = $(".liste_tranches:first").find(".tranche").length;
 
       if (nb_tranche > 1) {
-        $("#dialog_del").dialog("open");
+        $("#all_dialog_supp").show(0);
+        $('html, body').css({overflow: 'hidden'});
+
       }
       else {
         alert("Il n'y a que la tranche principale ! Vous ne pouvez pas la supprimer...")
@@ -166,40 +174,15 @@ $(function(){
     });
 
 
-    //définition de la boite de dialog de suppression avec jquery UI
-    $("#dialog_del").dialog({
-      autoOpen : false,
-      draggable:true,
-      height:200,
-      width:400,
-      modal:true,
-      buttons: [
-        {
-          text: "Supprimer",
-          icon: "ui-icon-trash",
-          click: function() {
-            $( this ).dialog( "close" );
-            var tranche_a_del = $("#in_del_tranche").val();
-            Supprimer_Tranche(tranche_a_del);
-          }
-     
-          // Uncommenting the following line would hide the text,
-          // resulting in the label being used as a tooltip
-          //showText: false
-        },
-        {
-          text: "Annuler",
-          icon: "ui-icon-arrowreturnthick-1-w",
-          click: function() {
-            $( this ).dialog( "close" );
-          }
-     
-          // Uncommenting the following line would hide the text,
-          // resulting in the label being used as a tooltip
-          //showText: false
-        },
-      ]
+    $("#Bsupprimer").on('click',function (){
+      var tranche_a_del = $("#in_del_tranche").val();
+      Supprimer_Tranche(tranche_a_del);
+      $("#all_dialog_supp").hide(0);
+      $('html, body').css({overflow: 'auto'});
+
+      
     });
+
 
 
 
@@ -250,7 +233,7 @@ function Ajouter_Tranche(nom_tranche) {
     val:nb_tranche - 1,
     text:nom_tranche.toUpperCase(),
 
-  }).appendTo("#dialog_del select")
+  }).appendTo("#in_del_tranche")
 
 
   //copy de l'input de chaque ligne de ratio correspondant
@@ -283,7 +266,7 @@ function Supprimer_Tranche(num_tranche) {
     
     //suppresion de l'option dans la boite de suppression
     var found=false;
-    $("#dialog_del").find("select").find("option").each(function(){
+    $("#in_del_tranche").find("option").each(function(){
       if (($(this).val() == num_tranche ) & (!found)) {
         $(this).remove()
         found=true;

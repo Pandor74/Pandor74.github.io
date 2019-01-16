@@ -61,17 +61,44 @@
 					<div class="boutons">
 						<input type="button" id="add_tranche" value="Ajouter Tranche"/>
 						<input type="button" id="del_tranche" value="Supprimer Tranche"/>
+						
 
 
-						<div id="dialog_del" Title="Supprimer quelle tranche ?">
-							<select id="in_del_tranche">
+						<div class="wrapp_all_to_lock" id="all_dialog_add">
+							<div id="dialog_add">
+								<div id="dialog_add_title">
+									Comment se nomme la nouvelle tranche ?
+								</div>
+								<div id="dialog_add_content">
+									<input type="text" id="in_add_tranche" placeholder="SAISIR NOM TRANCHE"/>
+								</div>
+								<div id="dialog_add_buttons">
+									<input type="button" id="Bcreer" value="Créer"/>
+									<input type="button" class="Bannuler" value="Annuler"/>
+								</div>
 								
-							</select>
+							</div>
 						</div>
 
-						<div id="dialog_add" Title="Comment se nomme la tranche ?">
-							<input type="text" id="in_add_tranche" placeholder="SAISIR NOM TRANCHE"/>
+
+						<div class="wrapp_all_to_lock" id="all_dialog_supp">
+							<div id="dialog_supp">
+								<div id="dialog_supp_title">
+									Comment se nomme la nouvelle tranche ?
+								</div>
+								<div id="dialog_supp_content">
+									<select id="in_del_tranche">
+								
+									</select>
+								</div>
+								<div id="dialog_supp_buttons">
+									<input type="button" id="Bsupprimer" value="Supprimer"/>
+									<input type="button" class="Bannuler" value="Annuler"/>
+								</div>
+								
+							</div>
 						</div>
+
 					</div>
 					
 

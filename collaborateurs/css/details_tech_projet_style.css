@@ -257,11 +257,191 @@ section {
 
 
 
-object {
-	height: 100%;
+.ui-dialog-content {
 	width: 100%;
 }
 
-.ui-dialog-content {
-	width: 100%;
+
+
+.wrapp_all_to_lock {
+	background-color: rgba(0,0,0,0.5);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	z-index: 100;
+	top:0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+}
+
+#dialog_add {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	
+	min-height:250px;
+	
+	min-width: 400px;
+	background-color: rgba(0,0,0,1);
+	color: white;
+	
+	border-radius: 25px;
+	box-shadow: 0 0 3px 2px rgba(255,255,255,1),10px -10px 8px 2px rgba(0, 0, 0, 0.5);
+
+}
+
+#dialog_add_title {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	background-color: rgb(50,50,50);
+	width:90%;
+	height : 40px;
+	min-height: 40px;
+	border:solid white 1px;
+	border-radius: 5px;
+	margin-top:10px;
+	margin-bottom: 10px;
+	padding:10px;
+	box-sizing: border-box;
+
+}
+
+#dialog_add_content {
+	display: flex;
+	justify-content: center;
+	width:90%;
+	height : 100%;
+	border-radius: 5px;
+}
+
+#dialog_add_content input {
+	width: 80%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+
+#dialog_add_buttons {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	box-sizing: border-box;
+	width:90%;
+	
+	
+	/*border:solid white 1px;*/
+	border-radius: 5px;
+	margin-bottom:10px;
+	margin-top:10px;
+	padding: 10px;
+	/*background-color: rgb(50,50,50);*/
+
+}
+
+#dialog_add_buttons input {
+	margin-left: 10px;
+	border-radius: 5px;
+	background-color: rgb(50,50,50);
+	color:white;
+	border:solid white 1px;
+	padding: 5px 10px 5px 10px;
+	width: 80px;
+}
+
+
+#dialog_add_buttons input:hover {
+	background-color: rgb(255,255,255);
+	color:black;
+	font-weight: bold;
+}
+
+
+
+/*ICI démarrage la boite de suppression*/
+#dialog_supp {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	
+	min-height:250px;
+	
+	min-width: 400px;
+	background-color: rgba(0,0,0,1);
+	color: white;
+	
+	border-radius: 25px;
+	box-shadow: 0 0 3px 2px rgba(255,255,255,1),10px -10px 8px 2px rgba(0, 0, 0, 0.5);
+
+}
+
+#dialog_supp_title {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	background-color: rgb(50,50,50);
+	width:90%;
+	height : 40px;
+	min-height: 40px;
+	border:solid white 1px;
+	border-radius: 5px;
+	margin-top:10px;
+	margin-bottom: 10px;
+	padding:10px;
+	box-sizing: border-box;
+
+}
+
+#dialog_supp_content {
+	display: flex;
+	justify-content: center;
+	width:90%;
+	height : 100%;
+	border-radius: 5px;
+}
+
+#dialog_supp_content input {
+	width: 80%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+
+#dialog_supp_buttons {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	box-sizing: border-box;
+	width:90%;
+	
+	
+	/*border:solid white 1px;*/
+	border-radius: 5px;
+	margin-bottom:10px;
+	margin-top:10px;
+	padding: 10px;
+	/*background-color: rgb(50,50,50);*/
+
+}
+
+#dialog_supp_buttons input {
+	margin-left: 10px;
+	border-radius: 5px;
+	background-color: rgb(50,50,50);
+	color:white;
+	border:solid white 1px;
+	padding: 5px 10px 5px 10px;
+	width: 80px;
+}
+
+
+#dialog_supp_buttons input:hover {
+	background-color: rgb(255,255,255);
+	color:black;
+	font-weight: bold;
 }
