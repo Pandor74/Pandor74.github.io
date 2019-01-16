@@ -321,6 +321,7 @@ section {
 	justify-content: flex-end;
 	min-height: 32px;
 	user-select: none;
+	cursor:row-resize;
 }
 
 #inside_CCTP object {
