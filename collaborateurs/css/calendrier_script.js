@@ -8,27 +8,11 @@ $(function(){
 
 
     //passage à la semaine à 5 jours
-    $('#F5j').on('click',function semaine_normale (){
-        $(".cal_title").find(".cal_day").eq(5).hide(0);
-        $(".cal_title").find(".cal_day").eq(6).hide(0);
-
-        $(".cal_week").each(function(){
-            $(this).find(".cal_day").eq(5).hide(0);
-            $(this).find(".cal_day").eq(6).hide(0);
-        });
-    });
+    $('#F5j').on('click',semaine_normale);
 
 
     //passage à la semaine à 7 jours
-    $('#F7j').on('click',function semaine_complete (){
-        $(".cal_title").find(".cal_day").eq(5).show(0);
-        $(".cal_title").find(".cal_day").eq(6).show(0);
-
-        $(".cal_week").each(function(){
-            $(this).find(".cal_day").eq(5).show(0);
-            $(this).find(".cal_day").eq(6).show(0);
-        });
-    });
+    $('#F7j').on('click',semaine_complete);
 
 
     $('#Favant').on('click',prev_month);
@@ -36,6 +20,51 @@ $(function(){
 
 
 });
+
+function semaine_normale (){
+        $(".cal_title").find(".cal_day").eq(5).hide(0);
+        $(".cal_title").find(".cal_day").eq(6).hide(0);
+
+        $(".cal_week").each(function(){
+            $(this).find(".cal_day").eq(5).hide(0);
+            $(this).find(".cal_day").eq(6).hide(0);
+        });
+
+        //gestion des intermédiaires
+        $(".cal_week").each(function(){
+            $(this).find(".cal_day").eq(4).css('box-shadow','inset -2px 0 10px 2px rgba(0, 0, 0, 1)');
+        });
+
+        //gestion du coin bas droite
+        $(".cal_week").eq(5).find(".cal_day").eq(4).css('border-bottom-right-radius','25px');
+        $(".cal_week").eq(5).find(".cal_day").eq(4).css('box-shadow','inset 0 -2px 10px 2px rgba(0, 0, 0, 1),inset -2px 0 10px 2px rgba(0, 0, 0, 1)');
+
+        //gestion du dernier jour de la semaine
+        $(".cal_title").find(".cal_day").eq(4).css('box-shadow','inset -2px 0 10px 2px rgba(0, 0, 0, 1)');
+};
+
+
+function semaine_complete (){
+        $(".cal_title").find(".cal_day").eq(5).show(0);
+        $(".cal_title").find(".cal_day").eq(6).show(0);
+
+        $(".cal_week").each(function(){
+            $(this).find(".cal_day").eq(5).show(0);
+            $(this).find(".cal_day").eq(6).show(0);
+        });
+
+        //gestion des intermédiaires
+        $(".cal_week").each(function(){
+            $(this).find(".cal_day").eq(4).css('box-shadow','inset 0 0 10px 2px rgba(0, 0, 0, 1)');
+        });
+
+        //gestion du coin bas droite
+        $(".cal_week").eq(5).find(".cal_day").eq(4).css('border-bottom-right-radius','0px');
+        $(".cal_week").eq(5).find(".cal_day").eq(4).css('box-shadow','inset 0px -2px 10px 3px rgba(0, 0, 0, 1)');
+
+        //gestion du dernier jour de la semaine
+        $(".cal_title").find(".cal_day").eq(4).css('box-shadow','inset 0 0 10px 2px rgba(0, 0, 0, 1)');
+};
 
 
 //on initilise le calendrier en supposant qu'on s'en fou du passé donc la première ligne contient le jour d'aujourd'hui
