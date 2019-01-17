@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+   <meta charset="utf-8"/>
+  
+   <link rel="stylesheet" href="../css/calendrier_style.css" />
+   <script src="../css/jquery-3.3.1.js" ></script>
+   <script src="../css/calendrier_script.js" ></script>
+
+
+   <title>Plateforme Appel d'offres</title>
+</head>
+
+
+
+<body>
+
+	<header>
+		
+			<div class="navigation_principale">
+				<a href="">Mes projets</a>
+				<a href="liste_projets.html">Tous les projets</a>
+				<a href="calendrier.html">Agenda</a>
+				<a href="liste_contacts.html">Contacts</a>
+			</div>
+
+			<div class="navigation_secondaire">
+				<a href="">Mon compte</a>
+				<a href="">Aide/support</a>
+				<a href="">Déconnexion</a>
+
+			</div>
+	</header>
+
+ 
+
+  	<section>
+
+
+
+			<div class="filtrage">
+				<div class="filtre" id="Fmesprojets">Mes projets</div>
+				<div class="filtre" id="Ftousprojets">Tous les projets</div>
+				<div class="filtre" id="Ftousprojetsagence">
+					<select id="Fagence">
+						<option value="1">Plenetude Lyon</option>
+						<option value="1">Plenetude Annecy</option>
+						<option value="1">Plenetude Chambery</option>
+						<option value="1">Pegime</option>
+						<option value="1">Pexin</option>
+					</select>
+				</div>
+				
+
+				<div class="filtre" id="F5j">5 jours</div>
+				<div class="filtre" id="F7j">7 jours</div>
+			</div>
+
+			<div class="cal_wrapper">
+				<div class="cal_date_wrapper">
+					<div class="filtre" id="Favant"></div>
+					<div id="date_title"></div>
+					<div class="filtre" id="Fapres"></div>
+					
+				</div>
+
+				<div class ="cal_title">
+					<div class="cal_day">
+						Lundi
+					</div>
+					<div class="cal_day">
+						Mardi
+					</div>
+					<div class="cal_day">
+						Mercredi
+					</div>
+					<div class="cal_day">
+						Jeudi
+					</div>
+					<div class="cal_day">
+						Vendredi
+					</div>
+					<div class="cal_day">
+						Samedi
+					</div>
+					<div class="cal_day">
+						Dimanche
+					</div>
+				</div>
+
+				<div class="cal_weeks_wrapper">
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+					<div class="cal_week">
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+						 	<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+						<div class="cal_day">
+							<div class="num_day"></div>
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+
+
+			
+
+   	</section>
+
+
+	<footer>
+	
+	</footer>
+
+
+</body>
+</html>
+
+
