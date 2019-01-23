@@ -4,7 +4,7 @@ var element;
 
 $(function(){
     
- 
+
 
     initialise_calendar();
 
